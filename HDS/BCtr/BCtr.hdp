@@ -1,0 +1,20 @@
+[DesignChecker]
+BCtr_lib = $HDS_PROJECT_DIR\BCtr_lib\designcheck
+[ModelSim]
+BCtr_lib = $HDS_PROJECT_DIR\BCtr_lib\work
+[hdl]
+BCtr_lib = $HDS_PROJECT_DIR/BCtr_lib/hdl
+[hdl_vm]
+BCtr_lib = https://forge.abcd.harvard.edu/svn/arp-eos/trunk/HDS/BCtr_lib
+[hdl_ws]
+BCtr_lib = $HDS_PROJECT_DIR
+[hds]
+BCtr_lib = $HDS_PROJECT_DIR/BCtr_lib/hds
+[hds_settings]
+default_library = BCtr_lib
+project_description = Binned Counter
+version = 2
+[library_type]
+BCtr_lib = regular
+[shared]
+others = $HDS_TEAM_HOME/shared.hdp
