@@ -49,7 +49,9 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    TYPE STATE_TYPE IS (
       Startup,
       ReportArmed,
+      TriggerDelayed,
       TriggerArmed,
+      Triggered,
       Scanning
    );
  
@@ -65,6 +67,7 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    SIGNAL first_row_cld : std_logic;
    SIGNAL first_col_cld : std_logic;
    SIGNAL CntEn_cld : std_logic;
+   SIGNAL PMT_clr_cld : std_logic;
    SIGNAL WE1_cld : std_logic;
    SIGNAL WE2_cld : std_logic;
    SIGNAL RE1_cld : std_logic;
@@ -87,7 +90,7 @@ BEGIN
         CntEn_cld <= '0';
         WE1_cld <= '0';
         WE2_cld <= '0';
-        PMT_clr <= '1';
+        PMT_clr_cld <= '1';
         RE1_cld <= '0';
         DRdy_cld <= '0';
         TrigClr_cld <= '0';
@@ -107,7 +110,7 @@ BEGIN
             CntEn_cld <= '0';
             WE1_cld <= '0';
             WE2_cld <= '0';
-            PMT_clr <= '1';
+            PMT_clr_cld <= '1';
             RE1_cld <= '0';
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
@@ -119,29 +122,40 @@ BEGIN
             WE2_cld <= '0';
             RE1_cld <= '0';
             NCcnt <= NC;
-            TrigClr_cld <= '0';
+            TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
+            if NC = 0 AND Empty2 = '1' then
+              DRdy_cld <= '0';
+            end if;
+          WHEN TriggerDelayed =>
+            if Empty2 = '1' then
+              DRdy_cld <= '0';
+            end if;
           WHEN TriggerArmed =>
             first_col_cld <= '1';
             CntEn_cld <= '0';
             WE1_cld <= '0';
             WE2_cld <= '0';
             RE1_cld <= '0';
-            PMT_clr <= '1';
+            PMT_clr_cld <= '1';
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
             if En = '1' AND TrigSeen = '1' then
-              PMT_clr <= '0';
-              CntEn_cld <= '1';
-              NBcnt <= NB;
-              NAcnt <= NA;
-              if NA = 0 AND NB = 0 then
-                if NCcnt = 0 then
-                  WE2_cld <= '1';
-                else
-                  WE1_cld <= '1';
-                end if;
+              PMT_clr_cld <= '0';
+            end if;
+          WHEN Triggered =>
+            CntEn_cld <= '1';
+            NBcnt <= NB;
+            NAcnt <= NA;
+            if first_row_cld = '0' then
+              RE1_cld <= '1';
+            end if;
+            if NA = 0 AND NB = 0 then
+              if NCcnt = 0 then
+                WE2_cld <= '1';
+              else
+                WE1_cld <= '1';
               end if;
             end if;
           WHEN Scanning =>
@@ -150,6 +164,9 @@ BEGIN
             if NAcnt = 0 then -- last sample in a bin
               NAcnt <= NA;
               first_col_cld <= '1';
+              if first_row_cld = '0' then
+                RE1_cld <= '1';
+              end if;
               if NCcnt = 0 then
                 WE2_cld <= '1';
               else
@@ -157,12 +174,16 @@ BEGIN
               end if;
               if NBcnt = 0 then -- last sample in a trigger
                 NBcnt <= NB;
+                CntEn_cld <= '0';
+                PMT_clr_cld <= '1';
                 if NCcnt = 0 then -- last sample in a report
                   NCcnt <= NC;
                   DRdy_cld <= '1';
                   first_row_cld <= '1';
-                  CntEn_cld <= '0';
                 else
+                  if NCcnt = 1 AND Empty2 = '1' then
+                    DRdy_cld <= '0';
+                  end if;
                   NCcnt <= NCcnt - 1;
                   first_row_cld <= '0';
                 end if;
@@ -174,6 +195,7 @@ BEGIN
               first_col_cld <= '0';
               WE1_cld <= '0';
               WE2_cld <= '0';
+              RE1_cld <= '0';
             end if;
           WHEN OTHERS =>
             NULL;
@@ -185,7 +207,7 @@ BEGIN
   -----------------------------------------------------------------
    nextstate_proc : PROCESS ( 
       En,
-      TrigSeen,
+      TrigSeen, Empty2,
       NAcnt, NBcnt, NCcnt,
       current_state
    )
@@ -200,25 +222,45 @@ BEGIN
         END IF;
       WHEN ReportArmed => 
         if En = '1' then
-          next_state <= TriggerArmed;
+          if NC = 0 AND Empty2 = '0' then
+            next_state <= TriggerDelayed;
+          else
+            next_state <= TriggerArmed;
+          end if;
         else
           next_state <= Startup;
         end if;
+      WHEN TriggerDelayed =>
+        if En /= '1' THEN
+          next_state <= Startup;
+        ELSIF Empty2 = '1' THEN
+          next_state <= TriggerArmed;
+        ELSE
+          next_state <= TriggerDelayed;
+        END IF;
       WHEN TriggerArmed =>
         IF En /= '1' THEN 
           next_state <= Startup;
         ELSIF TrigSeen = '1' THEN
-          next_state <= Scanning;
+          next_state <= Triggered;
         ELSE
           next_state <= TriggerArmed;
+        END IF;
+      WHEN Triggered =>
+        IF En /= '1' THEN
+          next_state <= Startup;
+        ELSE
+          next_state <= Scanning;
         END IF;
       WHEN Scanning =>
         if En /= '1' then
           next_state <= Startup;
         elsif NAcnt = 0 AND NBcnt = 0 then
-          if NCcnt = 0 then
+          IF NCcnt = 0 THEN
             next_state <= ReportArmed;
-          else
+          ELSIF NCcnt = 1 AND Empty2 = '0' THEN
+            next_state <= TriggerDelayed;
+          ELSE
             next_state <= TriggerArmed;
           end if;
         else
@@ -228,16 +270,27 @@ BEGIN
         next_state <= Startup;
     END CASE;
   END PROCESS nextstate_proc;
+  
+  DRdy_qual : PROCESS (clk) IS
+  BEGIN
+    IF clk'Event AND clk = '1' THEN
+      IF DRdy_cld = '1' AND Empty2 = '0' THEN
+        DRdy <= '1';
+      ELSE
+        DRdy <= '0';
+      END IF;
+    END IF;
+  END PROCESS DRdy_qual;
  
   -- Concurrent Statements
   -- Clocked output assignments
   first_row <= first_row_cld;
   first_col <= first_col_cld;
   CntEn <= CntEn_cld;
+  PMT_clr <= PMT_clr_cld;
   WE1 <= WE1_cld;
   WE2 <= WE2_cld;
   RE1 <= RE1_cld;
-  DRdy <= DRdy_cld;
   TrigClr <= TrigClr_cld;
   TrigOE <= TrigOE_cld;
   TrigArm <= TrigArm_cld;

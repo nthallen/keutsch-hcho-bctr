@@ -142,8 +142,8 @@ BEGIN
     TrigSeen <= '0';
     En <= '0';
     Full1 <= '0';
-    Empty1 <= '0';
-    Empty2 <= '0';
+    Empty1 <= '1';
+    Empty2 <= '1';
     
     rst <= '1';
     -- pragma synthesis_off
@@ -166,24 +166,126 @@ BEGIN
     assert TrigOE = '1' report "Trigger OE not set after enable" severity error;
     assert TrigClr = '0' report "Trigger cleared after enable" severity error;
     
+    -- Report 1: Do one full report without intervention
+    -- Report 1 Trigger 1 of 2
     TrigSeen <= '1';
-    
     wait until TrigClr = '1';
     wait until clk'Event and clk = '1';
     TrigSeen <= '0';
     
+    -- Report 1 Trigger 2 of 2
     wait until TrigClr = '0' AND TrigArm = '1';
     wait until clk'Event and clk = '1';
     wait until clk'Event and clk = '1';
     wait until clk'Event and clk = '1';
     TrigSeen <= '1';
-    
     wait until TrigClr = '1';
     wait until clk'Event and clk = '1';
     TrigSeen <= '0';
     
-    wait until TrigClr = '0' AND TrigArm = '1';
+    wait until WE2 = '1' for 50 ns;
+    assert WE2 = '1' report "WE2 not seen" severity error;
     wait until clk'Event and clk = '1';
+    Empty2 <= '0';
+    wait until DRdy = '1' for 200 ns;
+    assert DRdy = '1' report "DRdy not seen for R1" severity error;
+    -- Simulate reading data
+    for i in 1 to 4 loop
+      wait until clk'Event and clk = '1';
+    end loop;
+    Empty2 <= '1';
+    
+    -- Report 2 Trigger 1 of 2
+    if TrigClr = '1' OR TrigArm = '0' then
+      wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+      assert TrigClr = '0' AND TrigArm = '1'
+         report "TrigClr/Arm not seen for R2T1" severity error;
+    end if;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '1';
+    wait until TrigClr = '1' for 100 ns;
+    assert TrigClr = '1' report "TrigClr not seen for R2T1" severity error;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '0';
+    
+    -- Report 2 Trigger 2 of 2
+    wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+    assert TrigClr = '0' AND TrigArm = '1'
+      report "TrigClr/Arm not seen for R2T2" severity error;
+    wait until clk'Event and clk = '1';
+    wait until clk'Event and clk = '1';
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '1';
+    wait until TrigClr = '1' for 200 ns;
+    assert TrigClr = '1' report "TrigClr not seen for R2T2" severity error;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '0';
+    
+    wait until WE2 = '1';
+    assert WE2 = '1' report "WE2 not seen for R2T2" severity error;
+    wait until clk'Event and clk = '1';
+    Empty2 <= '0';
+    wait until DRdy = '1' for 200 ns;
+    assert DRdy = '1' report "DRdy not seen for R2" severity error;
+    -- Delay reading to observe delay in Report 3
+
+    if TrigClr = '1' OR TrigArm = '0' then
+      wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+      assert TrigClr = '0' AND TrigArm = '1'
+         report "TrigClr/Arm not seen for R2T2" severity error;
+    end if;
+    wait until clk'Event and clk = '1';
+     
+    -- Report 3 Trigger 1 of 2
+    if TrigClr = '1' OR TrigArm = '0' then
+      wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+      assert TrigClr = '0' AND TrigArm = '1'
+         report "TrigClr/Arm not seen for R3T1" severity error;
+    end if;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '1';
+    wait until TrigClr = '1' for 100 ns;
+    assert TrigClr = '1' report "TrigClr not seen for R3T1" severity error;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '0';
+    
+    -- Report 3 Trigger 2 of 2
+    wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+    assert TrigClr = '1' OR TrigArm = '0'
+      report "TrigClr/Arm seen for R3T2 without Empty2" severity error;
+    wait until clk'Event and clk = '1';
+    Empty2 <= '1';
+    wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+    assert TrigClr = '0' AND TrigArm = '1'
+      report "TrigClr/Arm not seen for R3T2 after Empty2" severity error;
+
+    wait until clk'Event and clk = '1';
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '1';
+    wait until TrigClr = '1' for 200 ns;
+    assert TrigClr = '1' report "TrigClr not seen for R3T2" severity error;
+    wait until clk'Event and clk = '1';
+    TrigSeen <= '0';
+    
+    wait until WE2 = '1';
+    assert WE2 = '1' report "WE2 not seen for R3T2" severity error;
+    wait until clk'Event and clk = '1';
+    Empty2 <= '0';
+    wait until DRdy = '1' for 200 ns;
+    assert DRdy = '1' report "DRdy not seen for R3" severity error;
+    -- Simulate reading data
+    for i in 1 to 4 loop
+      wait until clk'Event and clk = '1';
+    end loop;
+    Empty2 <= '1';
+
+    if TrigClr = '1' OR TrigArm = '0' then
+      wait until TrigClr = '0' AND TrigArm = '1' for 200 ns;
+      assert TrigClr = '0' AND TrigArm = '1'
+         report "TrigClr/Arm not seen for R3T2" severity error;
+    end if;
+    wait until clk'Event and clk = '1';
+   
     En <= '0';
     wait until TrigClr = '1';
     wait until clk'Event and clk = '1';
