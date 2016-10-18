@@ -13,11 +13,11 @@ USE ieee.std_logic_arith.all;
 
 ENTITY TriEn IS
    PORT( 
-      clk   : IN     std_logic;
-      RESET : IN     std_logic;
-      EN1   : OUT    std_logic;
-      EN2   : OUT    std_logic;
-      EN3   : OUT    std_logic
+      clk     : IN     std_logic;
+      EN1     : OUT    std_logic;
+      EN2     : OUT    std_logic;
+      EN3     : OUT    std_logic;
+      PMT_clr : IN     std_logic
    );
 
 -- Declarations
@@ -36,12 +36,12 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	PROCESS (sreg,RESET)
+	PROCESS (sreg,PMT_clr)
 	BEGIN
 
 		next_sreg<=INIT;
 
-		IF ( RESET='1' ) THEN
+		IF ( PMT_clr='1' ) THEN
 			next_sreg<=INIT;
 		ELSE
 			CASE sreg IS
