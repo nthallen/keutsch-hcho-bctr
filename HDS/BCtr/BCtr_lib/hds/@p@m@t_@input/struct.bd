@@ -110,19 +110,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "10/14/2016"
+value "10/19/2016"
 )
 (vvPair
 variable "day"
-value "Fri"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Friday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "14"
+value "19"
 )
 (vvPair
 variable "entity_name"
@@ -150,7 +150,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "10/12/16"
+value "10/14/16"
 )
 (vvPair
 variable "graphical_source_group"
@@ -158,7 +158,7 @@ value "Domain Users"
 )
 (vvPair
 variable "graphical_source_time"
-value "14:36:10"
+value "19:29:26"
 )
 (vvPair
 variable "group"
@@ -262,7 +262,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "19:29:26"
+value "16:49:43"
 )
 (vvPair
 variable "unit"
@@ -704,7 +704,7 @@ blkPorts [
 "EN1"
 "EN2"
 "EN3"
-"PMT_clr"
+"rst"
 ]
 )
 *16 (Net
@@ -721,8 +721,8 @@ uid 168,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,2000,32500,2800"
-st "PMT     : std_logic
+xt "22000,2000,30500,2800"
+st "PMT : std_logic
 "
 )
 )
@@ -732,7 +732,7 @@ lang 11
 decl (Decl
 n "clk"
 t "std_logic"
-o 3
+o 2
 suid 7,0
 )
 declText (MLText
@@ -740,8 +740,8 @@ uid 210,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,3600,32500,4400"
-st "clk     : std_logic
+xt "22000,2800,30500,3600"
+st "clk : std_logic
 "
 )
 )
@@ -759,8 +759,8 @@ uid 220,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,6200,36500,7000"
-st "SIGNAL EN1     : std_logic
+xt "22000,6200,34500,7000"
+st "SIGNAL EN1 : std_logic
 "
 )
 )
@@ -778,8 +778,8 @@ uid 230,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,7000,36500,7800"
-st "SIGNAL EN2     : std_logic
+xt "22000,7000,34500,7800"
+st "SIGNAL EN2 : std_logic
 "
 )
 )
@@ -797,8 +797,8 @@ uid 240,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,7800,36500,8600"
-st "SIGNAL EN3     : std_logic
+xt "22000,7800,34500,8600"
+st "SIGNAL EN3 : std_logic
 "
 )
 )
@@ -1596,7 +1596,7 @@ lang 11
 decl (Decl
 n "Q1"
 t "std_logic"
-o 8
+o 9
 suid 12,0
 )
 declText (MLText
@@ -1604,8 +1604,8 @@ uid 432,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,8600,36500,9400"
-st "SIGNAL Q1      : std_logic
+xt "22000,8600,34500,9400"
+st "SIGNAL Q1  : std_logic
 "
 )
 )
@@ -1615,7 +1615,7 @@ lang 11
 decl (Decl
 n "Q3"
 t "std_logic"
-o 10
+o 11
 suid 16,0
 )
 declText (MLText
@@ -1623,8 +1623,8 @@ uid 472,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,10200,36500,11000"
-st "SIGNAL Q3      : std_logic
+xt "22000,10200,34500,11000"
+st "SIGNAL Q3  : std_logic
 "
 )
 )
@@ -1634,7 +1634,7 @@ lang 11
 decl (Decl
 n "Q2"
 t "std_logic"
-o 9
+o 10
 suid 17,0
 )
 declText (MLText
@@ -1642,8 +1642,8 @@ uid 474,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,9400,36500,10200"
-st "SIGNAL Q2      : std_logic
+xt "22000,9400,34500,10200"
+st "SIGNAL Q2  : std_logic
 "
 )
 )
@@ -1839,8 +1839,8 @@ uid 553,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,4400,32500,5200"
-st "SIG     : std_logic
+xt "22000,4400,30500,5200"
+st "SIG : std_logic
 "
 )
 )
@@ -1889,22 +1889,22 @@ tm "WireNameMgr"
 )
 )
 *59 (PortIoIn
-uid 646,0
+uid 705,0
 shape (CompositeShape
-uid 647,0
+uid 706,0
 va (VaSet
 vasetType 1
 fg "0,0,32768"
 )
 optionalChildren [
 (Pentagon
-uid 648,0
+uid 707,0
 sl 0
 ro 270
 xt "5000,24625,6500,25375"
 )
 (Line
-uid 649,0
+uid 708,0
 sl 0
 ro 270
 xt "6500,25000,7000,25000"
@@ -1918,15 +1918,15 @@ pts [
 stc 0
 sf 1
 tg (WTG
-uid 650,0
+uid 709,0
 ps "PortIoTextPlaceStrategy"
 stg "STSignalDisplayStrategy"
 f (Text
-uid 651,0
+uid 710,0
 va (VaSet
 )
-xt "600,24500,4000,25500"
-st "PMT_clr"
+xt "2700,24500,4000,25500"
+st "rst"
 ju 2
 blo "4000,25300"
 tm "WireNameMgr"
@@ -1934,21 +1934,20 @@ tm "WireNameMgr"
 )
 )
 *60 (Net
-uid 658,0
-lang 11
+uid 717,0
 decl (Decl
-n "PMT_clr"
+n "rst"
 t "std_logic"
 o 11
-suid 19,0
+suid 20,0
 )
 declText (MLText
-uid 659,0
+uid 718,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,2800,32500,3600"
-st "PMT_clr : std_logic
+xt "22000,3600,30500,4400"
+st "rst : std_logic
 "
 )
 )
@@ -2699,9 +2698,9 @@ tm "WireNameMgr"
 on &57
 )
 *86 (Wire
-uid 652,0
+uid 711,0
 shape (OrthoPolyLine
-uid 653,0
+uid 712,0
 va (VaSet
 vasetType 3
 )
@@ -2715,22 +2714,21 @@ start &59
 end &12
 sat 32
 eat 1
-stc 0
 st 0
 sf 1
 si 0
 tg (WTG
-uid 656,0
+uid 715,0
 ps "ConnStartEndStrategy"
 stg "STSignalDisplayStrategy"
 f (Text
-uid 657,0
+uid 716,0
 va (VaSet
 isHidden 1
 )
-xt "12000,26000,15400,27000"
-st "PMT_clr"
-blo "12000,26800"
+xt "13000,24000,14300,25000"
+st "rst"
+blo "13000,24800"
 tm "WireNameMgr"
 )
 )
@@ -2846,12 +2844,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "192,108,1211,798"
-viewArea "-5455,-1000,72854,52163"
+windowSize "192,108,1212,798"
+viewArea "-5500,-1000,72908,49391"
 cachedDiagramExtent "0,0,68000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 661,0
+lastUid 718,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -3889,7 +3887,7 @@ tm "BdDeclarativeTextMgr"
 )
 commonDM (CommonDM
 ldm (LogicalDM
-suid 19,0
+suid 20,0
 usingSuid 1
 emptyRow *118 (LEmptyRow
 )
@@ -3946,7 +3944,7 @@ lang 11
 decl (Decl
 n "clk"
 t "std_logic"
-o 3
+o 2
 suid 7,0
 )
 )
@@ -3998,7 +3996,7 @@ m 4
 decl (Decl
 n "Q1"
 t "std_logic"
-o 8
+o 9
 suid 12,0
 )
 )
@@ -4011,7 +4009,7 @@ m 4
 decl (Decl
 n "Q3"
 t "std_logic"
-o 10
+o 11
 suid 16,0
 )
 )
@@ -4024,7 +4022,7 @@ m 4
 decl (Decl
 n "Q2"
 t "std_logic"
-o 9
+o 10
 suid 17,0
 )
 )
@@ -4045,15 +4043,14 @@ uid 554,0
 )
 *140 (LeafLogPort
 port (LogicalPort
-lang 11
 decl (Decl
-n "PMT_clr"
+n "rst"
 t "std_logic"
 o 11
-suid 19,0
+suid 20,0
 )
 )
-uid 645,0
+uid 704,0
 )
 ]
 )
@@ -4163,7 +4160,7 @@ uid 555,0
 litem &140
 pos 2
 dimension 20
-uid 644,0
+uid 703,0
 )
 ]
 )

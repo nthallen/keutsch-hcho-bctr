@@ -208,7 +208,7 @@ BEGIN
    nextstate_proc : PROCESS ( 
       En,
       TrigSeen, Empty2,
-      NAcnt, NBcnt, NCcnt,
+      NAcnt, NBcnt, NCcnt, NC,
       current_state
    )
    -----------------------------------------------------------------
