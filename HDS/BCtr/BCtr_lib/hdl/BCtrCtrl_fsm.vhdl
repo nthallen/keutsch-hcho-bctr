@@ -129,6 +129,7 @@ BEGIN
               DRdy_cld <= '0';
             end if;
           WHEN TriggerDelayed =>
+            WE1_cld <= '0';
             if Empty2 = '1' then
               DRdy_cld <= '0';
             end if;
@@ -175,6 +176,7 @@ BEGIN
               if NBcnt = 0 then -- last sample in a trigger
                 NBcnt <= NB;
                 CntEn_cld <= '0';
+                RE1_cld <= '0';
                 PMT_clr_cld <= '1';
                 if NCcnt = 0 then -- last sample in a report
                   NCcnt <= NC;

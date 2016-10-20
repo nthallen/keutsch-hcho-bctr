@@ -142,6 +142,42 @@ BEGIN
         assert Trigger = '0' report "Expected Trigger to clear" severity error;
       end loop;
     end procedure wait_for_triggers;
+    
+    procedure test1(
+       A : std_logic_vector(15 downto 0);
+       B : std_logic_vector(FIFO_ADDR_WIDTH-1 downto 0);
+       C : std_logic_vector(15 downto 0)) is
+    begin
+      NA <= A;
+      NB <= B;
+      NC <= C;
+      wait until clk'Event and clk = '1';
+      En <= '1';
+      
+      wait_for_triggers(conv_integer(NC)+2);
+      assert DRdy = '1' report "Expected DRdy" severity error;
+      wait_for_triggers(conv_integer(NC)+1);
+      wait until clk'Event and clk = '1';
+      wait until clk'Event and clk = '1';
+      wait until clk'Event and clk = '1';
+      RE <= '1';
+      for i in 1 to conv_integer(NB)+1 loop
+        assert conv_integer(RData) = (conv_integer(NA)+1)*(conv_integer(NC)+1)
+        report "Invalid RData" severity error;
+        wait until clk'Event and clk = '1';
+      end loop;
+      RE <= '0';
+      wait until clk'Event and clk = '1';
+      wait for 2 ns;
+      assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
+      wait_for_triggers(conv_integer(NC)+2);
+      En <= '0';
+      wait for 200 ns;
+      assert DRdy = '1' report "Expected DRdy" severity error;
+      RE <= '1';
+      wait until DRdy = '0';
+      RE <= '0';
+    end procedure test1;
   Begin
     SimDone <= '0';
     NA <= X"0004";
@@ -155,19 +191,13 @@ BEGIN
     wait until clk'Event and clk = '1';
     rst <= '0';
     wait until clk'Event and clk = '1';
-    wait until clk'Event and clk = '1';
-    En <= '1';
     
-    wait_for_triggers(conv_integer(NC)+2);
-    assert DRdy = '1' report "Expected DRdy" severity error;
-    wait_for_triggers(conv_integer(NC)+2);
-    En <= '0';
-    wait for 200 ns;
-    
+    Test1(X"0004", X"02", X"0001");
+    Test1(X"0000", X"07", X"0005");
+    Test1(X"0004", X"02", X"0000");
+
     SimDone <= '1';
     wait;
-   -- pragma synthesis_on
+    -- pragma synthesis_on
   End Process;
-
-
-END rtl;
+End rtl;
