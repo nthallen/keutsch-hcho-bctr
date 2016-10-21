@@ -175,8 +175,15 @@ BEGIN
       wait for 200 ns;
       assert DRdy = '1' report "Expected DRdy" severity error;
       RE <= '1';
-      wait until DRdy = '0';
+      for i in 1 to conv_integer(NB)+1 loop
+        assert conv_integer(RData) = (conv_integer(NA)+1)*(conv_integer(NC)+1)
+        report "Invalid RData" severity error;
+        wait until clk'Event and clk = '1';
+      end loop;
       RE <= '0';
+      wait until clk'Event and clk = '1';
+      wait for 2 ns;
+      assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
     end procedure test1;
   Begin
     SimDone <= '0';

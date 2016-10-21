@@ -111,7 +111,7 @@ BEGIN
             WE1_cld <= '0';
             WE2_cld <= '0';
             PMT_clr_cld <= '1';
-            RE1_cld <= '0';
+            RE1_cld <= '1';
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
@@ -217,7 +217,7 @@ BEGIN
   BEGIN
     CASE current_state IS
       WHEN Startup => 
-        IF (En = '1') THEN 
+        IF (En = '1' AND Empty1 = '1') THEN 
           next_state <= ReportArmed;
         ELSE
           next_state <= Startup;
