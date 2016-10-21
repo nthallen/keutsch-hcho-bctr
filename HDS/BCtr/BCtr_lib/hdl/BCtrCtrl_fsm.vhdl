@@ -28,7 +28,6 @@ ENTITY BCtrCtrl IS
     rst       : IN     std_logic;
     CntEn     : OUT    std_logic;
     DRdy      : OUT    std_logic;
-    PMT_clr   : OUT    std_logic;
     RE1       : OUT    std_logic;
     TrigArm   : OUT    std_logic;
     TrigClr   : OUT    std_logic;
@@ -67,7 +66,6 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    SIGNAL first_row_cld : std_logic;
    SIGNAL first_col_cld : std_logic;
    SIGNAL CntEn_cld : std_logic;
-   SIGNAL PMT_clr_cld : std_logic;
    SIGNAL WE1_cld : std_logic;
    SIGNAL WE2_cld : std_logic;
    SIGNAL RE1_cld : std_logic;
@@ -90,7 +88,6 @@ BEGIN
         CntEn_cld <= '0';
         WE1_cld <= '0';
         WE2_cld <= '0';
-        PMT_clr_cld <= '1';
         RE1_cld <= '0';
         DRdy_cld <= '0';
         TrigClr_cld <= '0';
@@ -110,7 +107,6 @@ BEGIN
             CntEn_cld <= '0';
             WE1_cld <= '0';
             WE2_cld <= '0';
-            PMT_clr_cld <= '1';
             RE1_cld <= '1';
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
@@ -139,12 +135,8 @@ BEGIN
             WE1_cld <= '0';
             WE2_cld <= '0';
             RE1_cld <= '0';
-            PMT_clr_cld <= '1';
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
-            if En = '1' AND TrigSeen = '1' then
-              PMT_clr_cld <= '0';
-            end if;
           WHEN Triggered =>
             CntEn_cld <= '1';
             NBcnt <= NB;
@@ -177,7 +169,6 @@ BEGIN
                 NBcnt <= NB;
                 CntEn_cld <= '0';
                 RE1_cld <= '0';
-                PMT_clr_cld <= '1';
                 if NCcnt = 0 then -- last sample in a report
                   NCcnt <= NC;
                   DRdy_cld <= '1';
@@ -289,7 +280,6 @@ BEGIN
   first_row <= first_row_cld;
   first_col <= first_col_cld;
   CntEn <= CntEn_cld;
-  PMT_clr <= PMT_clr_cld;
   WE1 <= WE1_cld;
   WE2 <= WE2_cld;
   RE1 <= RE1_cld;
