@@ -44,6 +44,7 @@ ARCHITECTURE rtl OF BCtr_tb IS
    SIGNAL RData   : std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
    SIGNAL RE      : std_logic;
    SIGNAL Trigger : std_logic;
+   SIGNAL NSkipped : std_logic_vector (15 DOWNTO 0);
    SIGNAL SimDone : std_logic;
 
 
@@ -54,17 +55,18 @@ ARCHITECTURE rtl OF BCtr_tb IS
          FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
       );
       PORT (
-         clk     : IN     std_logic;
-         rst     : IN     std_logic;
-         DRdy    : OUT    std_logic;
-         En      : IN     std_logic;
-         NA      : IN     std_logic_vector(15 DOWNTO 0);
-         NC      : IN     std_logic_vector(15 DOWNTO 0);
-         NB      : IN     std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
-         PMT     : IN     std_logic;
-         RData   : OUT    std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
-         RE      : IN     std_logic;
-         Trigger : IN     std_logic
+         clk      : IN     std_logic;
+         rst      : IN     std_logic;
+         DRdy     : OUT    std_logic;
+         En       : IN     std_logic;
+         NA       : IN     std_logic_vector(15 DOWNTO 0);
+         NC       : IN     std_logic_vector(15 DOWNTO 0);
+         NB       : IN     std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+         PMT      : IN     std_logic;
+         RData    : OUT    std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
+         RE       : IN     std_logic;
+         NSkipped : OUT    std_logic_vector (15 DOWNTO 0);
+         Trigger  : IN     std_logic
       );
    END COMPONENT;
 
@@ -91,7 +93,8 @@ BEGIN
                PMT     => PMT,
                RData   => RData,
                RE      => RE,
-               Trigger => Trigger
+               Trigger => Trigger,
+               NSkipped => NSkipped
             );
       
   f100m_clk : Process is
@@ -136,11 +139,14 @@ BEGIN
       variable delay : integer := (conv_integer(NA)+1)*(conv_integer(NB)+1)+7;
     begin
       for i in 1 to N loop
+        -- pragma synthesis_off
         wait until Trigger = '1' for delay*10 ns;
         assert Trigger = '1' report "Expected Trigger" severity error;
         wait until Trigger = '0' for delay*10 ns;
+        -- pragma synthesis_on
         assert Trigger = '0' report "Expected Trigger to clear" severity error;
       end loop;
+      return;
     end procedure wait_for_triggers;
     
     procedure test1(
@@ -151,6 +157,7 @@ BEGIN
       NA <= A;
       NB <= B;
       NC <= C;
+      -- pragma synthesis_off
       wait until clk'Event and clk = '1';
       En <= '1';
       
@@ -183,7 +190,9 @@ BEGIN
       RE <= '0';
       wait until clk'Event and clk = '1';
       wait for 2 ns;
+      -- pragma synthesis_on
       assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
+      return;
     end procedure test1;
   Begin
     SimDone <= '0';

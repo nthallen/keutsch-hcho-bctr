@@ -35,7 +35,8 @@ ENTITY BCtrCtrl IS
     WE1       : OUT    std_logic;
     WE2       : OUT    std_logic;
     first_col : OUT    std_logic;
-    first_row : OUT    std_logic
+    first_row : OUT    std_logic;
+    NSkipped  : OUT    std_logic_vector (15 DOWNTO 0)
 );
 
 -- Declarations
@@ -48,7 +49,6 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    TYPE STATE_TYPE IS (
       Startup,
       ReportArmed,
-      TriggerDelayed,
       TriggerArmed,
       Triggered,
       Scanning
@@ -73,6 +73,8 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    SIGNAL TrigClr_cld : std_logic;
    SIGNAL TrigOE_cld : std_logic;
    SIGNAL TrigArm_cld : std_logic;
+   SIGNAL Skipping : std_logic;
+   SIGNAL NSkip : std_logic_vector (15 DOWNTO 0);
 BEGIN
 
   -----------------------------------------------------------------
@@ -96,6 +98,9 @@ BEGIN
         NAcnt <= (others => '0');
         NBcnt <= (others => '0');
         NCcnt <= (others => '0');
+        Skipping <= '0';
+        NSkip <= (others => '0');
+        NSkipped <= (others => '0');
       ELSE
         current_state <= next_state;
 
@@ -111,24 +116,26 @@ BEGIN
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
+            Skipping <= '0';
           WHEN ReportArmed => 
             first_row_cld <= '1';
             CntEn_cld <= '0';
             WE1_cld <= '0';
             WE2_cld <= '0';
             RE1_cld <= '0';
-            NCcnt <= NC;
+            NCcnt <= (others => '0');
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
-            if NC = 0 AND Empty2 = '1' then
-              DRdy_cld <= '0';
-            end if;
-          WHEN TriggerDelayed =>
-            WE1_cld <= '0';
+            NSkip <= (others => '0');
             if Empty2 = '1' then
               DRdy_cld <= '0';
             end if;
+--          WHEN TriggerDelayed =>
+--            WE1_cld <= '0';
+--            if Empty2 = '1' then
+--              DRdy_cld <= '0';
+--            end if;
           WHEN TriggerArmed =>
             first_col_cld <= '1';
             CntEn_cld <= '0';
@@ -137,48 +144,68 @@ BEGIN
             RE1_cld <= '0';
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
+            IF En = '1' AND TrigSeen = '1' THEN
+              IF ( NC = 0 OR NCcnt = 1 ) AND Empty2 = '0' THEN
+                Skipping <= '1';
+              ELSE
+                Skipping <= '0';
+                IF NCcnt = 0 THEN
+                  NCcnt <= NC;
+                ELSE
+                  NCcnt <= NCcnt - 1;
+                END IF;
+              END IF;
+            END IF;
           WHEN Triggered =>
-            CntEn_cld <= '1';
-            NBcnt <= NB;
-            NAcnt <= NA;
-            if first_row_cld = '0' then
-              RE1_cld <= '1';
-            end if;
-            if NA = 0 AND NB = 0 then
-              if NCcnt = 0 then
-                WE2_cld <= '1';
-              else
-                WE1_cld <= '1';
-              end if;
-            end if;
-          WHEN Scanning =>
-            TrigClr_cld <= '1';
-            TrigArm_cld <= '0';
-            if NAcnt = 0 then -- last sample in a bin
-              NAcnt <= NA;
-              first_col_cld <= '1';
+            IF Skipping = '1' THEN
+              NSkip <= NSkip + 1;
+            ELSE
+              CntEn_cld <= '1';
               if first_row_cld = '0' then
                 RE1_cld <= '1';
               end if;
-              if NCcnt = 0 then
-                WE2_cld <= '1';
-              else
-                WE1_cld <= '1';
+              if NA = 0 AND NB = 0 then
+                if NCcnt = 0 then
+                  WE2_cld <= '1';
+                else
+                  WE1_cld <= '1';
+                end if;
+              end if;
+            END IF;
+            NBcnt <= NB;
+            NAcnt <= NA;
+          WHEN Scanning =>
+            TrigClr_cld <= '1';
+            TrigArm_cld <= '0';
+            if Empty2 = '1' then
+              DRdy_cld <= '0';
+            end if;
+            if NAcnt = 0 then -- last sample in a bin
+              NAcnt <= NA;
+              first_col_cld <= '1';
+              if Skipping = '0' then
+                if first_row_cld = '0' then
+                  RE1_cld <= '1';
+                end if;
+                if NCcnt = 0 then
+                  WE2_cld <= '1';
+                else
+                  WE1_cld <= '1';
+                end if;
               end if;
               if NBcnt = 0 then -- last sample in a trigger
                 NBcnt <= NB;
                 CntEn_cld <= '0';
                 RE1_cld <= '0';
-                if NCcnt = 0 then -- last sample in a report
-                  NCcnt <= NC;
+                if NCcnt = 0 AND Skipping = '0' then -- last sample in a report
+                  -- NCcnt <= NC;
                   DRdy_cld <= '1';
+                  NSkipped <= NSkip;
                   first_row_cld <= '1';
                 else
-                  if NCcnt = 1 AND Empty2 = '1' then
-                    DRdy_cld <= '0';
+                  if Skipping = '0' then
+                    first_row_cld <= '0';
                   end if;
-                  NCcnt <= NCcnt - 1;
-                  first_row_cld <= '0';
                 end if;
               else
                 NBcnt <= NBcnt - 1;
@@ -200,8 +227,8 @@ BEGIN
   -----------------------------------------------------------------
    nextstate_proc : PROCESS ( 
       En,
-      TrigSeen, Empty2,
-      NAcnt, NBcnt, NCcnt, NC,
+      TrigSeen, Empty1,
+      NAcnt, NBcnt, NCcnt,
       current_state
    )
    -----------------------------------------------------------------
@@ -215,22 +242,18 @@ BEGIN
         END IF;
       WHEN ReportArmed => 
         if En = '1' then
-          if NC = 0 AND Empty2 = '0' then
-            next_state <= TriggerDelayed;
-          else
-            next_state <= TriggerArmed;
-          end if;
+          next_state <= TriggerArmed;
         else
           next_state <= Startup;
         end if;
-      WHEN TriggerDelayed =>
-        if En /= '1' THEN
-          next_state <= Startup;
-        ELSIF Empty2 = '1' THEN
-          next_state <= TriggerArmed;
-        ELSE
-          next_state <= TriggerDelayed;
-        END IF;
+--      WHEN TriggerDelayed =>
+--        if En /= '1' THEN
+--          next_state <= Startup;
+--        ELSIF Empty2 = '1' THEN
+--          next_state <= TriggerArmed;
+--        ELSE
+--          next_state <= TriggerDelayed;
+--        END IF;
       WHEN TriggerArmed =>
         IF En /= '1' THEN 
           next_state <= Startup;
@@ -249,10 +272,10 @@ BEGIN
         if En /= '1' then
           next_state <= Startup;
         elsif NAcnt = 0 AND NBcnt = 0 then
-          IF NCcnt = 0 THEN
+          IF NCcnt = 0 AND Skipping = '0' THEN
             next_state <= ReportArmed;
-          ELSIF NCcnt = 1 AND Empty2 = '0' THEN
-            next_state <= TriggerDelayed;
+--          ELSIF NCcnt = 1 AND Empty2 = '0' THEN
+--            next_state <= TriggerDelayed;
           ELSE
             next_state <= TriggerArmed;
           end if;

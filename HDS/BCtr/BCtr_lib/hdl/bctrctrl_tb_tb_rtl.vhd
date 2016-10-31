@@ -40,7 +40,6 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
    SIGNAL rst       : std_logic;
    SIGNAL CntEn     : std_logic;
    SIGNAL DRdy      : std_logic;
-   SIGNAL PMT_clr   : std_logic;
    SIGNAL RE1       : std_logic;
    SIGNAL TrigArm   : std_logic;
    SIGNAL TrigClr   : std_logic;
@@ -49,6 +48,7 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
    SIGNAL WE2       : std_logic;
    SIGNAL first_col : std_logic;
    SIGNAL first_row : std_logic;
+   SIGNAL NSkipped  : std_logic_vector(15 DOWNTO 0);
    SIGNAL SimDone   : std_logic;
 
 
@@ -70,7 +70,6 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
          rst       : IN     std_logic;
          CntEn     : OUT    std_logic;
          DRdy      : OUT    std_logic;
-         PMT_clr   : OUT    std_logic;
          RE1       : OUT    std_logic;
          TrigArm   : OUT    std_logic;
          TrigClr   : OUT    std_logic;
@@ -78,7 +77,8 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
          WE1       : OUT    std_logic;
          WE2       : OUT    std_logic;
          first_col : OUT    std_logic;
-         first_row : OUT    std_logic
+         first_row : OUT    std_logic;
+         NSkipped  : OUT    std_logic_vector (15 DOWNTO 0)
       );
    END COMPONENT;
 
@@ -106,7 +106,6 @@ BEGIN
                rst       => rst,
                CntEn     => CntEn,
                DRdy      => DRdy,
-               PMT_clr   => PMT_clr,
                RE1       => RE1,
                TrigArm   => TrigArm,
                TrigClr   => TrigClr,
@@ -114,7 +113,8 @@ BEGIN
                WE1       => WE1,
                WE2       => WE2,
                first_col => first_col,
-               first_row => first_row
+               first_row => first_row,
+               NSkipped  => NSkipped
             );
 
       
