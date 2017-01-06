@@ -54,7 +54,10 @@ BEGIN
         Empty_int <= '1';
         Head <= (others => '0');
         Tail <= (others => '0');
-        FIFOdata(0) <= (others => '0');
+        -- This is a little overkill:
+        for i in 0 TO 2**FIFO_ADDR_WIDTH-1 loop
+          FIFOdata(i) <= (others => '0');
+        end loop;
       else
         if RE = '1' AND Empty_int = '0' then
           if Tail+1 = Head AND ( WE /= '1' OR Full_int = '1' ) then
