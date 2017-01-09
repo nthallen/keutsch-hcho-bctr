@@ -229,7 +229,7 @@ BEGIN
       En,
       TrigSeen, Empty1,
       NAcnt, NBcnt, NCcnt,
-      current_state
+      current_state, Skipping
    )
    -----------------------------------------------------------------
   BEGIN

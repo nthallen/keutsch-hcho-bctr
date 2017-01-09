@@ -27,53 +27,42 @@ END TriEn ;
 --
 ARCHITECTURE beh OF TriEn IS
 	TYPE type_sreg IS (INIT,S1,S2,S3);
-	SIGNAL sreg, next_sreg : type_sreg;
+	SIGNAL sreg : type_sreg;
 BEGIN
 	PROCESS (CLK)
 	BEGIN
 		IF CLK='1' AND CLK'event THEN
-			sreg <= next_sreg;
-		END IF;
-	END PROCESS;
-
-	PROCESS (sreg,rst)
-	BEGIN
-
-		IF ( rst='1' ) THEN
-			next_sreg<=INIT;
-		ELSE
-			CASE sreg IS
-				WHEN INIT =>
-					next_sreg<=S1;
-				WHEN S1 =>
-					next_sreg<=S2;
-				WHEN S2 =>
-					next_sreg<=S3;
-				WHEN S3 =>
-					next_sreg<=S1;
-				WHEN OTHERS =>
-			END CASE;
-		END IF;
-	END PROCESS;
-
-	PROCESS (sreg)
-	BEGIN
-		IF ((  (sreg=INIT)) OR (  (sreg=S1))) THEN EN1<='1';
-		ELSE EN1<='0';
-		END IF;
-	END PROCESS;
-
-	PROCESS (sreg)
-	BEGIN
-		IF ((  (sreg=INIT)) OR (  (sreg=S2))) THEN EN2<='1';
-		ELSE EN2<='0';
-		END IF;
-	END PROCESS;
-
-	PROCESS (sreg)
-	BEGIN
-		IF ((  (sreg=INIT)) OR (  (sreg=S3))) THEN EN3<='1';
-		ELSE EN3<='0';
+		  IF ( rst='1' ) THEN
+		    sreg <= INIT;
+		    EN1 <= '1';
+		    EN2 <= '1';
+		    EN3 <= '1';
+      ELSE
+    			 CASE sreg IS
+      				WHEN INIT =>
+      	 				sreg <= S1;
+      				WHEN S1 =>
+       					sreg <= S2;
+      		    EN1 <= '1';
+      		    EN2 <= '0';
+      		    EN3 <= '0';
+      				WHEN S2 =>
+      					sreg <= S3;
+      		    EN1 <= '0';
+      		    EN2 <= '1';
+      		    EN3 <= '0';
+      				WHEN S3 =>
+      					sreg <= S1;
+      		    EN1 <= '0';
+      		    EN2 <= '0';
+      		    EN3 <= '1';
+      				WHEN OTHERS =>
+      			   sreg <= INIT;
+      		    EN1 <= '1';
+      		    EN2 <= '1';
+      		    EN3 <= '1';
+      		END CASE;
+      END IF;
 		END IF;
 	END PROCESS;
 END ARCHITECTURE beh;

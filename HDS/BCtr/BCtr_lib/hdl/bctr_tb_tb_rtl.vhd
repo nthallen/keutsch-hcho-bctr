@@ -14,8 +14,9 @@ USE ieee.std_logic_arith.all;
 
 ENTITY BCtr_tb IS
    GENERIC (
-      FIFO_WIDTH      : integer range 32 downto 1 := 16;
-      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 8
+     N_CHANNELS : integer range 4 downto 0 := 1;
+     CTR_WIDTH      : integer range 32 downto 1 := 16;
+     FIFO_ADDR_WIDTH : integer range 10 downto 4 := 8
    );
 END BCtr_tb;
 
@@ -40,8 +41,9 @@ ARCHITECTURE rtl OF BCtr_tb IS
    SIGNAL NA      : std_logic_vector(15 DOWNTO 0);
    SIGNAL NB      : std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
    SIGNAL NC      : std_logic_vector(15 DOWNTO 0);
+   SIGNAL PMTs    : std_logic_vector(N_CHANNELS-1 DOWNTO 0);
    SIGNAL PMT     : std_logic;
-   SIGNAL RData   : std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
+   SIGNAL RData   : std_logic_vector(N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
    SIGNAL RE      : std_logic;
    SIGNAL Trigger : std_logic;
    SIGNAL NSkipped : std_logic_vector (15 DOWNTO 0);
@@ -51,7 +53,8 @@ ARCHITECTURE rtl OF BCtr_tb IS
    -- Component declarations
    COMPONENT BCtr
       GENERIC (
-         FIFO_WIDTH      : integer range 32 downto 1 := 16;
+         N_CHANNELS : integer range 4 downto 1 := 1;
+         CTR_WIDTH      : integer range 32 downto 1 := 16;
          FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
       );
       PORT (
@@ -62,8 +65,8 @@ ARCHITECTURE rtl OF BCtr_tb IS
          NA       : IN     std_logic_vector(15 DOWNTO 0);
          NC       : IN     std_logic_vector(15 DOWNTO 0);
          NB       : IN     std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
-         PMT      : IN     std_logic;
-         RData    : OUT    std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
+         PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
+         RData    : OUT    std_logic_vector(N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
          RE       : IN     std_logic;
          NSkipped : OUT    std_logic_vector (15 DOWNTO 0);
          Trigger  : IN     std_logic
@@ -79,8 +82,9 @@ BEGIN
 
          U_0 : BCtr
             GENERIC MAP (
-               FIFO_WIDTH      => FIFO_WIDTH,
-               FIFO_ADDR_WIDTH => FIFO_ADDR_WIDTH
+              N_CHANNELS => 1,
+              CTR_WIDTH => CTR_WIDTH,
+              FIFO_ADDR_WIDTH => FIFO_ADDR_WIDTH
             )
             PORT MAP (
                clk     => clk,
@@ -90,7 +94,7 @@ BEGIN
                NA      => NA,
                NB      => NB,
                NC      => NC,
-               PMT     => PMT,
+               PMTs     => PMTs,
                RData   => RData,
                RE      => RE,
                Trigger => Trigger,
@@ -216,4 +220,6 @@ BEGIN
     wait;
     -- pragma synthesis_on
   End Process;
+  
+  PMTs(0) <= PMT;
 End rtl;

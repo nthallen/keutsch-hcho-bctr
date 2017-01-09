@@ -14,17 +14,17 @@ USE ieee.std_logic_unsigned.all;
 
 ENTITY BCtrSum IS
    GENERIC( 
-      FIFO_WIDTH : integer range 32 downto 1 := 16
+      CTR_WIDTH : integer range 32 downto 1 := 16
    );
    PORT( 
-      CData0    : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+      CData0    : IN     std_logic_vector (CTR_WIDTH-1 DOWNTO 0);
       CntEn     : IN     std_logic;
       SIG       : IN     std_logic;
       clk       : IN     std_logic;
       first_col : IN     std_logic;
       first_row : IN     std_logic;
       rst       : IN     std_logic;
-      CData1    : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0)
+      CData1    : OUT    std_logic_vector (CTR_WIDTH-1 DOWNTO 0)
    );
 
 -- Declarations
@@ -33,10 +33,10 @@ END BCtrSum ;
 
 --
 ARCHITECTURE beh OF BCtrSum IS
-  SIGNAL CurSum : std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
+  SIGNAL CurSum : std_logic_vector(CTR_WIDTH-1 DOWNTO 0);
 BEGIN
   Sum : PROCESS (clk)
-    variable Addend : std_logic_vector(FIFO_WIDTH-1 DOWNTO 0);
+    variable Addend : std_logic_vector(CTR_WIDTH-1 DOWNTO 0);
     variable Inc : std_logic;
   BEGIN
     if clk'Event AND clk = '1' then

@@ -1,26 +1,26 @@
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 NO_GRAPHIC 0
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 50,0 11 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 671,0 18 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 666,0 19 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 676,0 20 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 681,0 21 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 1,0 24 0 
 DESIGN @p@m@t_@input
-VIEW interface
+VIEW symbol.sb
 GRAPHIC 1,0 25 0 
 DESIGN @p@m@t_@input
 VIEW struct.bd
