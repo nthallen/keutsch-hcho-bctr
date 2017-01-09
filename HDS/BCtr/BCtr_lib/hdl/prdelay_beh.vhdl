@@ -14,7 +14,9 @@ USE ieee.numeric_std.all;
 ENTITY prdelay IS
   GENERIC (
     LFSR_WIDTH : integer range 64 downto 4 := 41;
-    OUTPUT_WIDTH : integer range 16 downto 4 := 9
+    OUTPUT_WIDTH : integer range 16 downto 4 := 9;
+    RAND_WIDTH : integer range 64 downto 4 := 18;
+    LOOKUP_SIZE : integer range 1000 downto 4 := 333
   );
   PORT (
     clk : IN std_logic;
@@ -39,9 +41,48 @@ ARCHITECTURE beh OF prdelay IS
   SIGNAL set_seed : std_logic;
   SIGNAL seed : std_logic_vector(LFSR_WIDTH-1 DOWNTO 0);
   SIGNAL rand_out : std_logic_vector(LFSR_WIDTH-1 DOWNTO 0);
-  SIGNAL R : unsigned(17 DOWNTO 0);
-  -- type T_t is array (333 DOWNTO 1) of integer range 3992 DOWNTO 0;
-  -- SIGNAL T : T_t;
+  SIGNAL R : unsigned(RAND_WIDTH-1 DOWNTO 0);
+  SIGNAL Tmid : integer range 3992 DOWNTO 0;
+  SIGNAL RgtTmid : std_logic;
+  SIGNAL low, mid, high : unsigned(OUTPUT_WIDTH-1 DOWNTO 0);
+  TYPE State_t IS (S_INIT, S_LU0, S_LU1, S_LU2);
+  SIGNAL cur_state : State_t;
+  TYPE T_t is array (1 TO LOOKUP_SIZE) of integer range 3992 DOWNTO 0;
+  CONSTANT T : T_t := (
+      87,   174,   262,   349,   408,   448,   484,   521,   557,   592,
+     627,   662,   697,   731,   765,   798,   832,   864,   897,   929,
+     961,   993,  1024,  1055,  1085,  1116,  1146,  1175,  1205,  1234,
+    1263,  1291,  1320,  1348,  1375,  1403,  1430,  1457,  1483,  1510,
+    1536,  1562,  1587,  1613,  1638,  1663,  1687,  1711,  1736,  1759,
+    1783,  1806,  1830,  1852,  1875,  1898,  1920,  1942,  1964,  1985,
+    2007,  2028,  2049,  2069,  2090,  2110,  2130,  2150,  2170,  2190,
+    2209,  2228,  2247,  2266,  2284,  2303,  2321,  2339,  2357,  2374,
+    2392,  2409,  2426,  2443,  2460,  2477,  2493,  2510,  2526,  2542,
+    2558,  2573,  2589,  2604,  2619,  2634,  2649,  2664,  2679,  2693,
+    2707,  2722,  2736,  2750,  2763,  2777,  2790,  2804,  2817,  2830,
+    2843,  2856,  2869,  2881,  2894,  2906,  2918,  2930,  2942,  2954,
+    2966,  2977,  2989,  3000,  3012,  3023,  3034,  3045,  3055,  3066,
+    3077,  3087,  3098,  3108,  3118,  3128,  3138,  3148,  3158,  3168,
+    3177,  3187,  3196,  3205,  3215,  3224,  3233,  3242,  3251,  3259,
+    3268,  3277,  3285,  3294,  3302,  3310,  3318,  3327,  3335,  3343,
+    3350,  3358,  3366,  3374,  3381,  3389,  3396,  3403,  3411,  3418,
+    3425,  3432,  3439,  3446,  3453,  3459,  3466,  3473,  3479,  3486,
+    3492,  3499,  3505,  3511,  3517,  3523,  3529,  3535,  3541,  3547,
+    3553,  3559,  3565,  3570,  3576,  3581,  3587,  3592,  3598,  3603,
+    3608,  3613,  3619,  3624,  3629,  3634,  3639,  3644,  3649,  3653,
+    3658,  3663,  3668,  3672,  3677,  3681,  3686,  3690,  3695,  3699,
+    3703,  3708,  3712,  3716,  3720,  3724,  3728,  3732,  3736,  3740,
+    3744,  3748,  3752,  3756,  3759,  3763,  3767,  3770,  3774,  3778,
+    3781,  3785,  3788,  3791,  3795,  3798,  3802,  3805,  3808,  3811,
+    3815,  3818,  3821,  3824,  3827,  3830,  3833,  3836,  3839,  3842,
+    3845,  3848,  3850,  3853,  3856,  3859,  3862,  3864,  3867,  3870,
+    3872,  3875,  3877,  3880,  3882,  3885,  3887,  3890,  3892,  3895,
+    3897,  3899,  3902,  3904,  3906,  3908,  3911,  3913,  3915,  3917,
+    3919,  3921,  3924,  3926,  3928,  3930,  3932,  3934,  3936,  3938,
+    3940,  3942,  3943,  3945,  3947,  3949,  3951,  3953,  3954,  3956,
+    3958,  3960,  3961,  3963,  3965,  3966,  3968,  3970,  3971,  3973,
+    3975,  3976,  3978,  3979,  3981,  3982,  3984,  3985,  3987,  3988,
+    3990,  3991,  3992 );
 BEGIN
   lfsr_inst : lfsr
     GENERIC MAP (width => LFSR_WIDTH)
@@ -53,694 +94,82 @@ BEGIN
       rand_out => rand_out
     );
     
+  PROCESS (R,Tmid) IS
+  BEGIN
+    IF (R > to_unsigned(Tmid,RAND_WIDTH)) THEN
+      RgtTmid <= '1';
+    ELSE
+      RgtTmid <= '0';
+    END IF;
+  END PROCESS;
+  
   PROCESS (clk) IS
-    FUNCTION my_US(X : IN integer) return unsigned IS
-      VARIABLE Output : unsigned(OUTPUT_WIDTH-1 DOWNTO 0);
-      VARIABLE Y : integer range 2**OUTPUT_WIDTH-1 DOWNTO 0;
+    FUNCTION midpoint(low, high : IN unsigned(OUTPUT_WIDTH-1 DOWNTO 0))
+      return unsigned IS
+      VARIABLE low1, mid1, high1 : unsigned(OUTPUT_WIDTH DOWNTO 0);
+      VARIABLE mid : unsigned(OUTPUT_WIDTH-1 DOWNTO 0);
     BEGIN
-      Y := X;
-      Output := to_unsigned(Y, OUTPUT_WIDTH);
-      return Output;
-    END my_US;
+      low1 := resize(low,OUTPUT_WIDTH+1);
+      high1 := resize(high,OUTPUT_WIDTH+1);
+      mid1 := low1+high1;
+      mid := mid1(OUTPUT_WIDTH DOWNTO 1);
+      return mid;
+    END midpoint;
+    VARIABLE midv : unsigned(OUTPUT_WIDTH-1 DOWNTO 0);
   BEGIN
     IF (clk'Event AND clk = '1') THEN
       IF (rst = '1') THEN
         Nbins <= (others => '0');
         set_seed <= '0';
         seed <= (others => '0');
+        cur_state <= S_INIT;
       ELSE
-        IF (RE = '1') THEN
-          R <= unsigned(rand_out(17 DOWNTO 0));
-          IF (R <= 87) THEN
-            Nbins <= my_US(1);
-          ELSIF (R <= 174) THEN
-            Nbins <= my_US(2);
-          ELSIF (R <= 262) THEN
-            Nbins <= my_US(3);
-          ELSIF (R <= 349) THEN
-            Nbins <= my_US(4);
-          ELSIF (R <= 408) THEN
-            Nbins <= my_US(5);
-          ELSIF (R <= 448) THEN
-            Nbins <= my_US(6);
-          ELSIF (R <= 484) THEN
-            Nbins <= my_US(7);
-          ELSIF (R <= 521) THEN
-            Nbins <= my_US(8);
-          ELSIF (R <= 557) THEN
-            Nbins <= my_US(9);
-          ELSIF (R <= 592) THEN
-            Nbins <= my_US(10);
-          ELSIF (R <= 627) THEN
-            Nbins <= my_US(11);
-          ELSIF (R <= 662) THEN
-            Nbins <= my_US(12);
-          ELSIF (R <= 697) THEN
-            Nbins <= my_US(13);
-          ELSIF (R <= 731) THEN
-            Nbins <= my_US(14);
-          ELSIF (R <= 765) THEN
-            Nbins <= my_US(15);
-          ELSIF (R <= 798) THEN
-            Nbins <= my_US(16);
-          ELSIF (R <= 832) THEN
-            Nbins <= my_US(17);
-          ELSIF (R <= 864) THEN
-            Nbins <= my_US(18);
-          ELSIF (R <= 897) THEN
-            Nbins <= my_US(19);
-          ELSIF (R <= 929) THEN
-            Nbins <= my_US(20);
-          ELSIF (R <= 961) THEN
-            Nbins <= my_US(21);
-          ELSIF (R <= 993) THEN
-            Nbins <= my_US(22);
-          ELSIF (R <= 1024) THEN
-            Nbins <= my_US(23);
-          ELSIF (R <= 1055) THEN
-            Nbins <= my_US(24);
-          ELSIF (R <= 1085) THEN
-            Nbins <= my_US(25);
-          ELSIF (R <= 1116) THEN
-            Nbins <= my_US(26);
-          ELSIF (R <= 1146) THEN
-            Nbins <= my_US(27);
-          ELSIF (R <= 1175) THEN
-            Nbins <= my_US(28);
-          ELSIF (R <= 1205) THEN
-            Nbins <= my_US(29);
-          ELSIF (R <= 1234) THEN
-            Nbins <= my_US(30);
-          ELSIF (R <= 1263) THEN
-            Nbins <= my_US(31);
-          ELSIF (R <= 1291) THEN
-            Nbins <= my_US(32);
-          ELSIF (R <= 1320) THEN
-            Nbins <= my_US(33);
-          ELSIF (R <= 1348) THEN
-            Nbins <= my_US(34);
-          ELSIF (R <= 1375) THEN
-            Nbins <= my_US(35);
-          ELSIF (R <= 1403) THEN
-            Nbins <= my_US(36);
-          ELSIF (R <= 1430) THEN
-            Nbins <= my_US(37);
-          ELSIF (R <= 1457) THEN
-            Nbins <= my_US(38);
-          ELSIF (R <= 1483) THEN
-            Nbins <= my_US(39);
-          ELSIF (R <= 1510) THEN
-            Nbins <= my_US(40);
-          ELSIF (R <= 1536) THEN
-            Nbins <= my_US(41);
-          ELSIF (R <= 1562) THEN
-            Nbins <= my_US(42);
-          ELSIF (R <= 1587) THEN
-            Nbins <= my_US(43);
-          ELSIF (R <= 1613) THEN
-            Nbins <= my_US(44);
-          ELSIF (R <= 1638) THEN
-            Nbins <= my_US(45);
-          ELSIF (R <= 1663) THEN
-            Nbins <= my_US(46);
-          ELSIF (R <= 1687) THEN
-            Nbins <= my_US(47);
-          ELSIF (R <= 1711) THEN
-            Nbins <= my_US(48);
-          ELSIF (R <= 1736) THEN
-            Nbins <= my_US(49);
-          ELSIF (R <= 1759) THEN
-            Nbins <= my_US(50);
-          ELSIF (R <= 1783) THEN
-            Nbins <= my_US(51);
-          ELSIF (R <= 1806) THEN
-            Nbins <= my_US(52);
-          ELSIF (R <= 1830) THEN
-            Nbins <= my_US(53);
-          ELSIF (R <= 1852) THEN
-            Nbins <= my_US(54);
-          ELSIF (R <= 1875) THEN
-            Nbins <= my_US(55);
-          ELSIF (R <= 1898) THEN
-            Nbins <= my_US(56);
-          ELSIF (R <= 1920) THEN
-            Nbins <= my_US(57);
-          ELSIF (R <= 1942) THEN
-            Nbins <= my_US(58);
-          ELSIF (R <= 1964) THEN
-            Nbins <= my_US(59);
-          ELSIF (R <= 1985) THEN
-            Nbins <= my_US(60);
-          ELSIF (R <= 2007) THEN
-            Nbins <= my_US(61);
-          ELSIF (R <= 2028) THEN
-            Nbins <= my_US(62);
-          ELSIF (R <= 2049) THEN
-            Nbins <= my_US(63);
-          ELSIF (R <= 2069) THEN
-            Nbins <= my_US(64);
-          ELSIF (R <= 2090) THEN
-            Nbins <= my_US(65);
-          ELSIF (R <= 2110) THEN
-            Nbins <= my_US(66);
-          ELSIF (R <= 2130) THEN
-            Nbins <= my_US(67);
-          ELSIF (R <= 2150) THEN
-            Nbins <= my_US(68);
-          ELSIF (R <= 2170) THEN
-            Nbins <= my_US(69);
-          ELSIF (R <= 2190) THEN
-            Nbins <= my_US(70);
-          ELSIF (R <= 2209) THEN
-            Nbins <= my_US(71);
-          ELSIF (R <= 2228) THEN
-            Nbins <= my_US(72);
-          ELSIF (R <= 2247) THEN
-            Nbins <= my_US(73);
-          ELSIF (R <= 2266) THEN
-            Nbins <= my_US(74);
-          ELSIF (R <= 2284) THEN
-            Nbins <= my_US(75);
-          ELSIF (R <= 2303) THEN
-            Nbins <= my_US(76);
-          ELSIF (R <= 2321) THEN
-            Nbins <= my_US(77);
-          ELSIF (R <= 2339) THEN
-            Nbins <= my_US(78);
-          ELSIF (R <= 2357) THEN
-            Nbins <= my_US(79);
-          ELSIF (R <= 2374) THEN
-            Nbins <= my_US(80);
-          ELSIF (R <= 2392) THEN
-            Nbins <= my_US(81);
-          ELSIF (R <= 2409) THEN
-            Nbins <= my_US(82);
-          ELSIF (R <= 2426) THEN
-            Nbins <= my_US(83);
-          ELSIF (R <= 2443) THEN
-            Nbins <= my_US(84);
-          ELSIF (R <= 2460) THEN
-            Nbins <= my_US(85);
-          ELSIF (R <= 2477) THEN
-            Nbins <= my_US(86);
-          ELSIF (R <= 2493) THEN
-            Nbins <= my_US(87);
-          ELSIF (R <= 2510) THEN
-            Nbins <= my_US(88);
-          ELSIF (R <= 2526) THEN
-            Nbins <= my_US(89);
-          ELSIF (R <= 2542) THEN
-            Nbins <= my_US(90);
-          ELSIF (R <= 2558) THEN
-            Nbins <= my_US(91);
-          ELSIF (R <= 2573) THEN
-            Nbins <= my_US(92);
-          ELSIF (R <= 2589) THEN
-            Nbins <= my_US(93);
-          ELSIF (R <= 2604) THEN
-            Nbins <= my_US(94);
-          ELSIF (R <= 2619) THEN
-            Nbins <= my_US(95);
-          ELSIF (R <= 2634) THEN
-            Nbins <= my_US(96);
-          ELSIF (R <= 2649) THEN
-            Nbins <= my_US(97);
-          ELSIF (R <= 2664) THEN
-            Nbins <= my_US(98);
-          ELSIF (R <= 2679) THEN
-            Nbins <= my_US(99);
-          ELSIF (R <= 2693) THEN
-            Nbins <= my_US(100);
-          ELSIF (R <= 2707) THEN
-            Nbins <= my_US(101);
-          ELSIF (R <= 2722) THEN
-            Nbins <= my_US(102);
-          ELSIF (R <= 2736) THEN
-            Nbins <= my_US(103);
-          ELSIF (R <= 2750) THEN
-            Nbins <= my_US(104);
-          ELSIF (R <= 2763) THEN
-            Nbins <= my_US(105);
-          ELSIF (R <= 2777) THEN
-            Nbins <= my_US(106);
-          ELSIF (R <= 2790) THEN
-            Nbins <= my_US(107);
-          ELSIF (R <= 2804) THEN
-            Nbins <= my_US(108);
-          ELSIF (R <= 2817) THEN
-            Nbins <= my_US(109);
-          ELSIF (R <= 2830) THEN
-            Nbins <= my_US(110);
-          ELSIF (R <= 2843) THEN
-            Nbins <= my_US(111);
-          ELSIF (R <= 2856) THEN
-            Nbins <= my_US(112);
-          ELSIF (R <= 2869) THEN
-            Nbins <= my_US(113);
-          ELSIF (R <= 2881) THEN
-            Nbins <= my_US(114);
-          ELSIF (R <= 2894) THEN
-            Nbins <= my_US(115);
-          ELSIF (R <= 2906) THEN
-            Nbins <= my_US(116);
-          ELSIF (R <= 2918) THEN
-            Nbins <= my_US(117);
-          ELSIF (R <= 2930) THEN
-            Nbins <= my_US(118);
-          ELSIF (R <= 2942) THEN
-            Nbins <= my_US(119);
-          ELSIF (R <= 2954) THEN
-            Nbins <= my_US(120);
-          ELSIF (R <= 2966) THEN
-            Nbins <= my_US(121);
-          ELSIF (R <= 2977) THEN
-            Nbins <= my_US(122);
-          ELSIF (R <= 2989) THEN
-            Nbins <= my_US(123);
-          ELSIF (R <= 3000) THEN
-            Nbins <= my_US(124);
-          ELSIF (R <= 3012) THEN
-            Nbins <= my_US(125);
-          ELSIF (R <= 3023) THEN
-            Nbins <= my_US(126);
-          ELSIF (R <= 3034) THEN
-            Nbins <= my_US(127);
-          ELSIF (R <= 3045) THEN
-            Nbins <= my_US(128);
-          ELSIF (R <= 3055) THEN
-            Nbins <= my_US(129);
-          ELSIF (R <= 3066) THEN
-            Nbins <= my_US(130);
-          ELSIF (R <= 3077) THEN
-            Nbins <= my_US(131);
-          ELSIF (R <= 3087) THEN
-            Nbins <= my_US(132);
-          ELSIF (R <= 3098) THEN
-            Nbins <= my_US(133);
-          ELSIF (R <= 3108) THEN
-            Nbins <= my_US(134);
-          ELSIF (R <= 3118) THEN
-            Nbins <= my_US(135);
-          ELSIF (R <= 3128) THEN
-            Nbins <= my_US(136);
-          ELSIF (R <= 3138) THEN
-            Nbins <= my_US(137);
-          ELSIF (R <= 3148) THEN
-            Nbins <= my_US(138);
-          ELSIF (R <= 3158) THEN
-            Nbins <= my_US(139);
-          ELSIF (R <= 3168) THEN
-            Nbins <= my_US(140);
-          ELSIF (R <= 3177) THEN
-            Nbins <= my_US(141);
-          ELSIF (R <= 3187) THEN
-            Nbins <= my_US(142);
-          ELSIF (R <= 3196) THEN
-            Nbins <= my_US(143);
-          ELSIF (R <= 3205) THEN
-            Nbins <= my_US(144);
-          ELSIF (R <= 3215) THEN
-            Nbins <= my_US(145);
-          ELSIF (R <= 3224) THEN
-            Nbins <= my_US(146);
-          ELSIF (R <= 3233) THEN
-            Nbins <= my_US(147);
-          ELSIF (R <= 3242) THEN
-            Nbins <= my_US(148);
-          ELSIF (R <= 3251) THEN
-            Nbins <= my_US(149);
-          ELSIF (R <= 3259) THEN
-            Nbins <= my_US(150);
-          ELSIF (R <= 3268) THEN
-            Nbins <= my_US(151);
-          ELSIF (R <= 3277) THEN
-            Nbins <= my_US(152);
-          ELSIF (R <= 3285) THEN
-            Nbins <= my_US(153);
-          ELSIF (R <= 3294) THEN
-            Nbins <= my_US(154);
-          ELSIF (R <= 3302) THEN
-            Nbins <= my_US(155);
-          ELSIF (R <= 3310) THEN
-            Nbins <= my_US(156);
-          ELSIF (R <= 3318) THEN
-            Nbins <= my_US(157);
-          ELSIF (R <= 3327) THEN
-            Nbins <= my_US(158);
-          ELSIF (R <= 3335) THEN
-            Nbins <= my_US(159);
-          ELSIF (R <= 3343) THEN
-            Nbins <= my_US(160);
-          ELSIF (R <= 3350) THEN
-            Nbins <= my_US(161);
-          ELSIF (R <= 3358) THEN
-            Nbins <= my_US(162);
-          ELSIF (R <= 3366) THEN
-            Nbins <= my_US(163);
-          ELSIF (R <= 3374) THEN
-            Nbins <= my_US(164);
-          ELSIF (R <= 3381) THEN
-            Nbins <= my_US(165);
-          ELSIF (R <= 3389) THEN
-            Nbins <= my_US(166);
-          ELSIF (R <= 3396) THEN
-            Nbins <= my_US(167);
-          ELSIF (R <= 3403) THEN
-            Nbins <= my_US(168);
-          ELSIF (R <= 3411) THEN
-            Nbins <= my_US(169);
-          ELSIF (R <= 3418) THEN
-            Nbins <= my_US(170);
-          ELSIF (R <= 3425) THEN
-            Nbins <= my_US(171);
-          ELSIF (R <= 3432) THEN
-            Nbins <= my_US(172);
-          ELSIF (R <= 3439) THEN
-            Nbins <= my_US(173);
-          ELSIF (R <= 3446) THEN
-            Nbins <= my_US(174);
-          ELSIF (R <= 3453) THEN
-            Nbins <= my_US(175);
-          ELSIF (R <= 3459) THEN
-            Nbins <= my_US(176);
-          ELSIF (R <= 3466) THEN
-            Nbins <= my_US(177);
-          ELSIF (R <= 3473) THEN
-            Nbins <= my_US(178);
-          ELSIF (R <= 3479) THEN
-            Nbins <= my_US(179);
-          ELSIF (R <= 3486) THEN
-            Nbins <= my_US(180);
-          ELSIF (R <= 3492) THEN
-            Nbins <= my_US(181);
-          ELSIF (R <= 3499) THEN
-            Nbins <= my_US(182);
-          ELSIF (R <= 3505) THEN
-            Nbins <= my_US(183);
-          ELSIF (R <= 3511) THEN
-            Nbins <= my_US(184);
-          ELSIF (R <= 3517) THEN
-            Nbins <= my_US(185);
-          ELSIF (R <= 3523) THEN
-            Nbins <= my_US(186);
-          ELSIF (R <= 3529) THEN
-            Nbins <= my_US(187);
-          ELSIF (R <= 3535) THEN
-            Nbins <= my_US(188);
-          ELSIF (R <= 3541) THEN
-            Nbins <= my_US(189);
-          ELSIF (R <= 3547) THEN
-            Nbins <= my_US(190);
-          ELSIF (R <= 3553) THEN
-            Nbins <= my_US(191);
-          ELSIF (R <= 3559) THEN
-            Nbins <= my_US(192);
-          ELSIF (R <= 3565) THEN
-            Nbins <= my_US(193);
-          ELSIF (R <= 3570) THEN
-            Nbins <= my_US(194);
-          ELSIF (R <= 3576) THEN
-            Nbins <= my_US(195);
-          ELSIF (R <= 3581) THEN
-            Nbins <= my_US(196);
-          ELSIF (R <= 3587) THEN
-            Nbins <= my_US(197);
-          ELSIF (R <= 3592) THEN
-            Nbins <= my_US(198);
-          ELSIF (R <= 3598) THEN
-            Nbins <= my_US(199);
-          ELSIF (R <= 3603) THEN
-            Nbins <= my_US(200);
-          ELSIF (R <= 3608) THEN
-            Nbins <= my_US(201);
-          ELSIF (R <= 3613) THEN
-            Nbins <= my_US(202);
-          ELSIF (R <= 3619) THEN
-            Nbins <= my_US(203);
-          ELSIF (R <= 3624) THEN
-            Nbins <= my_US(204);
-          ELSIF (R <= 3629) THEN
-            Nbins <= my_US(205);
-          ELSIF (R <= 3634) THEN
-            Nbins <= my_US(206);
-          ELSIF (R <= 3639) THEN
-            Nbins <= my_US(207);
-          ELSIF (R <= 3644) THEN
-            Nbins <= my_US(208);
-          ELSIF (R <= 3649) THEN
-            Nbins <= my_US(209);
-          ELSIF (R <= 3653) THEN
-            Nbins <= my_US(210);
-          ELSIF (R <= 3658) THEN
-            Nbins <= my_US(211);
-          ELSIF (R <= 3663) THEN
-            Nbins <= my_US(212);
-          ELSIF (R <= 3668) THEN
-            Nbins <= my_US(213);
-          ELSIF (R <= 3672) THEN
-            Nbins <= my_US(214);
-          ELSIF (R <= 3677) THEN
-            Nbins <= my_US(215);
-          ELSIF (R <= 3681) THEN
-            Nbins <= my_US(216);
-          ELSIF (R <= 3686) THEN
-            Nbins <= my_US(217);
-          ELSIF (R <= 3690) THEN
-            Nbins <= my_US(218);
-          ELSIF (R <= 3695) THEN
-            Nbins <= my_US(219);
-          ELSIF (R <= 3699) THEN
-            Nbins <= my_US(220);
-          ELSIF (R <= 3703) THEN
-            Nbins <= my_US(221);
-          ELSIF (R <= 3708) THEN
-            Nbins <= my_US(222);
-          ELSIF (R <= 3712) THEN
-            Nbins <= my_US(223);
-          ELSIF (R <= 3716) THEN
-            Nbins <= my_US(224);
-          ELSIF (R <= 3720) THEN
-            Nbins <= my_US(225);
-          ELSIF (R <= 3724) THEN
-            Nbins <= my_US(226);
-          ELSIF (R <= 3728) THEN
-            Nbins <= my_US(227);
-          ELSIF (R <= 3732) THEN
-            Nbins <= my_US(228);
-          ELSIF (R <= 3736) THEN
-            Nbins <= my_US(229);
-          ELSIF (R <= 3740) THEN
-            Nbins <= my_US(230);
-          ELSIF (R <= 3744) THEN
-            Nbins <= my_US(231);
-          ELSIF (R <= 3748) THEN
-            Nbins <= my_US(232);
-          ELSIF (R <= 3752) THEN
-            Nbins <= my_US(233);
-          ELSIF (R <= 3756) THEN
-            Nbins <= my_US(234);
-          ELSIF (R <= 3759) THEN
-            Nbins <= my_US(235);
-          ELSIF (R <= 3763) THEN
-            Nbins <= my_US(236);
-          ELSIF (R <= 3767) THEN
-            Nbins <= my_US(237);
-          ELSIF (R <= 3770) THEN
-            Nbins <= my_US(238);
-          ELSIF (R <= 3774) THEN
-            Nbins <= my_US(239);
-          ELSIF (R <= 3778) THEN
-            Nbins <= my_US(240);
-          ELSIF (R <= 3781) THEN
-            Nbins <= my_US(241);
-          ELSIF (R <= 3785) THEN
-            Nbins <= my_US(242);
-          ELSIF (R <= 3788) THEN
-            Nbins <= my_US(243);
-          ELSIF (R <= 3791) THEN
-            Nbins <= my_US(244);
-          ELSIF (R <= 3795) THEN
-            Nbins <= my_US(245);
-          ELSIF (R <= 3798) THEN
-            Nbins <= my_US(246);
-          ELSIF (R <= 3802) THEN
-            Nbins <= my_US(247);
-          ELSIF (R <= 3805) THEN
-            Nbins <= my_US(248);
-          ELSIF (R <= 3808) THEN
-            Nbins <= my_US(249);
-          ELSIF (R <= 3811) THEN
-            Nbins <= my_US(250);
-          ELSIF (R <= 3815) THEN
-            Nbins <= my_US(251);
-          ELSIF (R <= 3818) THEN
-            Nbins <= my_US(252);
-          ELSIF (R <= 3821) THEN
-            Nbins <= my_US(253);
-          ELSIF (R <= 3824) THEN
-            Nbins <= my_US(254);
-          ELSIF (R <= 3827) THEN
-            Nbins <= my_US(255);
-          ELSIF (R <= 3830) THEN
-            Nbins <= my_US(256);
-          ELSIF (R <= 3833) THEN
-            Nbins <= my_US(257);
-          ELSIF (R <= 3836) THEN
-            Nbins <= my_US(258);
-          ELSIF (R <= 3839) THEN
-            Nbins <= my_US(259);
-          ELSIF (R <= 3842) THEN
-            Nbins <= my_US(260);
-          ELSIF (R <= 3845) THEN
-            Nbins <= my_US(261);
-          ELSIF (R <= 3848) THEN
-            Nbins <= my_US(262);
-          ELSIF (R <= 3850) THEN
-            Nbins <= my_US(263);
-          ELSIF (R <= 3853) THEN
-            Nbins <= my_US(264);
-          ELSIF (R <= 3856) THEN
-            Nbins <= my_US(265);
-          ELSIF (R <= 3859) THEN
-            Nbins <= my_US(266);
-          ELSIF (R <= 3862) THEN
-            Nbins <= my_US(267);
-          ELSIF (R <= 3864) THEN
-            Nbins <= my_US(268);
-          ELSIF (R <= 3867) THEN
-            Nbins <= my_US(269);
-          ELSIF (R <= 3870) THEN
-            Nbins <= my_US(270);
-          ELSIF (R <= 3872) THEN
-            Nbins <= my_US(271);
-          ELSIF (R <= 3875) THEN
-            Nbins <= my_US(272);
-          ELSIF (R <= 3877) THEN
-            Nbins <= my_US(273);
-          ELSIF (R <= 3880) THEN
-            Nbins <= my_US(274);
-          ELSIF (R <= 3882) THEN
-            Nbins <= my_US(275);
-          ELSIF (R <= 3885) THEN
-            Nbins <= my_US(276);
-          ELSIF (R <= 3887) THEN
-            Nbins <= my_US(277);
-          ELSIF (R <= 3890) THEN
-            Nbins <= my_US(278);
-          ELSIF (R <= 3892) THEN
-            Nbins <= my_US(279);
-          ELSIF (R <= 3895) THEN
-            Nbins <= my_US(280);
-          ELSIF (R <= 3897) THEN
-            Nbins <= my_US(281);
-          ELSIF (R <= 3899) THEN
-            Nbins <= my_US(282);
-          ELSIF (R <= 3902) THEN
-            Nbins <= my_US(283);
-          ELSIF (R <= 3904) THEN
-            Nbins <= my_US(284);
-          ELSIF (R <= 3906) THEN
-            Nbins <= my_US(285);
-          ELSIF (R <= 3908) THEN
-            Nbins <= my_US(286);
-          ELSIF (R <= 3911) THEN
-            Nbins <= my_US(287);
-          ELSIF (R <= 3913) THEN
-            Nbins <= my_US(288);
-          ELSIF (R <= 3915) THEN
-            Nbins <= my_US(289);
-          ELSIF (R <= 3917) THEN
-            Nbins <= my_US(290);
-          ELSIF (R <= 3919) THEN
-            Nbins <= my_US(291);
-          ELSIF (R <= 3921) THEN
-            Nbins <= my_US(292);
-          ELSIF (R <= 3924) THEN
-            Nbins <= my_US(293);
-          ELSIF (R <= 3926) THEN
-            Nbins <= my_US(294);
-          ELSIF (R <= 3928) THEN
-            Nbins <= my_US(295);
-          ELSIF (R <= 3930) THEN
-            Nbins <= my_US(296);
-          ELSIF (R <= 3932) THEN
-            Nbins <= my_US(297);
-          ELSIF (R <= 3934) THEN
-            Nbins <= my_US(298);
-          ELSIF (R <= 3936) THEN
-            Nbins <= my_US(299);
-          ELSIF (R <= 3938) THEN
-            Nbins <= my_US(300);
-          ELSIF (R <= 3940) THEN
-            Nbins <= my_US(301);
-          ELSIF (R <= 3942) THEN
-            Nbins <= my_US(302);
-          ELSIF (R <= 3943) THEN
-            Nbins <= my_US(303);
-          ELSIF (R <= 3945) THEN
-            Nbins <= my_US(304);
-          ELSIF (R <= 3947) THEN
-            Nbins <= my_US(305);
-          ELSIF (R <= 3949) THEN
-            Nbins <= my_US(306);
-          ELSIF (R <= 3951) THEN
-            Nbins <= my_US(307);
-          ELSIF (R <= 3953) THEN
-            Nbins <= my_US(308);
-          ELSIF (R <= 3954) THEN
-            Nbins <= my_US(309);
-          ELSIF (R <= 3956) THEN
-            Nbins <= my_US(310);
-          ELSIF (R <= 3958) THEN
-            Nbins <= my_US(311);
-          ELSIF (R <= 3960) THEN
-            Nbins <= my_US(312);
-          ELSIF (R <= 3961) THEN
-            Nbins <= my_US(313);
-          ELSIF (R <= 3963) THEN
-            Nbins <= my_US(314);
-          ELSIF (R <= 3965) THEN
-            Nbins <= my_US(315);
-          ELSIF (R <= 3966) THEN
-            Nbins <= my_US(316);
-          ELSIF (R <= 3968) THEN
-            Nbins <= my_US(317);
-          ELSIF (R <= 3970) THEN
-            Nbins <= my_US(318);
-          ELSIF (R <= 3971) THEN
-            Nbins <= my_US(319);
-          ELSIF (R <= 3973) THEN
-            Nbins <= my_US(320);
-          ELSIF (R <= 3975) THEN
-            Nbins <= my_US(321);
-          ELSIF (R <= 3976) THEN
-            Nbins <= my_US(322);
-          ELSIF (R <= 3978) THEN
-            Nbins <= my_US(323);
-          ELSIF (R <= 3979) THEN
-            Nbins <= my_US(324);
-          ELSIF (R <= 3981) THEN
-            Nbins <= my_US(325);
-          ELSIF (R <= 3982) THEN
-            Nbins <= my_US(326);
-          ELSIF (R <= 3984) THEN
-            Nbins <= my_US(327);
-          ELSIF (R <= 3985) THEN
-            Nbins <= my_US(328);
-          ELSIF (R <= 3987) THEN
-            Nbins <= my_US(329);
-          ELSIF (R <= 3988) THEN
-            Nbins <= my_US(330);
-          ELSIF (R <= 3990) THEN
-            Nbins <= my_US(331);
-          ELSIF (R <= 3991) THEN
-            Nbins <= my_US(332);
-          ELSIF (R <= 3992) THEN
-            Nbins <= my_US(333);
+        CASE cur_state IS
+        WHEN S_INIT =>
+          IF (RE = '1') THEN
+            R <= unsigned(rand_out(RAND_WIDTH-1 DOWNTO 0));
+            Tmid <= T(LOOKUP_SIZE);
+            low <= to_unsigned(1,OUTPUT_WIDTH);
+            high <= to_unsigned(LOOKUP_SIZE,OUTPUT_WIDTH);
+            cur_state <= S_LU0;
           ELSE
-            Nbins <= my_US(0);
+            cur_state <= S_INIT;
           END IF;
-        END IF;
+        WHEN S_LU0 =>
+          IF (RgtTmid = '1') THEN
+            Nbins <= (others => '0');
+            IF (RE = '1') THEN
+              cur_state <= S_LU0;
+            ELSE
+              cur_state <= S_INIT;
+            END IF;
+          ELSE
+            cur_state <= S_LU1;
+          END IF;
+        WHEN S_LU1 =>
+          IF (low = high) THEN
+            Nbins <= low;
+            IF (RE = '1') THEN
+              cur_state <= S_LU1;
+            ELSE
+              cur_state <= S_INIT;
+            END IF;
+          ELSE
+            midv := midpoint(low,high);
+            mid <= midv;
+            Tmid <= T(to_integer(midv));
+            cur_state <= S_LU2;
+          END IF;
+        WHEN S_LU2 =>
+          IF (RgtTmid = '1') THEN
+            low <= mid+1;
+          ELSE
+            high <= mid;
+          END IF;
+          cur_state <= S_LU1;
+        WHEN others =>
+          cur_state <= S_INIT;
+        END CASE;
       END IF;
     END IF;
   END PROCESS;

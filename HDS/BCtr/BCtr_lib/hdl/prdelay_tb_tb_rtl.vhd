@@ -106,7 +106,7 @@ BEGIN
     wait until clk'Event and clk = '1';
 
     for j in 1 to 1000 loop
-      wait_on_lfsr(18);
+      wait_on_lfsr(333);
       RE <= '1';
       wait until clk'Event and clk = '1';
       RE <= '0';
