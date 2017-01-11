@@ -9,7 +9,7 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
 
 
 ENTITY BCtrCtrl_tb IS
@@ -32,9 +32,9 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
    SIGNAL Empty2    : std_logic;
    SIGNAL En        : std_logic;
    SIGNAL Full1     : std_logic;
-   SIGNAL NA        : std_logic_vector(15 DOWNTO 0);
-   SIGNAL NC        : std_logic_vector(15 DOWNTO 0);
-   SIGNAL NB        : std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+   SIGNAL NA        : unsigned(15 DOWNTO 0);
+   SIGNAL NC        : unsigned(23 DOWNTO 0);
+   SIGNAL NB        : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
    SIGNAL TrigSeen  : std_logic;
    SIGNAL clk       : std_logic;
    SIGNAL rst       : std_logic;
@@ -48,7 +48,7 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
    SIGNAL WE2       : std_logic;
    SIGNAL first_col : std_logic;
    SIGNAL first_row : std_logic;
-   SIGNAL NSkipped  : std_logic_vector(15 DOWNTO 0);
+   SIGNAL NSkipped  : unsigned(15 DOWNTO 0);
    SIGNAL SimDone   : std_logic;
 
 
@@ -62,9 +62,9 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
          Empty2    : IN     std_logic;
          En        : IN     std_logic;
          Full1     : IN     std_logic;
-         NA        : IN     std_logic_vector(15 DOWNTO 0);
-         NC        : IN     std_logic_vector(15 DOWNTO 0);
-         NB        : IN     std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+         NA        : IN     unsigned(15 DOWNTO 0);
+         NC        : IN     unsigned(23 DOWNTO 0);
+         NB        : IN     unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
          TrigSeen  : IN     std_logic;
          clk       : IN     std_logic;
          rst       : IN     std_logic;
@@ -78,7 +78,7 @@ ARCHITECTURE rtl OF BCtrCtrl_tb IS
          WE2       : OUT    std_logic;
          first_col : OUT    std_logic;
          first_row : OUT    std_logic;
-         NSkipped  : OUT    std_logic_vector (15 DOWNTO 0)
+         NSkipped  : OUT    unsigned (15 DOWNTO 0)
       );
    END COMPONENT;
 
@@ -136,9 +136,9 @@ BEGIN
   test_proc: Process is
   Begin
     SimDone <= '0';
-    NA <= X"0004";
-    NB <= X"02";
-    NC <= X"0001";
+    NA <= to_unsigned(4,16);
+    NB <= to_unsigned(2,FIFO_ADDR_WIDTH);
+    NC <= to_unsigned(1,24);
     TrigSeen <= '0';
     En <= '0';
     Full1 <= '0';

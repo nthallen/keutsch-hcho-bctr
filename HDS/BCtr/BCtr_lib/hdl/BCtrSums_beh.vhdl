@@ -9,28 +9,27 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
 
 ENTITY BCtrSums IS
-   GENERIC( 
-      N_CHANNELS : integer range 4 DOWNTO 1  := 1;
-      CTR_WIDTH  : integer range 32 DOWNTO 1 := 16
-   );
-   PORT( 
-      CntEn     : IN     std_logic;
-      CtrData0  : IN     std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
-      PMTs      : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
-      clk       : IN     std_logic;
-      first_col : IN     std_logic;
-      first_row : IN     std_logic;
-      rst       : IN     std_logic;
-      CtrData1  : OUT    std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0)
-   );
+  GENERIC( 
+    N_CHANNELS : integer range 4 DOWNTO 1  := 1;
+    CTR_WIDTH  : integer range 32 DOWNTO 1 := 16
+  );
+  PORT( 
+    CntEn     : IN     std_logic;
+    CtrData0  : IN     std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
+    PMTs      : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
+    clk       : IN     std_logic;
+    first_col : IN     std_logic;
+    first_row : IN     std_logic;
+    rst       : IN     std_logic;
+    CtrData1  : OUT    std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0)
+  );
 
 -- Declarations
 
-END BCtrSums ;
+END ENTITY BCtrSums ;
 
 --
 ARCHITECTURE beh OF BCtrSums IS

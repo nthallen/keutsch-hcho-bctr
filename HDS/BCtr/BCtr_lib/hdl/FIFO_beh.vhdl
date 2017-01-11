@@ -13,7 +13,7 @@ USE ieee.std_logic_unsigned.all;
 
 ENTITY FIFO IS
    GENERIC( 
-      FIFO_WIDTH  : integer range 32 downto 1  := 1;
+      FIFO_WIDTH  : integer range 256 downto 1  := 1;
       FIFO_ADDR_WIDTH : integer range 10 downto 1 := 8
    );
    PORT( 

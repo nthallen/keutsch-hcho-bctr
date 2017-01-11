@@ -9,7 +9,7 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
+USE ieee.numeric_std.all;
 
 
 ENTITY BCtr_tb IS
@@ -23,8 +23,7 @@ END BCtr_tb;
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
 LIBRARY BCtr_lib;
 USE BCtr_lib.ALL;
 
@@ -38,15 +37,16 @@ ARCHITECTURE rtl OF BCtr_tb IS
    SIGNAL rst     : std_logic;
    SIGNAL DRdy    : std_logic;
    SIGNAL En      : std_logic;
-   SIGNAL NA      : std_logic_vector(15 DOWNTO 0);
-   SIGNAL NB      : std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
-   SIGNAL NC      : std_logic_vector(15 DOWNTO 0);
+   SIGNAL NA      : unsigned(15 DOWNTO 0);
+   SIGNAL NB      : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+   SIGNAL NC      : unsigned(23 DOWNTO 0);
    SIGNAL PMTs    : std_logic_vector(N_CHANNELS-1 DOWNTO 0);
    SIGNAL PMT     : std_logic;
    SIGNAL RData   : std_logic_vector(N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
    SIGNAL RE      : std_logic;
    SIGNAL Trigger : std_logic;
-   SIGNAL NSkipped : std_logic_vector (15 DOWNTO 0);
+   SIGNAL NSkipped : unsigned (15 DOWNTO 0);
+   SIGNAL NArd    : std_logic;
    SIGNAL SimDone : std_logic;
 
 
@@ -60,16 +60,17 @@ ARCHITECTURE rtl OF BCtr_tb IS
       PORT (
          clk      : IN     std_logic;
          rst      : IN     std_logic;
-         DRdy     : OUT    std_logic;
          En       : IN     std_logic;
-         NA       : IN     std_logic_vector(15 DOWNTO 0);
-         NC       : IN     std_logic_vector(15 DOWNTO 0);
-         NB       : IN     std_logic_vector(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+         NA       : IN     unsigned(15 DOWNTO 0);
+         NC       : IN     unsigned(23 DOWNTO 0);
+         NB       : IN     unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+         Trigger  : IN     std_logic;
          PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
-         RData    : OUT    std_logic_vector(N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
          RE       : IN     std_logic;
-         NSkipped : OUT    std_logic_vector (15 DOWNTO 0);
-         Trigger  : IN     std_logic
+         DRdy     : OUT    std_logic;
+         RData    : OUT    std_logic_vector(N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
+         NSkipped : OUT    unsigned (15 DOWNTO 0);
+         NArd     : OUT    std_logic
       );
    END COMPONENT;
 
@@ -94,10 +95,11 @@ BEGIN
                NA      => NA,
                NB      => NB,
                NC      => NC,
+               Trigger => Trigger,
                PMTs     => PMTs,
                RData   => RData,
                RE      => RE,
-               Trigger => Trigger,
+               NArd    => NArd,
                NSkipped => NSkipped
             );
       
@@ -130,7 +132,7 @@ BEGIN
       Trigger <= '1';
       wait for 5 ns;
       Trigger <= '0';
-      for i in 1 to (conv_integer(NA)+1)*(conv_integer(NB)+1)+3 loop
+      for i in 1 to (to_integer(NA)+1)*(to_integer(NB)+1)+3 loop
         wait until clk'Event AND clk = '1';
       end loop;
     end loop;
@@ -140,7 +142,7 @@ BEGIN
 
   test_proc: Process is
     procedure wait_for_triggers(N : integer) is
-      variable delay : integer := (conv_integer(NA)+1)*(conv_integer(NB)+1)+7;
+      variable delay : integer := (to_integer(NA)+1)*(to_integer(NB)+1)+7;
     begin
       for i in 1 to N loop
         -- pragma synthesis_off
@@ -158,22 +160,22 @@ BEGIN
        B : std_logic_vector(FIFO_ADDR_WIDTH-1 downto 0);
        C : std_logic_vector(15 downto 0)) is
     begin
-      NA <= A;
-      NB <= B;
-      NC <= C;
+      NA <= unsigned(A);
+      NB <= unsigned(B);
+      NC <= resize(unsigned(C),24);
       -- pragma synthesis_off
       wait until clk'Event and clk = '1';
       En <= '1';
       
-      wait_for_triggers(conv_integer(NC)+2);
+      wait_for_triggers(to_integer(NC)+2);
       assert DRdy = '1' report "Expected DRdy" severity error;
-      wait_for_triggers(conv_integer(NC)+1);
+      wait_for_triggers(to_integer(NC)+1);
       wait until clk'Event and clk = '1';
       wait until clk'Event and clk = '1';
       wait until clk'Event and clk = '1';
       RE <= '1';
-      for i in 1 to conv_integer(NB)+1 loop
-        assert conv_integer(RData) = (conv_integer(NA)+1)*(conv_integer(NC)+1)
+      for i in 1 to to_integer(NB)+1 loop
+        assert to_integer(unsigned(RData)) = (to_integer(NA)+1)*(to_integer(NC)+1)
         report "Invalid RData" severity error;
         wait until clk'Event and clk = '1';
       end loop;
@@ -181,13 +183,13 @@ BEGIN
       wait until clk'Event and clk = '1';
       wait for 2 ns;
       assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
-      wait_for_triggers(conv_integer(NC)+2);
+      wait_for_triggers(to_integer(NC)+2);
       En <= '0';
       wait for 200 ns;
       assert DRdy = '1' report "Expected DRdy" severity error;
       RE <= '1';
-      for i in 1 to conv_integer(NB)+1 loop
-        assert conv_integer(RData) = (conv_integer(NA)+1)*(conv_integer(NC)+1)
+      for i in 1 to to_integer(NB)+1 loop
+        assert to_integer(unsigned(RData)) = (to_integer(NA)+1)*(to_integer(NC)+1)
         report "Invalid RData" severity error;
         wait until clk'Event and clk = '1';
       end loop;
@@ -202,7 +204,7 @@ BEGIN
     SimDone <= '0';
     NA <= X"0004";
     NB <= X"02";
-    NC <= X"0001";
+    NC <= X"000001";
     En <= '0';
     RE <= '0';
     

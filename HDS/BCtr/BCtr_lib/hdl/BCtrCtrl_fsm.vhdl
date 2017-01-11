@@ -9,7 +9,7 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
 
 ENTITY BCtrCtrl IS
   GENERIC (
@@ -20,9 +20,9 @@ ENTITY BCtrCtrl IS
     Empty2    : IN     std_logic;
     En        : IN     std_logic;
     Full1     : IN     std_logic;
-    NA        : IN     std_logic_vector (15 DOWNTO 0);
-    NC        : IN     std_logic_vector (15 DOWNTO 0);
-    NB        : IN     std_logic_vector (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    NA        : IN     unsigned (15 DOWNTO 0);
+    NC        : IN     unsigned (23 DOWNTO 0);
+    NB        : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
     TrigSeen  : IN     std_logic;
     clk       : IN     std_logic;
     rst       : IN     std_logic;
@@ -30,13 +30,14 @@ ENTITY BCtrCtrl IS
     DRdy      : OUT    std_logic;
     RE1       : OUT    std_logic;
     TrigArm   : OUT    std_logic;
+    NArd      : OUT    std_logic;
     TrigClr   : OUT    std_logic;
     TrigOE    : OUT    std_logic;
     WE1       : OUT    std_logic;
     WE2       : OUT    std_logic;
     first_col : OUT    std_logic;
     first_row : OUT    std_logic;
-    NSkipped  : OUT    std_logic_vector (15 DOWNTO 0)
+    NSkipped  : OUT    unsigned (15 DOWNTO 0)
 );
 
 -- Declarations
@@ -58,9 +59,9 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    SIGNAL current_state : STATE_TYPE;
    SIGNAL next_state : STATE_TYPE;
 
-   SIGNAL NBcnt : std_logic_vector (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-   SIGNAL NCcnt : std_logic_vector (15 DOWNTO 0);
-   SIGNAL NAcnt : std_logic_vector (15 DOWNTO 0);
+   SIGNAL NBcnt : unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+   SIGNAL NCcnt : unsigned (23 DOWNTO 0);
+   SIGNAL NAcnt : unsigned (15 DOWNTO 0);
 
    -- Declare any pre-registered internal signals
    SIGNAL first_row_cld : std_logic;
@@ -74,7 +75,7 @@ ARCHITECTURE fsm OF BCtrCtrl IS
    SIGNAL TrigOE_cld : std_logic;
    SIGNAL TrigArm_cld : std_logic;
    SIGNAL Skipping : std_logic;
-   SIGNAL NSkip : std_logic_vector (15 DOWNTO 0);
+   SIGNAL NSkip : unsigned (15 DOWNTO 0);
 BEGIN
 
   -----------------------------------------------------------------
@@ -98,6 +99,7 @@ BEGIN
         NAcnt <= (others => '0');
         NBcnt <= (others => '0');
         NCcnt <= (others => '0');
+        NArd <= '0';
         Skipping <= '0';
         NSkip <= (others => '0');
         NSkipped <= (others => '0');
@@ -117,6 +119,7 @@ BEGIN
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
             Skipping <= '0';
+            NArd <= '0';
           WHEN ReportArmed => 
             first_row_cld <= '1';
             CntEn_cld <= '0';
@@ -127,15 +130,11 @@ BEGIN
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
+            NArd <= '0';
             NSkip <= (others => '0');
             if Empty2 = '1' then
               DRdy_cld <= '0';
             end if;
---          WHEN TriggerDelayed =>
---            WE1_cld <= '0';
---            if Empty2 = '1' then
---              DRdy_cld <= '0';
---            end if;
           WHEN TriggerArmed =>
             first_col_cld <= '1';
             CntEn_cld <= '0';
@@ -144,6 +143,7 @@ BEGIN
             RE1_cld <= '0';
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
+            NArd <= '0';
             IF En = '1' AND TrigSeen = '1' THEN
               IF ( NC = 0 OR NCcnt = 1 ) AND Empty2 = '0' THEN
                 Skipping <= '1';
@@ -174,14 +174,17 @@ BEGIN
             END IF;
             NBcnt <= NB;
             NAcnt <= NA;
+            NArd <= '1';
           WHEN Scanning =>
             TrigClr_cld <= '1';
             TrigArm_cld <= '0';
+            NArd <= '0';
             if Empty2 = '1' then
               DRdy_cld <= '0';
             end if;
             if NAcnt = 0 then -- last sample in a bin
               NAcnt <= NA;
+              NArd <= '1';
               first_col_cld <= '1';
               if Skipping = '0' then
                 if first_row_cld = '0' then
@@ -246,14 +249,6 @@ BEGIN
         else
           next_state <= Startup;
         end if;
---      WHEN TriggerDelayed =>
---        if En /= '1' THEN
---          next_state <= Startup;
---        ELSIF Empty2 = '1' THEN
---          next_state <= TriggerArmed;
---        ELSE
---          next_state <= TriggerDelayed;
---        END IF;
       WHEN TriggerArmed =>
         IF En /= '1' THEN 
           next_state <= Startup;
