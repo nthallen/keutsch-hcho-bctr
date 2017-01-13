@@ -72,6 +72,7 @@ BEGIN
         PMT <= '0';
         PulseCnt <= (others => '0');
         PulseTO <= '1';
+        RE <= '0';
       ELSE
         IF (TrigCnt = to_unsigned(0,TRIGCNT_WIDTH)) THEN
           TrigTO <= '1';

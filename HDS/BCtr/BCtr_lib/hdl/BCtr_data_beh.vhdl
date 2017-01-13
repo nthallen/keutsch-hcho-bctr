@@ -51,11 +51,13 @@ ARCHITECTURE beh OF BCtr_data IS
   CONSTANT CTR_WORDS : integer := (CTR_WIDTH+15)/16;
   SIGNAL tx_ctr_bits : integer range CTR_WIDTH DOWNTO 0;
   SIGNAL tx_bits : integer range N_CHANNELS*CTR_WIDTH DOWNTO 0;
+  SIGNAL tx_bins : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL tx_err_ovf : std_logic;
 BEGIN
   PROCESS (clk) IS
     VARIABLE NW : unsigned(15 DOWNTO 0);
     VARIABLE tx_bits_nxt : integer range N_CHANNELS*CTR_WIDTH DOWNTO 0;
+    VARIABLE tx_bits_hi : integer range N_CHANNELS*CTR_WIDTH-1 DOWNTO 0;
     VARIABLE tx_ctr_bits_nxt : integer range CTR_WIDTH DOWNTO 0;
   BEGIN
     IF (clk'event AND clk = '1') THEN
@@ -66,6 +68,7 @@ BEGIN
         DData <= (others => '0');
         current_state <= S_INIT;
         current_tx <= TX_IDLE;
+        NWremaining <= to_unsigned(0,16);
       ELSE
         CASE current_state IS
         WHEN S_INIT =>
@@ -76,11 +79,12 @@ BEGIN
             ELSIF (DataAddr = 1) THEN
               IF (current_tx = TX_IDLE) THEN
                 IF (DRdy = '1') THEN
-                  NW := resize(N_CHANNELS * CTR_WORDS * NBtot + 1,16);
+                  NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 1,16);
                   NWremaining <= NW;
                   DData <= std_logic_vector(NW);
-                  tx_ctr_bits <= 0;
+                  tx_ctr_bits <= CTR_WIDTH;
                   tx_bits <= 0;
+                  tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
                   current_tx <= TX_NSK;
                 ELSE
                   NWremaining <= to_unsigned(0,16);
@@ -92,11 +96,12 @@ BEGIN
               CASE current_tx IS
               WHEN TX_IDLE =>
                 IF (DRdy = '1') THEN
-                  NW := resize(N_CHANNELS * CTR_WORDS * NBtot,16);
+                  NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1)+1,16);
                   NWremaining <= NW;
                   DData <= std_logic_vector(NSkipped);
-                  tx_ctr_bits <= 0;
+                  tx_ctr_bits <= CTR_WIDTH;
                   tx_bits <= 0;
+                  tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
                   current_tx <= TX_DATA;
                 ELSE
                   NWremaining <= to_unsigned(0,16);
@@ -110,33 +115,39 @@ BEGIN
                 tx_active <= '1';
                 IF (tx_ctr_bits >= 16) THEN
                   IF (tx_bits+15 < N_CHANNELS*CTR_WIDTH) THEN
-                    DData <= FData(15+tx_bits DOWNTO tx_bits);
+                    -- tx_bits_hi := tx_bits+15;
+                    DData <= FData(tx_bits+15 DOWNTO tx_bits);
                     tx_bits_nxt := tx_bits + 16;
                     tx_ctr_bits_nxt := tx_ctr_bits - 16;
-                  ELSE
+                  ELSE -- This can't happen:
                     DData <= (others => '0');
                     tx_err_ovf <= '1';
                     current_tx <= TX_ERR;
+                    tx_ctr_bits_nxt := 0;
                   END IF;
                 ELSIF (tx_ctr_bits+tx_bits <= N_CHANNELS*CTR_WIDTH) THEN
+                  -- tx_bits_hi := tx_bits+tx_ctr_bits-1;
                   DData(tx_ctr_bits-1 DOWNTO 0) <=
-                    FData(tx_ctr_bits-1+tx_bits DOWNTO tx_bits);
+                    FData(tx_bits+tx_ctr_bits-1 DOWNTO tx_bits);
                   DData(15 DOWNTO tx_ctr_bits) <= (others => '0');
                   tx_bits_nxt := tx_bits + tx_ctr_bits;
                   tx_ctr_bits_nxt := 0;
-                ELSE
+                ELSE -- This can't happen either
                   DData <= (others => '0');
                   tx_err_ovf <= '1';
                   current_tx <= TX_ERR;
+                  tx_ctr_bits_nxt := 0;
                 END IF;
                 IF (tx_bits_nxt = N_CHANNELS*CTR_WIDTH) THEN
-                  IF (DRdy = '1') THEN
-                    RE <= '1';
-                  ELSE
+                  -- This means we are at the end of a bin
+                  tx_bits_nxt := 0;
+                  RE <= '1';
+                  IF (tx_bins = NBtot) THEN
                     tx_active <= '0';
                     current_tx <= TX_IDLE;
+                  ELSE
+                    tx_bins <= tx_bins + 1;
                   END IF;
-                  tx_bits_nxt := 0;
                 END IF;
                 IF (tx_ctr_bits_nxt = 0) THEN
                   tx_ctr_bits_nxt := CTR_WIDTH;

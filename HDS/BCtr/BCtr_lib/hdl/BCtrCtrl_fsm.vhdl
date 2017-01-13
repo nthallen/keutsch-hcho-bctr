@@ -172,6 +172,7 @@ BEGIN
                 end if;
               end if;
             END IF;
+            TrigArm_cld <= '0';
             NBcnt <= NB;
             NAcnt <= NA;
             NArd <= '1';

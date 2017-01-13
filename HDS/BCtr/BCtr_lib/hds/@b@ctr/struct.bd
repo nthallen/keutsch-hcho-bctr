@@ -13,7 +13,7 @@ unitName "numeric_std"
 ]
 instances [
 (Instance
-name "U_4"
+name "FIFO_A"
 duLibraryName "BCtr_lib"
 duName "FIFO"
 elements [
@@ -32,7 +32,7 @@ mwi 0
 uid 437,0
 )
 (Instance
-name "U_5"
+name "FIFO_B"
 duLibraryName "BCtr_lib"
 duName "FIFO"
 elements [
@@ -51,7 +51,7 @@ mwi 0
 uid 489,0
 )
 (Instance
-name "U_3"
+name "trig"
 duLibraryName "BCtr_lib"
 duName "BitClk"
 elements [
@@ -60,7 +60,7 @@ mwi 0
 uid 1151,0
 )
 (Instance
-name "U_1"
+name "CtrCtrl"
 duLibraryName "BCtr_lib"
 duName "BCtrCtrl"
 elements [
@@ -74,7 +74,7 @@ mwi 0
 uid 1587,0
 )
 (Instance
-name "U_6"
+name "sums"
 duLibraryName "BCtr_lib"
 duName "BCtrSums"
 elements [
@@ -197,7 +197,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "11:32:25"
+value "20:22:37"
 )
 (vvPair
 variable "group"
@@ -301,7 +301,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "11:32:25"
+value "20:22:37"
 )
 (vvPair
 variable "unit"
@@ -1118,8 +1118,8 @@ uid 442,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "58750,39000,60550,40000"
-st "U_4"
+xt "58750,39000,61850,40000"
+st "FIFO_A"
 blo "58750,39800"
 tm "InstanceNameMgr"
 )
@@ -1491,8 +1491,8 @@ uid 494,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "58750,49000,60550,50000"
-st "U_5"
+xt "58750,49000,61950,50000"
+st "FIFO_B"
 blo "58750,49800"
 tm "InstanceNameMgr"
 )
@@ -2364,8 +2364,8 @@ uid 1156,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "26250,56000,28050,57000"
-st "U_3"
+xt "26250,56000,27950,57000"
+st "trig"
 blo "26250,56800"
 tm "InstanceNameMgr"
 )
@@ -3292,8 +3292,8 @@ uid 1592,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "41200,64000,43000,65000"
-st "U_1"
+xt "41200,64000,44200,65000"
+st "CtrCtrl"
 blo "41200,64800"
 tm "InstanceNameMgr"
 )
@@ -3493,8 +3493,8 @@ uid 2419,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "38250,38500,40050,39500"
-st "U_6"
+xt "38250,38500,40650,39500"
+st "sums"
 blo "38250,39300"
 tm "InstanceNameMgr"
 )
@@ -5586,8 +5586,8 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "0,51,1281,937"
-viewArea "-1400,-1400,108288,74954"
+windowSize "0,51,1282,937"
+viewArea "-1400,-1400,108392,72038"
 cachedDiagramExtent "0,0,98000,73000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -5611,7 +5611,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 3257,0
+lastUid 3346,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

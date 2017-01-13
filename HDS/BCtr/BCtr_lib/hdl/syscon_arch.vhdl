@@ -275,6 +275,8 @@ BEGIN
                   end if;
                 end loop;
                 DataIn <= RData(16*ack_n+15 DOWNTO 16*ack_n);
+              else
+                DataIn <= (others => '0');
               end if;
             end if;
           WHEN sclbn =>

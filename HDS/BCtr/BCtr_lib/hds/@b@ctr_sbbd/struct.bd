@@ -14,7 +14,7 @@ unitName "numeric_std"
 ]
 instances [
 (Instance
-name "U_0"
+name "ctr"
 duLibraryName "BCtr_lib"
 duName "BCtr"
 elements [
@@ -38,7 +38,7 @@ mwi 0
 uid 165,0
 )
 (Instance
-name "U_1"
+name "subbus"
 duLibraryName "BCtr_lib"
 duName "subbus_io"
 elements [
@@ -52,7 +52,7 @@ mwi 0
 uid 207,0
 )
 (Instance
-name "U_2"
+name "addr"
 duLibraryName "BCtr_lib"
 duName "BCtr_addr"
 elements [
@@ -71,7 +71,7 @@ mwi 0
 uid 217,0
 )
 (Instance
-name "U_3"
+name "cfg"
 duLibraryName "BCtr_lib"
 duName "BCtr_cfg"
 elements [
@@ -85,7 +85,7 @@ mwi 0
 uid 257,0
 )
 (Instance
-name "U_4"
+name "data"
 duLibraryName "BCtr_lib"
 duName "BCtr_data"
 elements [
@@ -109,7 +109,7 @@ mwi 0
 uid 267,0
 )
 (Instance
-name "U_5"
+name "dmux"
 duLibraryName "BCtr_lib"
 duName "BCtr_Dmux"
 elements [
@@ -222,7 +222,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "11:34:13"
+value "20:21:29"
 )
 (vvPair
 variable "group"
@@ -326,7 +326,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "11:34:13"
+value "20:21:29"
 )
 (vvPair
 variable "unit"
@@ -1219,8 +1219,8 @@ uid 170,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "53200,47000,55000,48000"
-st "U_0"
+xt "53200,47000,54600,48000"
+st "ctr"
 blo "53200,47800"
 tm "InstanceNameMgr"
 )
@@ -1597,8 +1597,8 @@ uid 212,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "17350,48000,19150,49000"
-st "U_1"
+xt "17350,48000,20550,49000"
+st "subbus"
 blo "17350,48800"
 tm "InstanceNameMgr"
 )
@@ -1689,8 +1689,8 @@ uid 222,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "18250,56500,20050,57500"
-st "U_2"
+xt "18250,56500,20350,57500"
+st "addr"
 blo "18250,57300"
 tm "InstanceNameMgr"
 )
@@ -1873,8 +1873,8 @@ uid 262,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "37250,45500,39050,46500"
-st "U_3"
+xt "37250,45500,38850,46500"
+st "cfg"
 blo "37250,46300"
 tm "InstanceNameMgr"
 )
@@ -1979,8 +1979,8 @@ uid 272,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "69250,42500,71050,43500"
-st "U_4"
+xt "69250,42500,71250,43500"
+st "data"
 blo "69250,43300"
 tm "InstanceNameMgr"
 )
@@ -2723,8 +2723,8 @@ uid 641,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "81250,53500,83050,54500"
-st "U_5"
+xt "81250,53500,83750,54500"
+st "dmux"
 blo "81250,54300"
 tm "InstanceNameMgr"
 )
@@ -4649,8 +4649,8 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "50,103,1281,927"
-viewArea "-1400,-1400,111297,73993"
+windowSize "633,121,1865,945"
+viewArea "-1400,-1400,111409,70847"
 cachedDiagramExtent "0,0,103500,73000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -4674,7 +4674,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 1249,0
+lastUid 1362,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

@@ -68,30 +68,30 @@ for i=2:Nbins
   fprintf(1, '%sELSIF (R <= %d) THEN\n%s  Nbins <= my_US(%d);\n', indent, IPcumsum(i), indent, i);
 end
 fprintf(1, '%sELSE\n%s  Nbins <= my_US(0);\n%sEND IF;\n', indent, indent, indent);
-%%
-R = rand(1,1)*IPmax;
-dT = binsearch(IPcumsum, R);
-%%
-function ind = binsearch(T, R, low, high)
-  if nargin < 4
-    low = 1;
-    high = length(T);
-    if R > T(high)
-      ind = high+1;
-      return;
-    end
-  end
-  if low==high
-    ind = low;
-  else
-    mid = floor((low+high)/2);
-    if R > T(mid)
-      ind = binsearch(T, R, mid+1, high);
-    else
-      ind = binsearch(T, R, low, mid);
-    end
-  end
-  return;
-end
-
-
+% %%
+% R = rand(1,1)*IPmax;
+% dT = binsearch(IPcumsum, R);
+% %%
+% function ind = binsearch(T, R, low, high)
+%   if nargin < 4
+%     low = 1;
+%     high = length(T);
+%     if R > T(high)
+%       ind = high+1;
+%       return;
+%     end
+%   end
+%   if low==high
+%     ind = low;
+%   else
+%     mid = floor((low+high)/2);
+%     if R > T(mid)
+%       ind = binsearch(T, R, mid+1, high);
+%     else
+%       ind = binsearch(T, R, low, mid);
+%     end
+%   end
+%   return;
+% end
+% 
+% 
