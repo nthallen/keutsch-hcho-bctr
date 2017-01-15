@@ -16,11 +16,14 @@ USE ieee.std_logic_textio.all;
 
 ENTITY BCtr_sys_tester IS
   GENERIC( 
-    ADDR_WIDTH : integer range 16 downto 8 := 8;
-    N_CHANNELS : integer range 4 downto 1  := 1;
-    CTR_WIDTH  : integer range 32 downto 1 := 16;
-    FAIL_WIDTH : integer range 16 downto 0 := 2;
-    SW_WIDTH   : integer range 16 downto 0 := 1
+    ADDR_WIDTH : integer range 16 downto 8      := 8;
+    N_CHANNELS : integer range 4 downto 1       := 1;
+    CTR_WIDTH  : integer range 32 downto 1      := 16;
+    FAIL_WIDTH : integer range 16 downto 0      := 2;
+    SW_WIDTH   : integer range 16 downto 0      := 1;
+    BIN_OPT    : integer range 10 downto 1      := 1;
+    SIM_LOOPS  : integer range 50 downto 0      := 20;
+    NC         : integer range 2**24-1 downto 0 := 3000
   );
   PORT( 
     Data_i        : IN     std_logic_vector (15 DOWNTO 0);
@@ -30,7 +33,7 @@ ENTITY BCtr_sys_tester IS
     Addr          : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
     Ctrl          : OUT    std_logic_vector (6 DOWNTO 0);
     Data_o        : OUT    std_logic_vector (15 DOWNTO 0);
-    PMTs          : OUT    std_logic_vector (0 DOWNTO 0);
+    PMTs          : OUT    std_logic_vector (N_CHANNELS-1 DOWNTO 1);
     Switches      : OUT    std_logic_vector (SW_WIDTH-1 DOWNTO 0);
     clk           : OUT    std_logic
   );
@@ -44,6 +47,7 @@ ARCHITECTURE beh OF BCtr_sys_tester IS
   SIGNAL NWords : unsigned(15 DOWNTO 0);
   SIGNAL SimDone : std_logic;
   SIGNAL ReadResult : std_logic_vector(15 DOWNTO 0);
+  CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
   alias RdEn is Ctrl(0);
   alias WrEn is Ctrl(1);
   alias CS is Ctrl(2);
@@ -136,45 +140,52 @@ BEGIN
     rst <= '0';
     wait until clk'Event and clk = '1';
     wait until clk'Event and clk = '1';
-    
---    write(my_line, string'("Hello World"));
---    writeline(output, my_line);
---    write(my_line, to_integer(unsigned(ReadResult)));
---    writeline(output, my_line);
 
     sbrd( X"10", '1');
     assert ReadResult = X"0000" report "Invalid startup status" severity error;
-    -- Configure for 1 bins of 10
-    sbwr(X"13", std_logic_vector(to_unsigned(10,16)), '1');
-    sbwr(X"14", std_logic_vector(to_unsigned(1,16)), '1');
-    -- Check the status again: should be 'Ready' but not enabled
-    sbrd(X"10", '1');
-    assert ReadResult = X"0020" report "Expected Ready status" severity error;
-    -- Now add a second bin of 350ns
-    sbwr(X"15", std_logic_vector(to_unsigned(35,16)), '1');
-    sbwr(X"16", std_logic_vector(to_unsigned(1,16)), '1');
-    sbrd(X"10", '1');
-    assert ReadResult = X"0020" report "Expected Ready status again" severity error;
-    -- And a third bin of 2500ns
-    sbwr(X"17", std_logic_vector(to_unsigned(250,16)), '1');
-    sbwr(X"18", std_logic_vector(to_unsigned(1,16)), '1');
-    sbrd(X"10", '1');
-    assert ReadResult = X"0020" report "Expected Ready status still" severity error;
-    sbwr(X"1B", std_logic_vector(to_unsigned(30000,16)),'1');
+    CASE BIN_OPT IS
+    WHEN 1 =>
+      -- Configure for 1 bins of 10
+      sbwr(X"13", std_logic_vector(to_unsigned(10,16)), '1');
+      sbwr(X"14", std_logic_vector(to_unsigned(1,16)), '1');
+      -- Check the status again: should be 'Ready' but not enabled
+      sbrd(X"10", '1');
+      assert ReadResult = X"0020" report "Expected Ready status" severity error;
+      -- Now add a second bin of 350ns
+      sbwr(X"15", std_logic_vector(to_unsigned(35,16)), '1');
+      sbwr(X"16", std_logic_vector(to_unsigned(1,16)), '1');
+      sbrd(X"10", '1');
+      assert ReadResult = X"0020" report "Expected Ready status again" severity error;
+      -- And a third bin of 2500ns
+      sbwr(X"17", std_logic_vector(to_unsigned(250,16)), '1');
+      sbwr(X"18", std_logic_vector(to_unsigned(1,16)), '1');
+      sbrd(X"10", '1');
+      assert ReadResult = X"0020" report "Expected Ready status still" severity error;
+    WHEN others =>
+      sbwr(X"13", std_logic_vector(to_unsigned(4,16)), '1');
+      sbwr(X"14", std_logic_vector(to_unsigned(75,16)), '1');
+      -- Check the status again: should be 'Ready' but not enabled
+      sbrd(X"10", '1');
+      assert ReadResult = X"0020" report "Expected Ready status" severity error;
+    END CASE;
+    sbwr(X"1B", std_logic_vector(NCU(15 DOWNTO 0)),'1');
+    sbwr(X"1C", X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
 
     -- Enable and check status
     sbwr( X"10", X"0001", '1');
     sbrd( X"10", '1');
     assert ReadResult = X"0021" report "Expected Ready|En status" severity error;
     
-    for i in 1 to 10 loop
+    for i in 1 to SIM_LOOPS loop
       sbrd(X"10",'1');
       while ReadResult(1) = '0' loop
         sbrd(X"10",'1');
       end loop;
+      write(my_line, now);
       sbrd(X"11",'1'); -- NWords
       NWords <= unsigned(ReadResult);
       wait for 10 ns;
+      write(my_line, string'(": "));
       write(my_line, to_integer(NWords));
       write(my_line, string'(":"));
       while NWords > 0 loop

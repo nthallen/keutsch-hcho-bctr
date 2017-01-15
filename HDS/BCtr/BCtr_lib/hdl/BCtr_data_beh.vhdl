@@ -13,8 +13,8 @@ USE ieee.numeric_std.all;
 
 ENTITY BCtr_data IS
    GENERIC( 
-      N_CHANNELS      : integer range 4 downto 1   := 1;
-      CTR_WIDTH       : integer range 32 downto 16 := 16;
+      N_CHANNELS      : integer range 4 downto 1   := 2;
+      CTR_WIDTH       : integer range 32 downto 16 := 24;
       FIFO_ADDR_WIDTH : integer range 10 downto 4  := 9
    );
    PORT( 
@@ -43,22 +43,27 @@ ARCHITECTURE beh OF BCtr_data IS
   );
   SIGNAL current_state : State_t;
   TYPE TX_t IS (
-    TX_IDLE, TX_NSK, TX_DATA, TX_ERR
+    TX_IDLE, TX_NSK, TX_DATA
   );
   SIGNAL current_tx : TX_t;
   SIGNAL tx_active : std_logic;
   SIGNAL NWremaining : unsigned(15 DOWNTO 0);
+  SIGNAL IData : std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
   CONSTANT CTR_WORDS : integer := (CTR_WIDTH+15)/16;
-  SIGNAL tx_ctr_bits : integer range CTR_WIDTH DOWNTO 0;
-  SIGNAL tx_bits : integer range N_CHANNELS*CTR_WIDTH DOWNTO 0;
-  SIGNAL tx_bins : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+  CONSTANT CTR_LAST_WIDTH : integer := CTR_WIDTH-((CTR_WORDS-1)*16);
+  SIGNAL DRdy_int : std_logic;
+  -- Are these still used?
+  -- SIGNAL tx_ctr_bits : integer range CTR_WIDTH DOWNTO 0;
+  -- SIGNAL tx_bits : integer range N_CHANNELS*CTR_WIDTH-CTR_LAST_WIDTH DOWNTO 0;
+  SIGNAL word_cnt : integer range CTR_WORDS-1 DOWNTO 0;
+  SIGNAL chan_cnt : integer range N_CHANNELS-1 DOWNTO 0;
+  SIGNAL bin_cnt : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL tx_err_ovf : std_logic;
 BEGIN
   PROCESS (clk) IS
     VARIABLE NW : unsigned(15 DOWNTO 0);
-    VARIABLE tx_bits_nxt : integer range N_CHANNELS*CTR_WIDTH DOWNTO 0;
-    VARIABLE tx_bits_hi : integer range N_CHANNELS*CTR_WIDTH-1 DOWNTO 0;
-    VARIABLE tx_ctr_bits_nxt : integer range CTR_WIDTH DOWNTO 0;
+    -- VARIABLE tx_bits_nxt : integer range N_CHANNELS*CTR_WIDTH DOWNTO 0;
+    -- VARIABLE tx_ctr_bits_nxt : integer range CTR_WIDTH DOWNTO 0;
   BEGIN
     IF (clk'event AND clk = '1') THEN
       IF (rst = '1') THEN
@@ -70,24 +75,34 @@ BEGIN
         current_tx <= TX_IDLE;
         NWremaining <= to_unsigned(0,16);
       ELSE
+        IF DRdy = '1' OR NWremaining > 0 THEN
+          DRdy_int <= '1';
+        ELSE
+          DRdy_int <= '0';
+        END IF;
         CASE current_state IS
         WHEN S_INIT =>
           IF (RdEn = '1') THEN
             IF (DataAddr = 0) THEN
-              DData(6 DOWNTO 0) <= tx_err_ovf & Status & tx_active & DRdy & En;
+              DData(6 DOWNTO 0) <= tx_err_ovf & Status & tx_active & DRdy_int & En;
               DData(14 DOWNTO 7) <= (others => '0');
-            ELSIF (DataAddr = 1) THEN
+            ELSIF (DataAddr = 1) THEN -- Reading NWremaining
               IF (current_tx = TX_IDLE) THEN
                 IF (DRdy = '1') THEN
                   NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 1,16);
                   NWremaining <= NW;
                   DData <= std_logic_vector(NW);
-                  tx_ctr_bits <= CTR_WIDTH;
-                  tx_bits <= 0;
-                  tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
+                  bin_cnt <= NBtot;
+                  chan_cnt <= N_CHANNELS-1;
+                  word_cnt <= CTR_WORDS-1;
+                  IData <= FData;
+                  RE <= '1';
+                  -- tx_bits <= 0;
+                  -- tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
                   current_tx <= TX_NSK;
                 ELSE
                   NWremaining <= to_unsigned(0,16);
+                  DData <= X"0000";
                 END IF;
               ELSE
                 DData <= std_logic_vector(NWremaining);
@@ -99,12 +114,17 @@ BEGIN
                   NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1)+1,16);
                   NWremaining <= NW;
                   DData <= std_logic_vector(NSkipped);
-                  tx_ctr_bits <= CTR_WIDTH;
-                  tx_bits <= 0;
-                  tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
+                  bin_cnt <= NBtot;
+                  chan_cnt <= N_CHANNELS-1;
+                  IData <= FData;
+                  RE <= '1';
+                  -- tx_bits <= 0;
+                  -- tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
+                  tx_active <= '1';
                   current_tx <= TX_DATA;
                 ELSE
                   NWremaining <= to_unsigned(0,16);
+                  DData <= X"0000";
                 END IF;
               WHEN TX_NSK =>
                 DData <= std_logic_vector(NSkipped);
@@ -112,60 +132,47 @@ BEGIN
                 current_tx <= TX_DATA;
                 tx_active <= '1';
               WHEN TX_DATA =>
-                tx_active <= '1';
-                IF (tx_ctr_bits >= 16) THEN
-                  IF (tx_bits+15 < N_CHANNELS*CTR_WIDTH) THEN
-                    -- tx_bits_hi := tx_bits+15;
-                    DData <= FData(tx_bits+15 DOWNTO tx_bits);
-                    tx_bits_nxt := tx_bits + 16;
-                    tx_ctr_bits_nxt := tx_ctr_bits - 16;
-                  ELSE -- This can't happen:
-                    DData <= (others => '0');
-                    tx_err_ovf <= '1';
-                    current_tx <= TX_ERR;
-                    tx_ctr_bits_nxt := 0;
-                  END IF;
-                ELSIF (tx_ctr_bits+tx_bits <= N_CHANNELS*CTR_WIDTH) THEN
-                  -- tx_bits_hi := tx_bits+tx_ctr_bits-1;
-                  DData(tx_ctr_bits-1 DOWNTO 0) <=
-                    FData(tx_bits+tx_ctr_bits-1 DOWNTO tx_bits);
-                  DData(15 DOWNTO tx_ctr_bits) <= (others => '0');
-                  tx_bits_nxt := tx_bits + tx_ctr_bits;
-                  tx_ctr_bits_nxt := 0;
-                ELSE -- This can't happen either
-                  DData <= (others => '0');
-                  tx_err_ovf <= '1';
-                  current_tx <= TX_ERR;
-                  tx_ctr_bits_nxt := 0;
-                END IF;
-                IF (tx_bits_nxt = N_CHANNELS*CTR_WIDTH) THEN
-                  -- This means we are at the end of a bin
-                  tx_bits_nxt := 0;
-                  RE <= '1';
-                  IF (tx_bins = NBtot) THEN
-                    tx_active <= '0';
-                    current_tx <= TX_IDLE;
+                IF (word_cnt /= 0) THEN
+                  DData <= IData(15 DOWNTO 0);
+                  IData(N_CHANNELS*CTR_WIDTH-1-16 DOWNTO 0) <=
+                    IData(N_CHANNELS*CTR_WIDTH-1 DOWNTO 16);
+                  word_cnt <= word_cnt - 1;
+                ELSE
+                  DData(CTR_LAST_WIDTH-1 DOWNTO 0) <=
+                    IData(CTR_LAST_WIDTH-1 DOWNTO 0);
+                  DData(15 DOWNTO CTR_LAST_WIDTH) <= (others => '0');
+                  IData(N_CHANNELS*CTR_WIDTH-1-CTR_LAST_WIDTH DOWNTO 0) <=
+                    IData(N_CHANNELS*CTR_WIDTH-1 DOWNTO CTR_LAST_WIDTH);
+                  word_cnt <= CTR_WORDS-1;
+                  IF (chan_cnt = 0) THEN -- end of bin
+                    IF (bin_cnt = 0) THEN -- last bin
+                      -- pragma synthesis_off
+                      assert NWremaining = 1 report "NWremaining /= 1 at bin_cnt=chan_cnt=0" severity error;
+                      -- pragma synthesis_on
+                      IF NWremaining /= 1 THEN
+                        tx_err_ovf <= '1';
+                      END IF;
+                      tx_active <= '0';
+                      current_tx <= TX_IDLE;
+                    ELSE
+                      bin_cnt <= bin_cnt-1;
+                      chan_cnt <= N_CHANNELS-1;
+                      IData <= FData;
+                      RE <= '1';
+                    END IF;
                   ELSE
-                    tx_bins <= tx_bins + 1;
+                    chan_cnt <= chan_cnt - 1;
                   END IF;
                 END IF;
-                IF (tx_ctr_bits_nxt = 0) THEN
-                  tx_ctr_bits_nxt := CTR_WIDTH;
-                END IF;
-                tx_bits <= tx_bits_nxt;
-                tx_ctr_bits <= tx_ctr_bits_nxt;
                 IF (NWremaining /= 0) THEN
                   NWremaining <= NWremaining - 1;
                 END IF;
-              WHEN TX_ERR =>
-                DData <= (others => '0');
               WHEN OTHERS =>
                 DData <= (others => '0');
                 current_tx <= TX_IDLE;
               END CASE;
-            ELSE
+            ELSE -- Invalid address
               DData <= (others => '0');
-              -- Invalid address
             END IF;
             current_state <= S_RD;
           ELSE
@@ -185,4 +192,3 @@ BEGIN
     END IF;
   END PROCESS;
 END ARCHITECTURE beh;
-

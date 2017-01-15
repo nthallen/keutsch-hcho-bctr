@@ -44,7 +44,24 @@ plot(diff(IPcumsum),'.');
 R = rand(pulserate,1)*IPmax;
 dT = interp1([IPcumsum IPmax],[1:length(IPcumsum) 0], R, 'next', 'extrap');
 h = histogram(dT,[0:length(IPcumsum)+1]);
-plot(T,h.Values(2:end),'.',T,S);
+plot(T,S,T,h.Values(2:end),'.');
+%%
+% This is data from simulation where
+% N_CHANNELS := 1
+NA = 4;
+% NB := 75
+% NC := 300000, which matches pulserate above
+simCt = [103 359 150 159 129 164 134 125 145 120 107 122 129 108 109 ...
+  104 90 82 96 93 62 89 74 61 67 66 74 62 65 54 70 51 49 53 39 47 33 ...
+  37 37 39 37 38 39 30 29 19 30 26 32 23 18 31 23 26 25 20 19 20 18 ...
+  14 13 22 10 14 18 11 10 14 13 15 10 7 16 6 10];
+simT = (1:length(simCt))*NA*10e-9;
+hold on
+plot(simT,simCt/NA,'*b');
+hold off
+legend('P(T)','Matlab Sim','MODELSIM');
+xlabel('T');
+ylabel('counts');
 %%
 N = 1000;
 bcts = zeros(N,1);

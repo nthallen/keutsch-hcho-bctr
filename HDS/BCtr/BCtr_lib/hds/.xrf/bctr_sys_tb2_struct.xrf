@@ -9,228 +9,228 @@ VIEW symbol.sb
 GRAPHIC 13,0 14 1 
 DESIGN @b@ctr_sys_tb2
 VIEW symbol.sb
-GRAPHIC 1,0 24 0 
+GRAPHIC 1,0 27 0 
 DESIGN @b@ctr_sys_tb2
 VIEW symbol.sb
-GRAPHIC 1,0 25 0 
+GRAPHIC 1,0 28 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 28
+NO_GRAPHIC 31
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 319,0 44 0 
+GRAPHIC 319,0 47 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 50
+NO_GRAPHIC 53
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 0,0 53 2 
+GRAPHIC 0,0 56 2 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 127,0 58 0 
+GRAPHIC 127,0 61 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 119,0 59 0 
+GRAPHIC 119,0 62 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 87,0 60 0 
+GRAPHIC 87,0 63 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 135,0 61 0 
+GRAPHIC 135,0 64 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 103,0 62 0 
+GRAPHIC 103,0 65 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 79,0 63 0 
+GRAPHIC 79,0 66 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 159,0 64 0 
+GRAPHIC 159,0 67 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 95,0 65 0 
+GRAPHIC 95,0 68 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 143,0 66 0 
+GRAPHIC 143,0 69 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 151,0 67 0 
+GRAPHIC 151,0 70 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 111,0 68 0 
+GRAPHIC 111,0 71 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 69
+NO_GRAPHIC 72
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 70
+NO_GRAPHIC 73
 LIBRARY BCtr_lib
 DESIGN @b@ctr_sys
 VIEW struct
-GRAPHIC 69,0 72 0 
+GRAPHIC 69,0 75 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 14,0 73 1 
+GRAPHIC 14,0 76 1 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 141,0 84 0 
+GRAPHIC 141,0 87 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 136,0 85 0 
+GRAPHIC 136,0 88 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 146,0 86 0 
+GRAPHIC 146,0 89 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 203,0 87 0 
+GRAPHIC 203,0 90 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 156,0 88 0 
+GRAPHIC 156,0 91 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 198,0 89 0 
+GRAPHIC 198,0 92 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 126,0 90 0 
+GRAPHIC 126,0 93 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 151,0 91 0 
+GRAPHIC 151,0 94 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 166,0 92 0 
+GRAPHIC 166,0 95 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 131,0 93 0 
+GRAPHIC 131,0 96 0 
 DESIGN @b@ctr_sys
 VIEW symbol.sb
-GRAPHIC 161,0 94 0 
+GRAPHIC 161,0 97 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 167,0 97 0 
+GRAPHIC 167,0 100 0 
 DESIGN @b@ctr_sys_tester
 VIEW interface
-GRAPHIC 14,0 98 1 
+GRAPHIC 14,0 101 1 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 249,0 106 0 
+GRAPHIC 249,0 112 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 233,0 107 0 
+GRAPHIC 233,0 113 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 257,0 108 0 
+GRAPHIC 257,0 114 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 241,0 109 0 
+GRAPHIC 241,0 115 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 209,0 110 0 
+GRAPHIC 209,0 116 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 217,0 111 0 
+GRAPHIC 217,0 117 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 201,0 112 0 
+GRAPHIC 201,0 118 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 1344,0 113 0 
+GRAPHIC 1344,0 119 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 193,0 114 0 
+GRAPHIC 193,0 120 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 225,0 115 0 
+GRAPHIC 225,0 121 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 469,0 118 0 
+GRAPHIC 469,0 124 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 476,0 119 1 
+GRAPHIC 476,0 125 1 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 129
+NO_GRAPHIC 135
 LIBRARY BCtr_lib
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 131
+NO_GRAPHIC 137
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 69,0 134 0 
+GRAPHIC 69,0 140 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 167,0 135 0 
+GRAPHIC 167,0 141 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 469,0 136 0 
+GRAPHIC 469,0 142 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 139
+NO_GRAPHIC 145
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 141
+NO_GRAPHIC 147
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 69,0 143 0 
+GRAPHIC 69,0 149 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 76,0 144 1 
+GRAPHIC 76,0 150 1 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 129,0 155 0 
+GRAPHIC 129,0 161 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 121,0 156 0 
+GRAPHIC 121,0 162 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 137,0 157 0 
+GRAPHIC 137,0 163 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 161,0 158 0 
+GRAPHIC 161,0 164 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 145,0 159 0 
+GRAPHIC 145,0 165 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 153,0 160 0 
+GRAPHIC 153,0 166 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 113,0 161 0 
+GRAPHIC 113,0 167 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 89,0 162 0 
+GRAPHIC 89,0 168 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 105,0 163 0 
+GRAPHIC 105,0 169 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 81,0 164 0 
+GRAPHIC 81,0 170 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 97,0 165 0 
+GRAPHIC 97,0 171 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 167,0 167 0 
+GRAPHIC 167,0 173 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 174,0 168 1 
+GRAPHIC 174,0 174 1 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 469,0 187 0 
+GRAPHIC 469,0 196 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 476,0 188 1 
+GRAPHIC 476,0 197 1 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 497,0 194 0 
+GRAPHIC 497,0 203 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 505,0 195 0 
+GRAPHIC 505,0 204 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 481,0 196 0 
+GRAPHIC 481,0 205 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-GRAPHIC 489,0 197 0 
+GRAPHIC 489,0 206 0 
 DESIGN @b@ctr_sys_tb2
 VIEW struct.bd
-NO_GRAPHIC 200
+NO_GRAPHIC 209

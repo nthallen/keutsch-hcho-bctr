@@ -170,19 +170,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/11/2017"
+value "01/13/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Fri"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Friday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "13"
 )
 (vvPair
 variable "entity_name"
@@ -210,7 +210,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/11/2017"
+value "01/13/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -222,7 +222,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "20:21:29"
+value "16:30:36"
 )
 (vvPair
 variable "group"
@@ -326,7 +326,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "20:21:29"
+value "16:30:36"
 )
 (vvPair
 variable "unit"
@@ -2000,7 +2000,8 @@ font "Courier New,8,0"
 xt "67000,30600,103500,33000"
 st "N_CHANNELS      = N_CHANNELS         ( integer range 4 downto 1   )  
 CTR_WIDTH       = CTR_WIDTH          ( integer range 32 downto 16 )  
-FIFO_ADDR_WIDTH = FIFO_ADDR_WIDTH    ( integer range 10 downto 4  )  "
+FIFO_ADDR_WIDTH = FIFO_ADDR_WIDTH    ( integer range 10 downto 4  )  
+"
 )
 header ""
 )
@@ -4674,7 +4675,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 1362,0
+lastUid 1475,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

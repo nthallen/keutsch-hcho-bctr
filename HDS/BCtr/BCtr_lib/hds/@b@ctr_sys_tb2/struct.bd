@@ -102,6 +102,21 @@ name "SW_WIDTH"
 type "integer range 16 downto 0"
 value "SW_WIDTH"
 )
+(GiElement
+name "BIN_OPT"
+type "integer range 10 downto 1"
+value "BIN_OPT"
+)
+(GiElement
+name "SIM_LOOPS"
+type "integer range 50 downto 0"
+value "SIM_LOOPS"
+)
+(GiElement
+name "NC"
+type "integer range 2**24-1 downto 0"
+value "NC"
+)
 ]
 mwi 0
 uid 167,0
@@ -184,19 +199,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/13/2017"
+value "01/14/2017"
 )
 (vvPair
 variable "day"
-value "Fri"
+value "Sat"
 )
 (vvPair
 variable "day_long"
-value "Friday"
+value "Saturday"
 )
 (vvPair
 variable "dd"
-value "13"
+value "14"
 )
 (vvPair
 variable "entity_name"
@@ -224,7 +239,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/13/2017"
+value "01/14/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -236,7 +251,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "11:16:00"
+value "15:59:26"
 )
 (vvPair
 variable "group"
@@ -340,7 +355,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "11:16:00"
+value "15:59:26"
 )
 (vvPair
 variable "unit"
@@ -1156,12 +1171,16 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "14000,33000,45000,37000"
-st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8 )  
-N_CHANNELS = N_CHANNELS    ( integer range 4 downto 1  )  
-CTR_WIDTH  = CTR_WIDTH     ( integer range 32 downto 1 )  
-FAIL_WIDTH = FAIL_WIDTH    ( integer range 16 downto 0 )  
-SW_WIDTH   = SW_WIDTH      ( integer range 16 downto 0 )  "
+xt "14000,33000,47500,39400"
+st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8      )  
+N_CHANNELS = N_CHANNELS    ( integer range 4 downto 1       )  
+CTR_WIDTH  = CTR_WIDTH     ( integer range 32 downto 1      )  
+FAIL_WIDTH = FAIL_WIDTH    ( integer range 16 downto 0      )  
+SW_WIDTH   = SW_WIDTH      ( integer range 16 downto 0      )  
+BIN_OPT    = BIN_OPT       ( integer range 10 downto 1      )  
+SIM_LOOPS  = SIM_LOOPS     ( integer range 50 downto 0      )  
+NC         = NC            ( integer range 2**24-1 downto 0 )  
+"
 )
 header ""
 )
@@ -1190,6 +1209,21 @@ value "FAIL_WIDTH"
 name "SW_WIDTH"
 type "integer range 16 downto 0"
 value "SW_WIDTH"
+)
+(GiElement
+name "BIN_OPT"
+type "integer range 10 downto 1"
+value "BIN_OPT"
+)
+(GiElement
+name "SIM_LOOPS"
+type "integer range 50 downto 0"
+value "SIM_LOOPS"
+)
+(GiElement
+name "NC"
+type "integer range 2**24-1 downto 0"
+value "NC"
 )
 ]
 )
@@ -2624,7 +2658,7 @@ pts [
 start &44
 sat 32
 eat 16
-sl "(1)"
+sl "(0)"
 stc 0
 st 0
 sf 1
@@ -2638,7 +2672,7 @@ uid 510,0
 va (VaSet
 )
 xt "49000,27000,52500,28000"
-st "PMTs(1)"
+st "PMTs(0)"
 blo "49000,27800"
 tm "WireNameMgr"
 )
@@ -2720,7 +2754,7 @@ end &75
 sat 2
 eat 32
 sty 1
-sl "(0 DOWNTO 0)"
+sl "(N_CHANNELS-1 DOWNTO 1)"
 stc 0
 st 0
 sf 1
@@ -2733,8 +2767,8 @@ f (Text
 uid 1349,0
 va (VaSet
 )
-xt "25000,30000,29100,31000"
-st "PMTs(0:0)"
+xt "25000,30000,35500,31000"
+st "PMTs(N_CHANNELS-1:1)"
 blo "25000,30800"
 tm "WireNameMgr"
 )
@@ -2854,12 +2888,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1435,239,2557,1087"
-viewArea "-2000,-500,82930,62865"
+windowSize "1920,388,3044,1236"
+viewArea "-2000,-500,83120,62865"
 cachedDiagramExtent "0,0,72500,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-5000,0"
-lastUid 1446,0
+lastUid 1642,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4315,7 +4349,7 @@ uid 9,0
 generic (GiElement
 name "N_CHANNELS"
 type "integer range 4 downto 1"
-value "2"
+value "1"
 )
 uid 11,0
 )
@@ -4323,7 +4357,7 @@ uid 11,0
 generic (GiElement
 name "CTR_WIDTH"
 type "integer range 32 downto 1"
-value "24"
+value "16"
 )
 uid 13,0
 )
@@ -4331,7 +4365,7 @@ uid 13,0
 generic (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 4"
-value "9"
+value "7"
 )
 uid 15,0
 )
@@ -4367,6 +4401,30 @@ value "0"
 )
 uid 23,0
 )
+*176 (LogGeneric
+generic (GiElement
+name "SIM_LOOPS"
+type "integer range 50 downto 0"
+value "5"
+)
+uid 1542,0
+)
+*177 (LogGeneric
+generic (GiElement
+name "BIN_OPT"
+type "integer range 10 downto 1"
+value "2"
+)
+uid 1639,0
+)
+*178 (LogGeneric
+generic (GiElement
+name "NC"
+type "integer range 2**24-1 downto 1"
+value "300000"
+)
+uid 1641,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -4374,7 +4432,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 373,0
 optionalChildren [
-*176 (Sheet
+*179 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -4391,79 +4449,97 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *177 (MRCItem
+emptyMRCItem *180 (MRCItem
 litem &156
-pos 8
+pos 11
 dimension 20
 )
 uid 375,0
 optionalChildren [
-*178 (MRCItem
+*181 (MRCItem
 litem &157
 pos 0
 dimension 20
 uid 376,0
 )
-*179 (MRCItem
+*182 (MRCItem
 litem &158
 pos 1
 dimension 23
 uid 377,0
 )
-*180 (MRCItem
+*183 (MRCItem
 litem &159
 pos 2
 hidden 1
 dimension 20
 uid 378,0
 )
-*181 (MRCItem
+*184 (MRCItem
 litem &168
 pos 0
 dimension 20
 uid 10,0
 )
-*182 (MRCItem
+*185 (MRCItem
 litem &169
 pos 1
 dimension 20
 uid 12,0
 )
-*183 (MRCItem
+*186 (MRCItem
 litem &170
 pos 2
 dimension 20
 uid 14,0
 )
-*184 (MRCItem
+*187 (MRCItem
 litem &171
 pos 3
 dimension 20
 uid 16,0
 )
-*185 (MRCItem
+*188 (MRCItem
 litem &172
 pos 4
 dimension 20
 uid 18,0
 )
-*186 (MRCItem
+*189 (MRCItem
 litem &173
 pos 5
 dimension 20
 uid 20,0
 )
-*187 (MRCItem
+*190 (MRCItem
 litem &174
 pos 6
 dimension 20
 uid 22,0
 )
-*188 (MRCItem
+*191 (MRCItem
 litem &175
 pos 7
 dimension 20
 uid 24,0
+)
+*192 (MRCItem
+litem &176
+pos 8
+dimension 20
+uid 1543,0
+)
+*193 (MRCItem
+litem &177
+pos 9
+dimension 20
+uid 1640,0
+)
+*194 (MRCItem
+litem &178
+pos 10
+dimension 20
+uid 1642,0
 )
 ]
 )
@@ -4476,43 +4552,43 @@ textAngle 90
 )
 uid 379,0
 optionalChildren [
-*189 (MRCItem
+*195 (MRCItem
 litem &160
 pos 0
 dimension 20
 uid 380,0
 )
-*190 (MRCItem
+*196 (MRCItem
 litem &162
 pos 1
 dimension 50
 uid 381,0
 )
-*191 (MRCItem
+*197 (MRCItem
 litem &163
 pos 2
 dimension 100
 uid 382,0
 )
-*192 (MRCItem
+*198 (MRCItem
 litem &164
 pos 3
 dimension 154
 uid 383,0
 )
-*193 (MRCItem
+*199 (MRCItem
 litem &165
 pos 4
 dimension 50
 uid 384,0
 )
-*194 (MRCItem
+*200 (MRCItem
 litem &166
 pos 5
 dimension 50
 uid 385,0
 )
-*195 (MRCItem
+*201 (MRCItem
 litem &167
 pos 6
 dimension 80
