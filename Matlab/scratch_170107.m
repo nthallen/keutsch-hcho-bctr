@@ -11,7 +11,7 @@ k2 = 500; % Amplitude of 2nd exp
 k3 = 100;
 T = dt*(1:Nbins);
 S = (min(k3, max(k2*exp(-T/tau2), k1*exp(-T/tau))));
-
+%%
 vbin = T>=100e-9 & T <= 450e-9;
 bincts = sum(S(vbin));
 totcts = sum(S);

@@ -199,19 +199,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/14/2017"
+value "01/18/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "14"
+value "18"
 )
 (vvPair
 variable "entity_name"
@@ -239,7 +239,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/14/2017"
+value "01/18/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -251,7 +251,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "15:59:26"
+value "12:54:05"
 )
 (vvPair
 variable "group"
@@ -355,7 +355,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "15:59:26"
+value "12:54:05"
 )
 (vvPair
 variable "unit"
@@ -1179,8 +1179,7 @@ FAIL_WIDTH = FAIL_WIDTH    ( integer range 16 downto 0      )
 SW_WIDTH   = SW_WIDTH      ( integer range 16 downto 0      )  
 BIN_OPT    = BIN_OPT       ( integer range 10 downto 1      )  
 SIM_LOOPS  = SIM_LOOPS     ( integer range 50 downto 0      )  
-NC         = NC            ( integer range 2**24-1 downto 0 )  
-"
+NC         = NC            ( integer range 2**24-1 downto 0 )  "
 )
 header ""
 )
@@ -2888,12 +2887,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1920,388,3044,1236"
-viewArea "-2000,-500,83120,62865"
+windowSize "1756,283,2881,1131"
+viewArea "-2000,-500,83215,62865"
 cachedDiagramExtent "0,0,72500,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-5000,0"
-lastUid 1642,0
+lastUid 1737,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4413,7 +4412,7 @@ uid 1542,0
 generic (GiElement
 name "BIN_OPT"
 type "integer range 10 downto 1"
-value "2"
+value "1"
 )
 uid 1639,0
 )
@@ -4421,7 +4420,7 @@ uid 1639,0
 generic (GiElement
 name "NC"
 type "integer range 2**24-1 downto 1"
-value "300000"
+value "300"
 )
 uid 1641,0
 )

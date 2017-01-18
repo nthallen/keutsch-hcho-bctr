@@ -202,7 +202,7 @@ BEGIN
         WHEN S_EN =>
           En_int <= '1';
           IF (WrEn = '1' AND CfgAddr = "0000" AND
-              WData(15) = '0' AND WData(0) = '1') THEN
+              WData(15) = '0' AND WData(0) = '0') THEN
             current_state <= S_INIT;
           END IF;
           IF (TrigArm = '1') THEN

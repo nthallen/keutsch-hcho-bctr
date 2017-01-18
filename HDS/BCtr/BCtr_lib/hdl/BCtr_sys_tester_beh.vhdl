@@ -198,6 +198,10 @@ BEGIN
       writeline(output, my_line);
     end loop;
     
+    sbwr( X"10", X"0000", '1');
+    sbrd( X"10", '1');
+    assert ReadResult(0) = '0' report "Counter not disabled after writing disable" severity error;
+    
     SimDone <= '1';
     wait;
    -- pragma synthesis_on
