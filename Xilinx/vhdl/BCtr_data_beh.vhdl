@@ -85,7 +85,7 @@ BEGIN
           IF (RdEn = '1') THEN
             IF (DataAddr = 0) THEN
               DData(6 DOWNTO 0) <= tx_err_ovf & Status & tx_active & DRdy_int & En;
-              DData(14 DOWNTO 7) <= (others => '0');
+              DData(15 DOWNTO 7) <= (others => '0');
             ELSIF (DataAddr = 1) THEN -- Reading NWremaining
               IF (current_tx = TX_IDLE) THEN
                 IF (DRdy = '1') THEN
@@ -97,8 +97,7 @@ BEGIN
                   word_cnt <= CTR_WORDS-1;
                   IData <= FData;
                   RE <= '1';
-                  -- tx_bits <= 0;
-                  -- tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
+                  tx_active <= '1';
                   current_tx <= TX_NSK;
                 ELSE
                   NWremaining <= to_unsigned(0,16);
@@ -110,27 +109,27 @@ BEGIN
             ELSIF (DataAddr = 2) THEN
               CASE current_tx IS
               WHEN TX_IDLE =>
-                IF (DRdy = '1') THEN
-                  NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1)+1,16);
-                  NWremaining <= NW;
-                  DData <= std_logic_vector(NSkipped);
-                  bin_cnt <= NBtot;
-                  chan_cnt <= N_CHANNELS-1;
-                  IData <= FData;
-                  RE <= '1';
-                  -- tx_bits <= 0;
-                  -- tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
-                  tx_active <= '1';
-                  current_tx <= TX_DATA;
-                ELSE
-                  NWremaining <= to_unsigned(0,16);
-                  DData <= X"0000";
-                END IF;
+                DData <= X"0000";
+--                IF (DRdy = '1') THEN
+--                  NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1)+1,16);
+--                  NWremaining <= NW;
+--                  DData <= std_logic_vector(NSkipped);
+--                  bin_cnt <= NBtot;
+--                  chan_cnt <= N_CHANNELS-1;
+--                  IData <= FData;
+--                  RE <= '1';
+--                  -- tx_bits <= 0;
+--                  -- tx_bins <= to_unsigned(0,FIFO_ADDR_WIDTH);
+--                  tx_active <= '1';
+--                  current_tx <= TX_DATA;
+--                ELSE
+--                  NWremaining <= to_unsigned(0,16);
+--                  DData <= X"0000";
+--                END IF;
               WHEN TX_NSK =>
                 DData <= std_logic_vector(NSkipped);
                 NWremaining <= NWremaining - 1;
                 current_tx <= TX_DATA;
-                tx_active <= '1';
               WHEN TX_DATA =>
                 IF (word_cnt /= 0) THEN
                   DData <= IData(15 DOWNTO 0);

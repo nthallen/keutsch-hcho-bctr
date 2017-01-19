@@ -26,7 +26,7 @@ ENTITY BCtr_syscon IS
       clk     : IN std_logic;
       PMTs    : IN std_logic_vector(N_CTR_CHANNELS-1 DOWNTO 0);
       Trigger : IN std_logic;
-      Fail    : OUT std_logic_vector(FAIL_WIDTH-1 DOWNTO 0);
+      Fail    : OUT std_logic;
       Ctrl    : IN std_logic_vector(6 DOWNTO 0);
       Addr    : IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
       Data_i  : OUT std_logic_vector(15 DOWNTO 0);
@@ -226,5 +226,6 @@ BEGIN
     
   BdIntr <= (others => '0');
   Switches <= (others => '0');
+  Fail <= Fail_Out(0);
 END ARCHITECTURE beh;
 

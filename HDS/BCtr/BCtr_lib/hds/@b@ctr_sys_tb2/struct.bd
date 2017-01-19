@@ -199,19 +199,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/18/2017"
+value "01/19/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Thu"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Thursday"
 )
 (vvPair
 variable "dd"
-value "18"
+value "19"
 )
 (vvPair
 variable "entity_name"
@@ -239,7 +239,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/18/2017"
+value "01/19/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -251,7 +251,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "12:54:05"
+value "09:21:41"
 )
 (vvPair
 variable "group"
@@ -355,7 +355,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "12:54:05"
+value "09:21:41"
 )
 (vvPair
 variable "unit"
@@ -2887,12 +2887,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1756,283,2881,1131"
-viewArea "-2000,-500,83215,62865"
+windowSize "1754,283,2881,1131"
+viewArea "-2000,-500,83405,62865"
 cachedDiagramExtent "0,0,72500,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-5000,0"
-lastUid 1737,0
+lastUid 1927,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4404,7 +4404,7 @@ uid 23,0
 generic (GiElement
 name "SIM_LOOPS"
 type "integer range 50 downto 0"
-value "5"
+value "10"
 )
 uid 1542,0
 )
@@ -4420,7 +4420,7 @@ uid 1639,0
 generic (GiElement
 name "NC"
 type "integer range 2**24-1 downto 1"
-value "300"
+value "3000"
 )
 uid 1641,0
 )

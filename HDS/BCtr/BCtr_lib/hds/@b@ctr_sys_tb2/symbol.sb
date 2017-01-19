@@ -274,7 +274,7 @@ uid 123,0
 generic (GiElement
 name "SIM_LOOPS"
 type "integer range 50 downto 0"
-value "5"
+value "10"
 )
 uid 263,0
 )
@@ -290,7 +290,7 @@ uid 311,0
 generic (GiElement
 name "NC"
 type "integer range 2**24-1 downto 1"
-value "300"
+value "3000"
 )
 uid 359,0
 )
@@ -521,19 +521,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/18/2017"
+value "01/19/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Thu"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Thursday"
 )
 (vvPair
 variable "dd"
-value "18"
+value "19"
 )
 (vvPair
 variable "entity_name"
@@ -561,7 +561,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/18/2017"
+value "01/19/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -573,7 +573,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "12:54:05"
+value "09:21:42"
 )
 (vvPair
 variable "group"
@@ -677,7 +677,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "12:54:05"
+value "09:21:42"
 )
 (vvPair
 variable "unit"
@@ -753,20 +753,20 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "0,12000,28000,22400"
+xt "0,12000,28500,22400"
 st "Generic Declarations
 
-ADDR_WIDTH      integer range 16 downto 8      8    
-N_CHANNELS      integer range 4 downto 1       1    
-CTR_WIDTH       integer range 32 downto 1      16   
-FIFO_ADDR_WIDTH integer range 10 downto 4      7    
-N_BOARDS        integer range 10 downto 1      1    
-FAIL_WIDTH      integer range 16 downto 0      2    
-SW_WIDTH        integer range 16 downto 0      0    
-N_INTERRUPTS    integer range 16 downto 0      0    
-SIM_LOOPS       integer range 50 downto 0      5    
-BIN_OPT         integer range 10 downto 1      1    
-NC              integer range 2**24-1 downto 1 300  
+ADDR_WIDTH      integer range 16 downto 8      8     
+N_CHANNELS      integer range 4 downto 1       1     
+CTR_WIDTH       integer range 32 downto 1      16    
+FIFO_ADDR_WIDTH integer range 10 downto 4      7     
+N_BOARDS        integer range 10 downto 1      1     
+FAIL_WIDTH      integer range 16 downto 0      2     
+SW_WIDTH        integer range 16 downto 0      0     
+N_INTERRUPTS    integer range 16 downto 0      0     
+SIM_LOOPS       integer range 50 downto 0      10    
+BIN_OPT         integer range 10 downto 1      1     
+NC              integer range 2**24-1 downto 1 3000  
 "
 )
 header "Generic Declarations"
@@ -816,7 +816,7 @@ value "0"
 (GiElement
 name "SIM_LOOPS"
 type "integer range 50 downto 0"
-value "5"
+value "10"
 )
 (GiElement
 name "BIN_OPT"
@@ -826,7 +826,7 @@ value "1"
 (GiElement
 name "NC"
 type "integer range 2**24-1 downto 1"
-value "300"
+value "3000"
 )
 ]
 )
@@ -1468,7 +1468,7 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 405,0
+lastUid 497,0
 okToSyncOnLoad 1
 OkToSyncGenericsOnLoad 1
 activeModelName "Symbol:CDM"

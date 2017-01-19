@@ -191,45 +191,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_lmb_bram_0/BCtr_block_lmb_bram_0.xci">
-          <Proxy FileSetName="BCtr_block_lmb_bram_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_ilmb_bram_if_cntlr_0/BCtr_block_ilmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="BCtr_block_ilmb_bram_if_cntlr_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_dlmb_bram_if_cntlr_0/BCtr_block_dlmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="BCtr_block_dlmb_bram_if_cntlr_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_ilmb_v10_0/BCtr_block_ilmb_v10_0.xci">
-          <Proxy FileSetName="BCtr_block_ilmb_v10_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_dlmb_v10_0/BCtr_block_dlmb_v10_0.xci">
-          <Proxy FileSetName="BCtr_block_dlmb_v10_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_0/BCtr_block_microblaze_0_0.xci">
-          <Proxy FileSetName="BCtr_block_microblaze_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_gpio_0_0/BCtr_block_axi_gpio_0_0.xci">
-          <Proxy FileSetName="BCtr_block_axi_gpio_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_BCtr_syscon_0_0/BCtr_block_BCtr_syscon_0_0.xci">
-          <Proxy FileSetName="BCtr_block_BCtr_syscon_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_rst_clk_wiz_1_100M_0/BCtr_block_rst_clk_wiz_1_100M_0.xci">
-          <Proxy FileSetName="BCtr_block_rst_clk_wiz_1_100M_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_mdm_1_0/BCtr_block_mdm_1_0.xci">
-          <Proxy FileSetName="BCtr_block_mdm_1_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_xlconcat_0/BCtr_block_microblaze_0_xlconcat_0.xci">
-          <Proxy FileSetName="BCtr_block_microblaze_0_xlconcat_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_axi_intc_0/BCtr_block_microblaze_0_axi_intc_0.xci">
-          <Proxy FileSetName="BCtr_block_microblaze_0_axi_intc_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_clk_wiz_1_0/BCtr_block_clk_wiz_1_0.xci"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_axi_periph_0/BCtr_block_microblaze_0_axi_periph_0.xci"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hdl/BCtr_block.vhd"/>
         <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_uartlite_0_0/BCtr_block_axi_uartlite_0_0.xci">
           <Proxy FileSetName="BCtr_block_axi_uartlite_0_0"/>
         </CompFileExtendedInfo>
@@ -242,19 +203,63 @@
         <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_gpio_0_2/BCtr_block_axi_gpio_0_2.xci">
           <Proxy FileSetName="BCtr_block_axi_gpio_0_2"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_gpio_0_1/BCtr_block_axi_gpio_0_1.xci">
-          <Proxy FileSetName="BCtr_block_axi_gpio_0_1"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_xbar_0/BCtr_block_xbar_0.xci">
           <Proxy FileSetName="BCtr_block_xbar_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0.xml"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="synth/BCtr_block_BCtr_syscon_0_0.vhd"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="sim/BCtr_block_BCtr_syscon_0_0.vhd"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_gpio_0_0/BCtr_block_axi_gpio_0_0.xci">
+          <Proxy FileSetName="BCtr_block_axi_gpio_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_BCtr_syscon_0_0/BCtr_block_BCtr_syscon_0_0.xci">
+          <Proxy FileSetName="BCtr_block_BCtr_syscon_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_rst_clk_wiz_1_100M_0/BCtr_block_rst_clk_wiz_1_100M_0.xci">
+          <Proxy FileSetName="BCtr_block_rst_clk_wiz_1_100M_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_axi_gpio_0_1/BCtr_block_axi_gpio_0_1.xci">
+          <Proxy FileSetName="BCtr_block_axi_gpio_0_1"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_mdm_1_0/BCtr_block_mdm_1_0.xci">
+          <Proxy FileSetName="BCtr_block_mdm_1_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_axi_periph_0/BCtr_block_microblaze_0_axi_periph_0.xci"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_dlmb_v10_0/BCtr_block_dlmb_v10_0.xci">
+          <Proxy FileSetName="BCtr_block_dlmb_v10_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_0/BCtr_block_microblaze_0_0.xci">
+          <Proxy FileSetName="BCtr_block_microblaze_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_xlconcat_0/BCtr_block_microblaze_0_xlconcat_0.xci">
+          <Proxy FileSetName="BCtr_block_microblaze_0_xlconcat_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_microblaze_0_axi_intc_0/BCtr_block_microblaze_0_axi_intc_0.xci">
+          <Proxy FileSetName="BCtr_block_microblaze_0_axi_intc_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_clk_wiz_1_0/BCtr_block_clk_wiz_1_0.xci"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_lmb_bram_0/BCtr_block_lmb_bram_0.xci">
+          <Proxy FileSetName="BCtr_block_lmb_bram_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_ilmb_bram_if_cntlr_0/BCtr_block_ilmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="BCtr_block_ilmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_dlmb_bram_if_cntlr_0/BCtr_block_dlmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="BCtr_block_dlmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="ip/BCtr_block_ilmb_v10_0/BCtr_block_ilmb_v10_0.xci">
+          <Proxy FileSetName="BCtr_block_ilmb_v10_0"/>
+        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hdl/BCtr_block.hwdef"/>
-        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hw_handoff/BCtr_block_bd.tcl"/>
         <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hw_handoff/BCtr_block.hwh"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hw_handoff/BCtr_block_bd.tcl"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_ooc.xdc"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="hdl/BCtr_block.vhd"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0.xml"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0_sim_netlist.v"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0_stub.vhdl"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0_stub.v"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="sim/BCtr_block_BCtr_syscon_0_0.vhd"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="synth/BCtr_block_BCtr_syscon_0_0.vhd"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0_sim_netlist.vhdl"/>
+        <CompFileExtendedInfo CompFileName="BCtr_block.bd" FileRelPathName="BCtr_block_BCtr_syscon_0_0.dcp"/>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/hdl/BCtr_block_wrapper.vhd">
         <FileInfo>
@@ -576,9 +581,7 @@
     </Run>
     <Run Id="BCtr_block_BCtr_syscon_0_0_synth_1" Type="Ft3:Synth" SrcSet="BCtr_block_BCtr_syscon_0_0" Part="xc7a35tcpg236-1" ConstrsSet="BCtr_block_BCtr_syscon_0_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/BCtr_block_BCtr_syscon_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -859,9 +862,7 @@
     </Run>
     <Run Id="BCtr_block_BCtr_syscon_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a35tcpg236-1" ConstrsSet="BCtr_block_BCtr_syscon_0_0" Description="Default settings for Implementation." SynthRun="BCtr_block_BCtr_syscon_0_0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

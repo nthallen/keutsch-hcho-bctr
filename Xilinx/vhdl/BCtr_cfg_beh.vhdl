@@ -40,7 +40,7 @@ END BCtr_cfg ;
 --
 ARCHITECTURE beh OF BCtr_cfg IS
   TYPE State_t IS (
-    S_INIT, S_CHK_NAB, S_CHK_NAB2,
+    S_INIT, S_CHK_NAB, S_CHK_NAB2, S_CHK_NC,
     S_RESET, S_RESET2,
     S_EN
   );
@@ -52,6 +52,7 @@ ARCHITECTURE beh OF BCtr_cfg IS
   SIGNAL NBtotal : UNSIGNED(FIFO_ADDR_WIDTH DOWNTO 0);
   SIGNAL NBcnt   : UNSIGNED(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL NC_int : unsigned(23 DOWNTO 0);
+  SIGNAL NC_out : unsigned(23 DOWNTO 0);
   SIGNAL IntReset : std_logic;
   SIGNAL N_NAB : integer range 4 DOWNTO 0;
   SIGNAL NAB : integer range 4 DOWNTO 0;
@@ -94,22 +95,6 @@ BEGIN
       return;
     END PROCEDURE ResetRegs;
     
---    PROCEDURE ChkConfig IS
---    BEGIN
---      IF (WrEn = '1') THEN
---        IF (CfgAddr = "0000") THEN
---          IF (WData(15) = '1') THEN
---            current_state <= S_RESET;
---          ELSIF (WData(0) = '1' AND Ready = '1' AND En_int = '0') THEN
---            current_state <= S_EN;
---          ELSE
---            current_state <= S_INIT;
---          END IF;
---        END IF;
---      END IF;
---      return;
---    END PROCEDURE ChkConfig;
-    
     VARIABLE offset : unsigned(3 DOWNTO 0);
     VARIABLE index : integer range 3 downto 0;
     VARIABLE index4 : integer range 4 downto 0;
@@ -122,21 +107,23 @@ BEGIN
         ResetRegs;
         current_state <= S_INIT;
       ELSE
-        -- ChkConfig;
         CASE current_state IS
         WHEN S_INIT =>
-          IF (WrEn = '1' AND CfgAddr = "0000") THEN
-            IF (WData(15) = '1') THEN
-              current_state <= S_RESET;
-            ELSIF (WData(0) = '1' AND Ready = '1') THEN
-              current_state <= S_EN;
+          IntReset <= '0';
+          En_int <= '0';
+          IF (CfgAddr = "0000") THEN
+            IF (WrEn = '1') THEN
+              IF (WData(15) = '1') THEN
+                current_state <= S_RESET;
+              ELSIF (WData(0) = '1' AND Ready = '1') THEN
+                current_state <= S_EN;
+              ELSE
+                current_state <= S_INIT;
+              END IF;
             ELSE
               current_state <= S_INIT;
             END IF;
-          END IF;
-          IntReset <= '0';
-          En_int <= '0';
-          IF (CfgAddr >= 3 AND CfgAddr <= 10) THEN
+          ELSIF (CfgAddr >= 3 AND CfgAddr <= 10) THEN
             offset := CfgAddr - 3;
             index := to_integer(offset(2 downto 1));
             index4 := to_integer(to_unsigned(index,3));
@@ -153,6 +140,7 @@ BEGIN
                 current_state <= S_CHK_NAB;
               ELSE
                 config_err_nab <= '1';
+                current_state <= S_INIT;
               END IF;
             ELSIF (RdEn = '1') THEN
               IF (offset(0) = '0') THEN -- NA
@@ -161,16 +149,25 @@ BEGIN
                 CData(FIFO_ADDR_WIDTH-1 DOWNTO 0) <= std_logic_vector(NBv(index));
                 CData(15 DOWNTO FIFO_ADDR_WIDTH) <= (others => '0');
               END IF;
+              current_state <= S_INIT;
             END IF;
-          ELSIF (CfgAddr = 11 AND WrEn = '1') THEN
-            NC_int(15 DOWNTO 0) <= unsigned(WData);
-          ELSIF (CfgAddr = 11 AND RdEn = '1') THEN
-            CData <= std_logic_vector(NC_int(15 DOWNTO 0));
-          ELSIF (CfgAddr = 12 AND WrEn = '1') THEN
-            NC_int(23 DOWNTO 16) <= unsigned(WData(23-16 DOWNTO 0));
-          ELSIF (CfgAddr = 12 AND RdEn = '1') THEN
-            CData(15 DOWNTO 24-16) <= (others => '0');
-            CData(23-16 DOWNTO 0) <= std_logic_vector(NC_int(23 DOWNTO 16));
+          ELSIF (CfgAddr = 11) THEN
+            IF (WrEn = '1') THEN
+              NC_int(15 DOWNTO 0) <= unsigned(WData);
+              current_state <= S_CHK_NC;
+            ELSIF (RdEn = '1') THEN
+              CData <= std_logic_vector(NC_int(15 DOWNTO 0));
+              current_state <= S_INIT;
+            END IF;
+          ELSIF (CfgAddr = 12) THEN
+            IF (WrEn = '1') THEN
+              NC_int(23 DOWNTO 16) <= unsigned(WData(23-16 DOWNTO 0));
+              current_state <= S_CHK_NC;
+            ELSIF (RdEn = '1') THEN
+              CData(15 DOWNTO 24-16) <= (others => '0');
+              CData(23-16 DOWNTO 0) <= std_logic_vector(NC_int(23 DOWNTO 16));
+              current_state <= S_INIT;
+            END IF;
           END IF;
         WHEN S_CHK_NAB =>
           -- Check for legality
@@ -183,6 +180,8 @@ BEGIN
             ELSE
               current_state <= S_INIT;
             END IF;
+          ELSE
+            current_state <= S_INIT;
           END IF;
         WHEN S_CHK_NAB2 =>
           IF (NBtotal <= 2**FIFO_ADDR_WIDTH) THEN
@@ -193,18 +192,36 @@ BEGIN
             END IF;
             NBtotal1 := NBtotal-1;
             NBtot <= NBtotal1(FIFO_ADDR_WIDTH-1 DOWNTO 0);
-            Ready <= '1';
+            IF (NC_int > 0) THEN
+              Ready <= '0';
+            ELSE
+              Ready <= '1';
+            END IF;
           ELSE
             config_err_ovf <= '1';
+            Ready <= '0';
+          END IF;
+          current_state <= S_INIT;
+        WHEN S_CHK_NC =>
+          IF (NC_int > 0 AND NBtotal > 0 AND config_err_ovf = '0') THEN
+            NC_out <= NC_int-1;
+            Ready <= '1';
+          ELSE
             Ready <= '0';
           END IF;
           current_state <= S_INIT;
         WHEN S_EN =>
           En_int <= '1';
           IF (WrEn = '1' AND CfgAddr = "0000" AND
+              WData(15) = '1') THEN
+            current_state <= S_RESET;
+          ELSIF (WrEn = '1' AND CfgAddr = "0000" AND
               WData(15) = '0' AND WData(0) = '0') THEN
             current_state <= S_INIT;
+          ELSE
+            current_state <= S_EN;
           END IF;
+          
           IF (TrigArm = '1') THEN
             NAB <= 1;
             NA <= NAv(0)-1;
@@ -223,12 +240,6 @@ BEGIN
               NBcnt <= NBcnt - 1;
             END IF;
           END IF;
-          -- This probably can't occur, but might quiet DesignChecker
-          -- IF (En_int = '0') THEN
-          --   current_state <= S_INIT;
-          -- ELSE
-          --   current_state <= S_EN;
-          -- END IF;
         WHEN S_RESET =>
           IntReset <= '1';
           ResetRegs;
@@ -243,7 +254,7 @@ BEGIN
   END PROCESS;
   
   En <= En_int;
-  NC <= NC_int-1;
+  NC <= NC_out;
   Status <= Ready & config_err_nab & config_err_ovf;
 END ARCHITECTURE beh;
 

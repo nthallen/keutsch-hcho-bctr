@@ -16,7 +16,11 @@ end
 NChannels = 2;
 bin_NA = [10,35,200];
 bin_NB = [1,1,1];
+NC = 300;
+% bin_NA = [35];
+% bin_NB = [2];
 NC = 300000;
+Nsamples = 60;
 for i=1:length(bin_NA)
   write_subbus(s, ctr+1+2*i, bin_NA(i));
   write_subbus(s, ctr+2+2*i, bin_NB(i));
@@ -37,7 +41,7 @@ Nsampled = 0;
 %%
 write_subbus(s, ctr, 1); % Enable
 %
-while Nsampled < 60
+while Nsampled < Nsamples
   status = read_subbus(s,ctr);
   while bitand(status,2) == 0
     if bitand(status,1) == 0
@@ -59,6 +63,18 @@ while Nsampled < 60
     warning('read_multi() returned ack %d',ack);
   end
 end
+%
+write_subbus(s, ctr, 0); % Disable
+status = read_subbus(s,ctr);
+if bitand(status,1) == 1
+  warning('Counter still enabled after disable');
+end
+%%
+write_subbus(s, ctr, hex2dec('8000')); % Reset
+status = read_subbus(s,ctr);
+if bitand(status,1) == 1
+  warning('Counter still enabled after reset');
+end
 %%
 clf;
 Nax = 4;
@@ -70,6 +86,12 @@ plot(ax(1), NSk,'.');
 plot(ax(2), Cts(:, 1), '.');
 plot(ax(3), Cts(:, 3), '.');
 plot(ax(4), Cts(:, 5), '.');
+set(ax([2 4]),'YAxisLocation','Right');
+set(ax(1:3),'XTickLabel',[]);
+ylabel(ax(1),'NSk');
+ylabel(ax(2),'Bin1');
+ylabel(ax(3),'Bin2');
+ylabel(ax(4),'Bin3');
 %%
 % Get T,S from original model: top section of scratch_170107.m
 %%
@@ -84,7 +106,7 @@ for i=1:length(bin_NA)
     bin_num = bin_num+1;
     b1 = b0 + bin_NA(i);
     t1 = t0 + bin_NA(i)*dt;
-    bin_scale = normal_width/(t1-t0)
+    bin_scale = normal_width/(t1-t0);
     bin_mean = mean(Cts(1:Nsampled,bin_num*NChannels-1))*bin_scale;
     bin_std = std(Cts(1:Nsampled,bin_num*NChannels-1))*bin_scale;
     mdl_mean = mean(S((b0+1):b1))*normal_width/dt;
@@ -99,8 +121,9 @@ for i=1:length(bin_NA)
 end
 hold off;
 title('Normalized count rates');
-%%
+%
 hold on
 plot(T,S*normal_width/dt,'-b');
 hold off;
 shg
+%%
