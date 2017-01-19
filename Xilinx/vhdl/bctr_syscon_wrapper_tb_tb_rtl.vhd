@@ -19,9 +19,6 @@ END ENTITY BCtr_syscon_wrapper_tb;
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
-LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
-
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
 
@@ -71,8 +68,6 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
 
   -- embedded configurations
   -- pragma synthesis_off
-  FOR U_0 : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
-  FOR U_1 : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
   -- pragma synthesis_on
 
 BEGIN
@@ -106,3 +101,4 @@ BEGIN
   PMTs(0) <= SimPMT;
   PMTS(1) <= '0';
 END ARCHITECTURE rtl;
+

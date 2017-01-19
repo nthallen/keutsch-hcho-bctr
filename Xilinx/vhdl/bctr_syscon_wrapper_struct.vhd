@@ -52,8 +52,6 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
-
 ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
   -- Architecture declarations
@@ -91,7 +89,6 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : BCtr_syscon USE ENTITY BCtr_lib.BCtr_syscon;
   -- pragma synthesis_on
 
 
