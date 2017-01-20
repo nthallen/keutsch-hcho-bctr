@@ -60,7 +60,11 @@ ARCHITECTURE beh OF BCtr_cfg IS
   SIGNAL En_int : std_logic;
   SIGNAL config_err_nab : std_logic;
   SIGNAL config_err_ovf : std_logic;
-    SIGNAL tr_offset : unsigned(3 DOWNTO 0);
+  SIGNAL config_reg_addr : std_logic;
+  SIGNAL nab_regs_addr : std_logic;
+  SIGNAL nc_lsb_addr : std_logic;
+  SIGNAL nc_msb_addr : std_logic;
+  SIGNAL offset : unsigned(3 DOWNTO 0);
     SIGNAL tr_index : integer range 3 downto 0;
     SIGNAL tr_index4 : integer range 4 downto 0;
 BEGIN
@@ -72,6 +76,52 @@ BEGIN
       ELSE
         rst <= '0';
       END IF;
+    END IF;
+  END PROCESS;
+  
+  PROCESS (clk) IS
+  BEGIN
+    IF (clk'event AND clk = '1') THEN
+      IF (CfgAddr = "0000") THEN
+        config_reg_addr <= '1';
+      ELSE
+        config_reg_addr <= '0';
+      END IF;
+      
+      CASE CfgAddr IS
+      WHEN "0011" =>
+        nab_regs_addr <= '1';
+      WHEN "0100" =>
+        nab_regs_addr <= '1';
+      WHEN "0101" =>
+        nab_regs_addr <= '1';
+      WHEN "0110" =>
+        nab_regs_addr <= '1';
+      WHEN "0111" =>
+        nab_regs_addr <= '1';
+      WHEN "1000" =>
+        nab_regs_addr <= '1';
+      WHEN "1001" =>
+        nab_regs_addr <= '1';
+      WHEN "1010" =>
+        nab_regs_addr <= '1';
+      WHEN OTHERS =>
+        nab_regs_addr <= '0';
+      END CASE;
+
+      IF (CfgAddr = "1011") THEN
+        nc_lsb_addr <= '1';
+      ELSE
+        nc_lsb_addr <= '0';
+      END IF;
+
+      IF (CfgAddr = "1100") THEN
+        nc_msb_addr <= '1';
+      ELSE
+        nc_msb_addr <= '0';
+      END IF;
+
+      offset <= CfgAddr - 3;
     END IF;
   END PROCESS;
   
@@ -95,7 +145,6 @@ BEGIN
       return;
     END PROCEDURE ResetRegs;
     
-    VARIABLE offset : unsigned(3 DOWNTO 0);
     VARIABLE index : integer range 3 downto 0;
     VARIABLE index4 : integer range 4 downto 0;
     VARIABLE NBtotal1 : unsigned(FIFO_ADDR_WIDTH DOWNTO 0);
@@ -107,27 +156,25 @@ BEGIN
         ResetRegs;
         current_state <= S_INIT;
       ELSE
+        
+        IF (config_reg_addr = '1' AND WrEn = '1') THEN
+          IntReset <= WData(15);
+          En_int <= WData(0);
+        END IF;
+        
         CASE current_state IS
         WHEN S_INIT =>
-          IntReset <= '0';
-          En_int <= '0';
-          IF (CfgAddr = "0000") THEN
-            IF (WrEn = '1') THEN
-              IF (WData(15) = '1') THEN
-                current_state <= S_RESET;
-              ELSIF (WData(0) = '1' AND Ready = '1') THEN
-                current_state <= S_EN;
-              ELSE
-                current_state <= S_INIT;
-              END IF;
-            ELSE
-              current_state <= S_INIT;
-            END IF;
-          ELSIF (CfgAddr >= 3 AND CfgAddr <= 10) THEN
-            offset := CfgAddr - 3;
+          En <= '0';
+          IF (IntReset = '1') THEN
+            current_state <= S_RESET;
+          ELSIF (En_int = '1' AND Ready = '1') THEN
+            current_state <= S_EN;
+          ELSE
+            current_state <= S_INIT;
+          END IF;
+          IF (nab_regs_addr = '1') THEN
             index := to_integer(offset(2 downto 1));
             index4 := to_integer(to_unsigned(index,3));
-            tr_offset <= offset;
             tr_index <= index;
             tr_index4 <= index4;
             IF (WrEn = '1') THEN
@@ -151,7 +198,7 @@ BEGIN
               END IF;
               current_state <= S_INIT;
             END IF;
-          ELSIF (CfgAddr = 11) THEN
+          ELSIF (nc_lsb_addr = '1') THEN
             IF (WrEn = '1') THEN
               NC_int(15 DOWNTO 0) <= unsigned(WData);
               current_state <= S_CHK_NC;
@@ -159,7 +206,7 @@ BEGIN
               CData <= std_logic_vector(NC_int(15 DOWNTO 0));
               current_state <= S_INIT;
             END IF;
-          ELSIF (CfgAddr = 12) THEN
+          ELSIF (nc_msb_addr = '1') THEN
             IF (WrEn = '1') THEN
               NC_int(23 DOWNTO 16) <= unsigned(WData(23-16 DOWNTO 0));
               current_state <= S_CHK_NC;
@@ -211,12 +258,10 @@ BEGIN
           END IF;
           current_state <= S_INIT;
         WHEN S_EN =>
-          En_int <= '1';
-          IF (WrEn = '1' AND CfgAddr = "0000" AND
-              WData(15) = '1') THEN
+          En <= '1';
+          IF (IntReset = '1') THEN
             current_state <= S_RESET;
-          ELSIF (WrEn = '1' AND CfgAddr = "0000" AND
-              WData(15) = '0' AND WData(0) = '0') THEN
+          ELSIF (En_int = '0') THEN
             current_state <= S_INIT;
           ELSE
             current_state <= S_EN;
@@ -241,10 +286,11 @@ BEGIN
             END IF;
           END IF;
         WHEN S_RESET =>
-          IntReset <= '1';
+          En <= '0';
           ResetRegs;
           current_state <= S_RESET2;
         WHEN S_RESET2 =>
+          IntReset <= '0';
           current_state <= S_INIT;
         WHEN OTHERS =>
           current_state <= S_RESET;
@@ -253,7 +299,6 @@ BEGIN
     END IF;
   END PROCESS;
   
-  En <= En_int;
   NC <= NC_out;
   Status <= Ready & config_err_nab & config_err_ovf;
 END ARCHITECTURE beh;
