@@ -19,12 +19,15 @@ function rm_obj = read_multi_prep(varargin)
       case 3
         cmds{i} = sprintf('%X:%X:%X', addr);
         count = count + length(addr(1):addr(2):addr(3));
+      case 4 % kluge for new syntax
+        cmds{i} = sprintf('%X|%X@%X', addr(1:3));
+        count = count + addr(2) + 1;
       otherwise
         error('Invalid argument');
     end
   end
-  if count >= 50
-    error('read_multi is limited to 50 values');
+  if count >= 500
+    error('read_multi is limited to 500 values');
   end
   if count == 0
     error('No addresses specified');
