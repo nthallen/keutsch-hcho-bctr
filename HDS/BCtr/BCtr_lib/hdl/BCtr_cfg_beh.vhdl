@@ -240,9 +240,9 @@ BEGIN
             NBtotal1 := NBtotal-1;
             NBtot <= NBtotal1(FIFO_ADDR_WIDTH-1 DOWNTO 0);
             IF (NC_int > 0) THEN
-              Ready <= '0';
-            ELSE
               Ready <= '1';
+            ELSE
+              Ready <= '0';
             END IF;
           ELSE
             config_err_ovf <= '1';
