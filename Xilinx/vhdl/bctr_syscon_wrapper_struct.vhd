@@ -97,7 +97,7 @@ BEGIN
   -- Instance port mappings.
   U_0 : BCtr_syscon
     GENERIC MAP (
-      BUILD_NUMBER   => X"0002",      -- Relative to HCHO
+      BUILD_NUMBER   => X"0003",      -- Relative to HCHO
       INSTRUMENT_ID  => X"0008",      -- HCHO
       N_INTERRUPTS   => 0,
       N_BOARDS       => 2,
