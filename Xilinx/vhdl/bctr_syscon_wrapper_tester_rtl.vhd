@@ -19,7 +19,7 @@ ENTITY BCtr_syscon_wrapper_tester IS
   GENERIC( 
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
-    BIN_OPT    : integer range 10 downto 1      := 3;
+    BIN_OPT    : integer range 10 downto 1      := 3; -- 1,2,3 currently supported
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -159,47 +159,46 @@ BEGIN
       -- Configure for 1 bins of 10
       sbwr(ctr_base+3, std_logic_vector(to_unsigned(10,16)), '1');
       sbwr(ctr_base+4, std_logic_vector(to_unsigned(1,16)), '1');
-      -- Check the status again: should be 'Ready' but not enabled
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0000" report "Unexpected Ready status" severity error;
+      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
       -- Now add a second bin of 350ns
       sbwr(ctr_base+5, std_logic_vector(to_unsigned(35,16)), '1');
       sbwr(ctr_base+6, std_logic_vector(to_unsigned(1,16)), '1');
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0000" report "Unexpected Ready status again" severity error;
+      assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
       -- And a third bin of 2500ns
       sbwr(ctr_base+7, std_logic_vector(to_unsigned(250,16)), '1');
       sbwr(ctr_base+8, std_logic_vector(to_unsigned(1,16)), '1');
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0000" report "Unexpected Ready status still" severity error;
+      assert ReadResult = X"00C0" report "Expecte N_NAB=3 status still" severity error;
     WHEN 2 => -- 75x4, needs to be the bin ctr
       sbwr(ctr_base+3, std_logic_vector(to_unsigned(4,16)), '1');
       sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
       -- Check the status again: should be 'Ready' but not enabled
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0020" report "Expected Ready status" severity error;
+      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
     WHEN OTHERS =>
       -- Configure for 45 bins of 1
       sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
       sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
       -- Check the status again: should be 'Ready' but not enabled
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0000" report "Unexpected Ready status" severity error;
+      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
       -- 40 bins of 5
       sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
       sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0000" report "Unexpected Ready status again" severity error;
+      assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
     END CASE;
     sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
     sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
     sbrd(ctr_base, '1');
-    assert ReadResult = X"0020" report "Expected Ready status" severity error;
+    assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
 
     -- Enable and check status
     sbwr(ctr_base, X"0001", '1');
     sbrd(ctr_base, '1');
-    assert ReadResult = X"0021" report "Expected Ready|En status" severity error;
+    assert ReadResult(5 DOWNTO 0) = "100001" report "Expected Ready|En status" severity error;
     
     for i in 1 to SIM_LOOPS loop
       sbrd(ctr_base,'1');
