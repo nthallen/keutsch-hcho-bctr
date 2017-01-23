@@ -199,19 +199,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/19/2017"
+value "01/23/2017"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Mon"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Monday"
 )
 (vvPair
 variable "dd"
-value "19"
+value "23"
 )
 (vvPair
 variable "entity_name"
@@ -239,7 +239,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/19/2017"
+value "01/23/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -251,7 +251,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "09:21:41"
+value "11:13:32"
 )
 (vvPair
 variable "group"
@@ -355,7 +355,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "09:21:41"
+value "11:13:32"
 )
 (vvPair
 variable "unit"
@@ -919,7 +919,7 @@ uid 79,0
 decl (Decl
 n "Flt_CPU_Reset"
 t "std_logic"
-o 1
+o 6
 suid 1,0
 )
 declText (MLText
@@ -928,7 +928,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,7000,39500,7800"
-st "SIGNAL Flt_CPU_Reset : std_logic"
+st "SIGNAL Flt_CPU_Reset : std_logic
+"
 )
 )
 *17 (Net
@@ -937,7 +938,7 @@ decl (Decl
 n "Data_i"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 2
+o 3
 suid 2,0
 )
 declText (MLText
@@ -946,7 +947,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,4600,50000,5400"
-st "SIGNAL Data_i        : std_logic_vector(15 DOWNTO 0)"
+st "SIGNAL Data_i        : std_logic_vector(15 DOWNTO 0)
+"
 )
 )
 *18 (Net
@@ -955,7 +957,7 @@ decl (Decl
 n "Status"
 t "std_logic_vector"
 b "(3 DOWNTO 0)"
-o 3
+o 8
 suid 3,0
 )
 declText (MLText
@@ -964,7 +966,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,8600,49500,9400"
-st "SIGNAL Status        : std_logic_vector(3 DOWNTO 0)"
+st "SIGNAL Status        : std_logic_vector(3 DOWNTO 0)
+"
 )
 )
 *19 (Net
@@ -973,7 +976,7 @@ decl (Decl
 n "Fail_Out"
 t "std_logic_vector"
 b "(FAIL_WIDTH-1 DOWNTO 0)"
-o 4
+o 5
 suid 4,0
 )
 declText (MLText
@@ -982,7 +985,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,6200,55000,7000"
-st "SIGNAL Fail_Out      : std_logic_vector(FAIL_WIDTH-1 DOWNTO 0)"
+st "SIGNAL Fail_Out      : std_logic_vector(FAIL_WIDTH-1 DOWNTO 0)
+"
 )
 )
 *20 (Net
@@ -990,7 +994,7 @@ uid 111,0
 decl (Decl
 n "clk"
 t "std_logic"
-o 5
+o 11
 suid 5,0
 )
 declText (MLText
@@ -999,7 +1003,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,11000,39500,11800"
-st "SIGNAL clk           : std_logic"
+st "SIGNAL clk           : std_logic
+"
 )
 )
 *21 (Net
@@ -1008,7 +1013,7 @@ decl (Decl
 n "Ctrl"
 t "std_logic_vector"
 b "(6 DOWNTO 0)"
-o 6
+o 2
 suid 6,0
 )
 declText (MLText
@@ -1017,7 +1022,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,3800,49500,4600"
-st "SIGNAL Ctrl          : std_logic_vector(6 DOWNTO 0)"
+st "SIGNAL Ctrl          : std_logic_vector(6 DOWNTO 0)
+"
 )
 )
 *22 (Net
@@ -1026,7 +1032,7 @@ decl (Decl
 n "Addr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 7
+o 1
 suid 7,0
 )
 declText (MLText
@@ -1035,7 +1041,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,3000,55000,3800"
-st "SIGNAL Addr          : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)"
+st "SIGNAL Addr          : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)
+"
 )
 )
 *23 (Net
@@ -1044,7 +1051,7 @@ decl (Decl
 n "Data_o"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 8
+o 4
 suid 8,0
 )
 declText (MLText
@@ -1053,7 +1060,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,5400,50000,6200"
-st "SIGNAL Data_o        : std_logic_vector(15 DOWNTO 0)"
+st "SIGNAL Data_o        : std_logic_vector(15 DOWNTO 0)
+"
 )
 )
 *24 (Net
@@ -1071,7 +1079,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,9400,54000,10200"
-st "SIGNAL Switches      : std_logic_vector(SW_WIDTH-1 DOWNTO 0)"
+st "SIGNAL Switches      : std_logic_vector(SW_WIDTH-1 DOWNTO 0)
+"
 )
 )
 *25 (Net
@@ -1088,7 +1097,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,10200,39500,11000"
-st "SIGNAL Trigger       : std_logic"
+st "SIGNAL Trigger       : std_logic
+"
 )
 )
 *26 (Net
@@ -1098,7 +1108,7 @@ decl (Decl
 n "PMTs"
 t "std_logic_vector"
 b "(N_CHANNELS-1 DOWNTO 0)"
-o 11
+o 7
 suid 11,0
 )
 declText (MLText
@@ -1107,7 +1117,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,7800,55000,8600"
-st "SIGNAL PMTs          : std_logic_vector(N_CHANNELS-1 DOWNTO 0)"
+st "SIGNAL PMTs          : std_logic_vector(N_CHANNELS-1 DOWNTO 0)
+"
 )
 )
 *27 (Blk
@@ -2887,12 +2898,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1754,283,2881,1131"
-viewArea "-2000,-500,83405,62865"
+windowSize "1753,283,2881,1131"
+viewArea "-2000,-500,83500,65335"
 cachedDiagramExtent "0,0,72500,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-5000,0"
-lastUid 1927,0
+lastUid 2022,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -3977,7 +3988,7 @@ m 4
 decl (Decl
 n "Flt_CPU_Reset"
 t "std_logic"
-o 1
+o 6
 suid 1,0
 )
 )
@@ -3990,7 +4001,7 @@ decl (Decl
 n "Data_i"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 2
+o 3
 suid 2,0
 )
 )
@@ -4003,7 +4014,7 @@ decl (Decl
 n "Status"
 t "std_logic_vector"
 b "(3 DOWNTO 0)"
-o 3
+o 8
 suid 3,0
 )
 )
@@ -4016,7 +4027,7 @@ decl (Decl
 n "Fail_Out"
 t "std_logic_vector"
 b "(FAIL_WIDTH-1 DOWNTO 0)"
-o 4
+o 5
 suid 4,0
 )
 )
@@ -4028,7 +4039,7 @@ m 4
 decl (Decl
 n "clk"
 t "std_logic"
-o 5
+o 11
 suid 5,0
 )
 )
@@ -4041,7 +4052,7 @@ decl (Decl
 n "Ctrl"
 t "std_logic_vector"
 b "(6 DOWNTO 0)"
-o 6
+o 2
 suid 6,0
 )
 )
@@ -4054,7 +4065,7 @@ decl (Decl
 n "Addr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 7
+o 1
 suid 7,0
 )
 )
@@ -4067,7 +4078,7 @@ decl (Decl
 n "Data_o"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 8
+o 4
 suid 8,0
 )
 )
@@ -4106,7 +4117,7 @@ decl (Decl
 n "PMTs"
 t "std_logic_vector"
 b "(N_CHANNELS-1 DOWNTO 0)"
-o 11
+o 7
 suid 11,0
 )
 )
@@ -4412,7 +4423,7 @@ uid 1542,0
 generic (GiElement
 name "BIN_OPT"
 type "integer range 10 downto 1"
-value "1"
+value "2"
 )
 uid 1639,0
 )
@@ -4607,5 +4618,5 @@ vaOverrides [
 uid 360,0
 type 1
 )
-activeModelName "BlockDiag"
+activeModelName "BlockDiag:GEN"
 )

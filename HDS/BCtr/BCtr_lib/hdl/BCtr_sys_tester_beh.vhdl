@@ -150,31 +150,33 @@ BEGIN
       sbwr(X"14", std_logic_vector(to_unsigned(1,16)), '1');
       -- Check the status again: should be 'Ready' but not enabled
       sbrd(X"10", '1');
-      assert ReadResult = X"0020" report "Expected Ready status" severity error;
+      assert ReadResult = X"0040" report "Expected N_NAB=1, not ready status" severity error;
       -- Now add a second bin of 350ns
       sbwr(X"15", std_logic_vector(to_unsigned(35,16)), '1');
       sbwr(X"16", std_logic_vector(to_unsigned(1,16)), '1');
       sbrd(X"10", '1');
-      assert ReadResult = X"0020" report "Expected Ready status again" severity error;
+      assert ReadResult = X"0080" report "Expected N_NAB=2, not ready status again" severity error;
       -- And a third bin of 2500ns
       sbwr(X"17", std_logic_vector(to_unsigned(250,16)), '1');
       sbwr(X"18", std_logic_vector(to_unsigned(1,16)), '1');
       sbrd(X"10", '1');
-      assert ReadResult = X"0020" report "Expected Ready status still" severity error;
+      assert ReadResult = X"00C0" report "Expected N_NAB=3, not ready status still" severity error;
     WHEN others =>
       sbwr(X"13", std_logic_vector(to_unsigned(4,16)), '1');
       sbwr(X"14", std_logic_vector(to_unsigned(75,16)), '1');
       -- Check the status again: should be 'Ready' but not enabled
       sbrd(X"10", '1');
-      assert ReadResult = X"0020" report "Expected Ready status" severity error;
+      assert ReadResult = X"0040" report "Expected N_NAB=1, not ready status" severity error;
     END CASE;
     sbwr(X"1B", std_logic_vector(NCU(15 DOWNTO 0)),'1');
     sbwr(X"1C", X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
+    sbrd( X"10", '1');
+    assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
 
     -- Enable and check status
     sbwr( X"10", X"0001", '1');
     sbrd( X"10", '1');
-    assert ReadResult = X"0021" report "Expected Ready|En status" severity error;
+    assert ReadResult(5 DOWNTO 0) = "100001" report "Expected Ready|En status" severity error;
     
     for i in 1 to SIM_LOOPS loop
       sbrd(X"10",'1');

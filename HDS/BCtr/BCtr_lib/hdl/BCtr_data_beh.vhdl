@@ -12,29 +12,29 @@ USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
 ENTITY BCtr_data IS
-   GENERIC( 
-      N_CHANNELS      : integer range 4 downto 1   := 2;
-      CTR_WIDTH       : integer range 32 downto 16 := 24;
-      FIFO_ADDR_WIDTH : integer range 10 downto 4  := 9
-   );
-   PORT( 
-      DRdy     : IN     std_logic;
-      DataAddr : IN     unsigned (1 DOWNTO 0);
-      En       : IN     std_logic;
-      FData    : IN     std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
-      NBtot    : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-      NSkipped : IN     unsigned (15 DOWNTO 0);
-      RdEn     : IN     std_logic;
-      Status   : IN     std_logic_vector (2 DOWNTO 0);
-      clk      : IN     std_logic;
-      rst      : IN     std_logic;
-      DData    : OUT    std_logic_vector (15 DOWNTO 0);
-      RE       : OUT    std_logic
-   );
+  GENERIC( 
+    N_CHANNELS      : integer range 4 downto 1   := 2;
+    CTR_WIDTH       : integer range 32 downto 16 := 24;
+    FIFO_ADDR_WIDTH : integer range 10 downto 4  := 9
+  );
+  PORT( 
+    DRdy     : IN     std_logic;
+    DataAddr : IN     unsigned (1 DOWNTO 0);
+    En       : IN     std_logic;
+    FData    : IN     std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
+    NBtot    : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    NSkipped : IN     unsigned (15 DOWNTO 0);
+    RdEn     : IN     std_logic;
+    Status   : IN     std_logic_vector (5 DOWNTO 0);
+    clk      : IN     std_logic;
+    rst      : IN     std_logic;
+    DData    : OUT    std_logic_vector (15 DOWNTO 0);
+    RE       : OUT    std_logic
+  );
 
 -- Declarations
 
-END BCtr_data ;
+END ENTITY BCtr_data ;
 
 --
 ARCHITECTURE beh OF BCtr_data IS
@@ -84,8 +84,8 @@ BEGIN
         WHEN S_INIT =>
           IF (RdEn = '1') THEN
             IF (DataAddr = 0) THEN
-              DData(6 DOWNTO 0) <= tx_err_ovf & Status & tx_active & DRdy_int & En;
-              DData(15 DOWNTO 7) <= (others => '0');
+              DData(9 DOWNTO 0) <= tx_err_ovf & Status & tx_active & DRdy_int & En;
+              DData(15 DOWNTO 10) <= (others => '0');
             ELSIF (DataAddr = 1) THEN -- Reading NWremaining
               IF (current_tx = TX_IDLE) THEN
                 IF (DRdy = '1') THEN

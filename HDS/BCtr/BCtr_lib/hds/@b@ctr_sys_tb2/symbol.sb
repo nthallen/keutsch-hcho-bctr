@@ -282,7 +282,7 @@ uid 263,0
 generic (GiElement
 name "BIN_OPT"
 type "integer range 10 downto 1"
-value "1"
+value "2"
 )
 uid 311,0
 )
@@ -521,19 +521,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/19/2017"
+value "01/23/2017"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Mon"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Monday"
 )
 (vvPair
 variable "dd"
-value "19"
+value "23"
 )
 (vvPair
 variable "entity_name"
@@ -561,7 +561,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/19/2017"
+value "01/23/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -573,7 +573,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "09:21:42"
+value "11:13:32"
 )
 (vvPair
 variable "group"
@@ -677,7 +677,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "09:21:42"
+value "11:13:32"
 )
 (vvPair
 variable "unit"
@@ -765,7 +765,7 @@ FAIL_WIDTH      integer range 16 downto 0      2
 SW_WIDTH        integer range 16 downto 0      0     
 N_INTERRUPTS    integer range 16 downto 0      0     
 SIM_LOOPS       integer range 50 downto 0      10    
-BIN_OPT         integer range 10 downto 1      1     
+BIN_OPT         integer range 10 downto 1      2     
 NC              integer range 2**24-1 downto 1 3000  
 "
 )
@@ -821,7 +821,7 @@ value "10"
 (GiElement
 name "BIN_OPT"
 type "integer range 10 downto 1"
-value "1"
+value "2"
 )
 (GiElement
 name "NC"
@@ -1468,7 +1468,7 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 497,0
+lastUid 520,0
 okToSyncOnLoad 1
 OkToSyncGenericsOnLoad 1
 activeModelName "Symbol:CDM"

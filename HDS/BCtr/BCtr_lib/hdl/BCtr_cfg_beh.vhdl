@@ -12,30 +12,30 @@ USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
 ENTITY BCtr_cfg IS
-   GENERIC( 
-      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
-   );
-   PORT( 
-      CfgAddr  : IN     unsigned (3 DOWNTO 0);
-      ExpReset : IN     std_logic;
-      NArd     : IN     std_logic;
-      RdEn     : IN     std_logic;
-      TrigArm  : IN     std_logic;
-      WData    : IN     std_logic_vector (15 DOWNTO 0);
-      WrEn     : IN     std_logic;
-      clk      : IN     std_logic;
-      CData    : OUT    std_logic_vector (15 DOWNTO 0);
-      En       : OUT    std_logic;
-      NA       : OUT    unsigned (15 DOWNTO 0);
-      NBtot    : OUT    unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-      NC       : OUT    unsigned (23 DOWNTO 0);
-      rst      : OUT    std_logic;
-      Status   : OUT    std_logic_vector (2 DOWNTO 0)
-   );
+  GENERIC( 
+    FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
+  );
+  PORT( 
+    CfgAddr  : IN     unsigned (3 DOWNTO 0);
+    ExpReset : IN     std_logic;
+    NArd     : IN     std_logic;
+    RdEn     : IN     std_logic;
+    TrigArm  : IN     std_logic;
+    WData    : IN     std_logic_vector (15 DOWNTO 0);
+    WrEn     : IN     std_logic;
+    clk      : IN     std_logic;
+    CData    : OUT    std_logic_vector (15 DOWNTO 0);
+    En       : OUT    std_logic;
+    NA       : OUT    unsigned (15 DOWNTO 0);
+    NBtot    : OUT    unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    NC       : OUT    unsigned (23 DOWNTO 0);
+    rst      : OUT    std_logic;
+    Status   : OUT    std_logic_vector (5 DOWNTO 0)
+  );
 
 -- Declarations
 
-END BCtr_cfg ;
+END ENTITY BCtr_cfg ;
 
 --
 ARCHITECTURE beh OF BCtr_cfg IS
@@ -49,6 +49,10 @@ ARCHITECTURE beh OF BCtr_cfg IS
   TYPE NB_t IS ARRAY (3 DOWNTO 0) OF UNSIGNED(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL NAv : NA_t;
   SIGNAL NBv : NB_t;
+  SIGNAL NA_in : UNSIGNED(15 DOWNTO 0);
+  SIGNAL NA_int : UNSIGNED(15 DOWNTO 0);
+  SIGNAL NB_in : UNSIGNED(15 DOWNTO 0);
+  SIGNAL NB_in1 : UNSIGNED(15 DOWNTO 0);
   SIGNAL NBtotal : UNSIGNED(FIFO_ADDR_WIDTH DOWNTO 0);
   SIGNAL NBcnt   : UNSIGNED(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL NC_int : unsigned(23 DOWNTO 0);
@@ -132,7 +136,9 @@ BEGIN
         NAv(i) <= (others => '0');
         NBv(i) <= (others => '0');
       end loop;
-      NA <= (others => '0');
+      NA_int <= (others => '0');
+      NA_in <= (others => '0');
+      NB_in <= (others => '0');
       NBtotal <= (others => '0');
       NBtot <= (others => '0');
       NC_int <= (others => '0');
@@ -148,7 +154,6 @@ BEGIN
     VARIABLE index : integer range 3 downto 0;
     VARIABLE index4 : integer range 4 downto 0;
     VARIABLE NBtotal1 : unsigned(FIFO_ADDR_WIDTH DOWNTO 0);
-    VARIABLE N_NABv : integer range 4 DOWNTO 0;
   BEGIN
     IF (clk'event AND clk = '1') THEN
       IF (ExpReset = '1') THEN
@@ -180,9 +185,9 @@ BEGIN
             IF (WrEn = '1') THEN
               IF (index4 = N_NAB) THEN
                 IF (offset(0) = '0') THEN -- NA
-                  NAv(index) <= unsigned(WData);
-                ELSE -- NB
-                  NBv(index) <= unsigned(WData(FIFO_ADDR_WIDTH-1 DOWNTO 0));
+                  NA_in <= unsigned(WData);
+                ELSE
+                  NB_in <= unsigned(WData);
                 END IF;
                 current_state <= S_CHK_NAB;
               ELSE
@@ -218,27 +223,28 @@ BEGIN
           END IF;
         WHEN S_CHK_NAB =>
           -- Check for legality
-          IF (NAB < 4) THEN
-            index := to_integer(to_unsigned(NAB,2));
-            IF (N_NAB < 4 AND config_err_ovf = '0' AND
-                NAv(index) /= 0 AND NBv(index) /= 0) THEN
-              NBtotal <= NBtotal + resize(NBv(index),FIFO_ADDR_WIDTH+1);
-              current_state <= S_CHK_NAB2;
-            ELSE
-              current_state <= S_INIT;
-            END IF;
+          index := to_integer(to_unsigned(N_NAB,2));
+          IF (N_NAB < 4 AND
+              NA_in /= 0 AND
+              NB_in /= 0 AND
+              NB_in(15 DOWNTO FIFO_ADDR_WIDTH+1) = 0 AND
+              config_err_ovf = '0') THEN
+            NBtotal <= NBtotal + resize(NB_in,FIFO_ADDR_WIDTH+1);
+            NB_in1 <= NB_in - 1;
+            current_state <= S_CHK_NAB2;
           ELSE
             current_state <= S_INIT;
           END IF;
         WHEN S_CHK_NAB2 =>
           IF (NBtotal <= 2**FIFO_ADDR_WIDTH) THEN
-            N_NABv := NAB+1;
-            N_NAB <= N_NABv;
-            IF (N_NABv < 4) THEN
-              NAB <= N_NABv;
-            END IF;
+            index := to_integer(to_unsigned(N_NAB,2));
+            NAv(index) <= NA_in-1;
+            NBv(index) <= NB_in1(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+            N_NAB <= N_NAB+1;
             NBtotal1 := NBtotal-1;
             NBtot <= NBtotal1(FIFO_ADDR_WIDTH-1 DOWNTO 0);
+            NA_in <= (others => '0');
+            NB_in <= (others => '0');
             IF (NC_int > 0) THEN
               Ready <= '1';
             ELSE
@@ -269,16 +275,16 @@ BEGIN
           
           IF (TrigArm = '1') THEN
             NAB <= 1;
-            NA <= NAv(0)-1;
-            NBcnt <= NBv(0)-1;
+            NA_int <= NAv(0);
+            NBcnt <= NBv(0);
           ELSIF (NArd = '1') THEN
             IF (NBcnt = 0) THEN
               IF (NAB = N_NAB OR NAB >= 4) THEN
-                NA <= (others => '0');
+                NA_int <= (others => '0');
               ELSE
                 index := to_integer(to_unsigned(NAB,2));
-                NA <= NAv(index)-1;
-                NBcnt <= NBv(index)-1;
+                NA_int <= NAv(index);
+                NBcnt <= NBv(index);
                 NAB <= NAB+1;
               END IF;
             ELSE
@@ -299,7 +305,29 @@ BEGIN
     END IF;
   END PROCESS;
   
+  PROCESS (current_state, TrigArm, NAv, NAB, N_NAB, NArd, NA_int, NBcnt) IS
+    VARIABLE index : integer range 3 downto 0;
+  BEGIN
+    CASE current_state IS
+    WHEN S_EN =>
+      IF (TrigArm = '1') THEN
+        NA <= NAv(0);
+      ELSIF (NArd = '1' AND NBcnt = 0) THEN
+        IF (NAB = N_NAB OR NAB >= 4) THEN
+          NA <= (others => '0');
+        ELSE
+          index := to_integer(to_unsigned(NAB,2));
+          NA <= NAv(index);
+        END IF;
+      ELSE
+        NA <= NA_int;
+      END IF;
+    WHEN others =>
+      NA <= (others => '0');
+    END CASE;
+  END PROCESS;
+  
   NC <= NC_out;
-  Status <= Ready & config_err_nab & config_err_ovf;
+  Status <= std_logic_vector(to_unsigned(N_NAB,3)) & Ready & config_err_nab & config_err_ovf;
 END ARCHITECTURE beh;
 
