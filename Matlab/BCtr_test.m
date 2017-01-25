@@ -14,17 +14,23 @@ while status ~= 0
 end
 %%
 NChannels = 2;
-% bin_NA = [10,1,200];
-% bin_NB = [1,35,1];
-bin_NA = [1,5,80];
-bin_NB = [45,40,1];
-% bin_NA = [35];
-% bin_NB = [2];
+Channel = 1; % 1 or 2
+bin_opt = 3;
+if bin_opt == 1
+  bin_NA = [10,35,200];
+  bin_NB = [1, 1, 1];
+elseif bin_opt == 2
+  bin_NA = [10,1,200];
+  bin_NB = [1,35,1];
+elseif bin_opt == 3
+  bin_NA = [1,5,80];
+  bin_NB = [45,40,1];
+end
 if sum(bin_NA.*bin_NB) > 330
   warning('Bins exceed pulse period');
 end
 NC = 300000;
-Nsamples = 600;
+Nsamples = 120;
 for i=1:length(bin_NA)
   write_subbus(s, ctr+1+2*i, bin_NA(i));
   write_subbus(s, ctr+2+2*i, bin_NB(i));
@@ -98,7 +104,9 @@ while Nsampled < Nsamples
       Nsampled = Nsampled+1;
       NSk(Nsampled) = values(3);
       Cts(Nsampled,:) = values(4:end)';
-      fprintf(1,'Nsample = %d\n', Nsampled);
+      fprintf(1,'Nsample = %d: ', Nsampled);
+      fprintf(1,' %d',Cts(Nsampled,:));
+      fprintf(1,'\n');
       if NSk(Nsampled) == 0
         pause(0.4);
       end
@@ -120,7 +128,6 @@ if bitand(status,1) == 1
   warning('Counter still enabled after reset');
 end
 %%
-Channel = 2; % 1 or 2
 if NBtotal == 3
   clf;
   Nax = 4;
@@ -159,12 +166,11 @@ prop_delay = 3;
 S(1+prop_delay:end) = S(1:end-prop_delay);
 S(1:prop_delay) = 0;
 %%
-figure;
 t0 = 0; % In time units
 b0 = 0; % In bin resolution units
 bin_num = 0;
 dt = 10e-9;
-normal_width = 350e-9;
+normal_width = 10e-9;
 bT = zeros(sum(bin_NB),1);
 bW = zeros(sum(bin_NB),1);
 bMean = zeros(sum(bin_NB),1);
@@ -188,17 +194,17 @@ for i=1:length(bin_NA)
     bMean(nBins) = bin_mean;
     bStd(nBins) = bin_std;
     bMdlMean(nBins) = mdl_mean;
-    plot(t01, bin_mean, '*r', t01, mdl_mean, 'xb', ...
-      [t0 t1], bin_mean*[1 1], '-k', ...
-      t01*[1 1], bin_mean+bin_std*[-1 1], '-k');
-    hold on;
+%     plot(t01, bin_mean, '-*r', ...
+%       [t0 t1], bin_mean*[1 1], '-k', ...
+%       t01*[1 1], bin_mean+bin_std*[-1 1], '-k');
+%     hold on;
     t0 = t1;
     b0 = b1;
   end
 end
-hold off;
-title('Normalized count rates');
-%
+% hold off;
+% title('Normalized count rates');
+%%
 hold on
 plot(T,S*normal_width/dt,'-b');
 hold off;
@@ -206,7 +212,12 @@ shg
 %%
 figure;
 %%
-plot(bT,bMean-bMdlMean,'*',bT,bStd*[1,-1],'k',bT,bStd*[3,-3],'c');
+plot(bT,bMean,'-*r');
+ylabel(sprintf('Counts/sec/%d ns bin', normal_width*1e9));
+xlabel('Seconds after trigger');
+%%
+%plot(bT,bMean-bMdlMean,'*',bT,bStd*[1,-1],'k',bT,bStd*[3,-3],'c');
+plot(bT,bStd*[1,-1],'k',bT,bStd*[3,-3],'c');
 legend('residual','1 \sigma','','3 \sigma','');
 xlabel('Time after trigger, sec');
 ylabel('Normalized residual counts');
