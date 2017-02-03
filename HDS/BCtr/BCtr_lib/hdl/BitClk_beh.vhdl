@@ -18,26 +18,40 @@ END BitClk ;
 
 --
 ARCHITECTURE beh OF BitClk IS
-  SIGNAL FDQ : std_logic;
+  SIGNAL FDQP : std_logic;
+  SIGNAL FDQN : std_logic;
 BEGIN
 
   PROCESS (PMT, CLR)
   BEGIN
     IF CLR = '1' THEN
-      FDQ <= '0';
+      FDQP <= '0';
     ELSE
       IF PMT = '1' AND PMT'event THEN
         IF PMT_EN = '1' THEN
-          FDQ <= '1';
+          FDQP <= '1';
         END IF;
       END IF;
     END IF;
   END PROCESS;
 
-  PROCESS (FDQ, OE)
+  PROCESS (PMT, CLR)
   BEGIN
-    IF OE = '1' THEN
-      Q <= FDQ;
+    IF CLR = '1' THEN
+      FDQN <= '0';
+    ELSE
+      IF PMT = '0' AND PMT'event THEN
+        IF PMT_EN = '1' THEN
+          FDQN <= '1';
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
+
+  PROCESS (FDQP, FDQN, OE)
+  BEGIN
+    IF OE = '1' AND (FDQP = '1' OR FDQN = '1') THEN
+      Q <= '1';
     ELSE
       Q <= '0';
     END IF;

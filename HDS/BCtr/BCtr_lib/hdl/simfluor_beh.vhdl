@@ -35,6 +35,7 @@ ARCHITECTURE beh OF simfluor IS
   SIGNAL PulseTO : std_logic;
   TYPE State_t IS (S_INIT, S_TRIG, S_TRIG2, S_TRIG3, S_PULSE);
   SIGNAL cur_state : State_t;
+  SIGNAL PMT_int : std_logic;
 
    COMPONENT prdelay
       GENERIC (
@@ -69,7 +70,7 @@ BEGIN
         Trigger <= '0';
         TrigTO <= '1';
         TrigCnt <= (others => '0');
-        PMT <= '0';
+        PMT_int <= '0';
         PulseCnt <= (others => '0');
         PulseTO <= '1';
         RE <= '0';
@@ -87,13 +88,13 @@ BEGIN
         CASE cur_state IS
           WHEN S_INIT =>
             Trigger <= '0';
-            PMT <= '0';
+            PMT_int <= '0';
             cur_state <= S_TRIG;
           WHEN S_TRIG =>
             TrigCnt <= to_unsigned(TRIG_PERIOD,TRIGCNT_WIDTH);
             TrigTO <= '0';
             Trigger <= '1';
-            PMT <= '0';
+            -- PMT <= '0';
             PulseCnt <= Nbins;
             RE <= '1';
             IF (Nbins /= to_unsigned(0,PULSECNT_WIDTH)) THEN
@@ -104,7 +105,7 @@ BEGIN
             END IF;
           WHEN S_TRIG2 =>
             Trigger <= '0';
-            PMT <= '0';
+            -- PMT <= '0';
             RE <= '0';
             IF (PulseTO = '1') THEN
               cur_state <= S_PULSE;
@@ -115,7 +116,7 @@ BEGIN
             END IF;
           WHEN S_TRIG3 =>
             Trigger <= '0';
-            PMT <= '0';
+            -- PMT <= '0';
             RE <= '0';
             IF (TrigTO = '1') THEN
               cur_state <= S_TRIG;
@@ -123,7 +124,11 @@ BEGIN
               cur_state <= S_TRIG3;
             END IF;
           WHEN S_PULSE =>
-            PMT <= '1';
+            IF PMT_int = '1' THEN
+              PMT_int <= '0';
+            ELSE
+              PMT_int <= '1';
+            END IF;
             IF (TrigTO = '1') THEN
               cur_state <= S_TRIG;
             ELSE
@@ -135,5 +140,7 @@ BEGIN
       END IF;
     END IF;
   END PROCESS;
+  
+  PMT <= PMT_int;
 END ARCHITECTURE beh;
 

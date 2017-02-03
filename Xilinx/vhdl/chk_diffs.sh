@@ -5,7 +5,7 @@ for i in *.vhd *.vhdl; do
   echo
   echo $i
   if [ -f $H/$i ]; then
-    diff -b $i $H/$i | grep "^[<>] *[^- ]"
+    diff -b $H/$i $i | grep "^[<>] *[^- ]"
   else
     echo "  $H/$i not found"
   fi
