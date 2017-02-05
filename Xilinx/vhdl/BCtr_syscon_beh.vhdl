@@ -13,27 +13,29 @@ USE ieee.numeric_std.all;
 
 ENTITY BCtr_syscon IS
     GENERIC (
-      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0001"; -- Relative to HCHO
+      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0005"; -- Relative to HCHO
       INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 2;
+      N_BOARDS      : integer range 15 downto 0     := 3;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
       N_CTR_CHANNELS : integer range 4 DOWNTO 0     := 2
     );
     PORT (
-      clk     : IN std_logic;
-      PMTs    : IN std_logic_vector(N_CTR_CHANNELS-1 DOWNTO 0);
-      Trigger : IN std_logic;
-      Fail    : OUT std_logic;
-      Ctrl    : IN std_logic_vector(6 DOWNTO 0);
-      Addr    : IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
-      Data_i  : OUT std_logic_vector(15 DOWNTO 0);
-      Data_o  : IN std_logic_vector(15 DOWNTO 0);
-      Status  : OUT std_logic_vector(3 DOWNTO 0);
-      SimTrig : OUT std_logic;
-      SimPMT  : OUT std_logic
+      clk      : IN std_logic;
+      PMTs     : IN std_logic_vector(N_CTR_CHANNELS-1 DOWNTO 0);
+      Trigger  : IN std_logic;
+      Fail     : OUT std_logic;
+      Ctrl     : IN std_logic_vector(6 DOWNTO 0);
+      Addr     : IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      Data_i   : OUT std_logic_vector(15 DOWNTO 0);
+      Data_o   : IN std_logic_vector(15 DOWNTO 0);
+      Status   : OUT std_logic_vector(3 DOWNTO 0);
+      temp_scl : INOUT  std_logic;
+      temp_sda : INOUT  std_logic;
+      SimTrig  : OUT std_logic;
+      SimPMT   : OUT std_logic
     );
 END ENTITY BCtr_syscon;
 
@@ -129,6 +131,24 @@ ARCHITECTURE beh OF BCtr_syscon IS
       rst : IN std_logic
     );
   END COMPONENT simfluor;
+  
+  COMPONENT temp_top
+    GENERIC (
+      BASE_ADDR  : unsigned (15 DOWNTO 0)    := X"0000";
+      ADDR_WIDTH : integer range 16 downto 8 := 8
+    );
+    PORT (
+      Addr   : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd  : IN     std_logic;
+      ExpWr  : IN     std_logic;
+      clk    : IN     std_logic;
+      rst    : IN     std_logic;
+      ExpAck : OUT    std_logic;
+      RData  : OUT    std_logic_vector(15 DOWNTO 0);
+      scl    : INOUT  std_logic;
+      sda    : INOUT  std_logic
+    );
+  END COMPONENT temp_top;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -172,7 +192,7 @@ BEGIN
   adjgatectr : BCtr_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
-      BASE_ADDR       => to_unsigned(16,16),
+      BASE_ADDR       => to_unsigned(16#10#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
       FIFO_ADDR_WIDTH => 4
@@ -193,7 +213,7 @@ BEGIN
   binctr : BCtr_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
-      BASE_ADDR       => to_unsigned(32,16),
+      BASE_ADDR       => to_unsigned(16#20#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
       FIFO_ADDR_WIDTH => 9
@@ -209,6 +229,23 @@ BEGIN
       clk      => clk,
       ExpAck   => ExpAck(1),
       RData    => RData(31 DOWNTO 16)
+    );
+
+  temps : temp_top
+    GENERIC MAP (
+      BASE_ADDR  => to_unsigned(16#30#,16),
+      ADDR_WIDTH => ADDR_WIDTH
+    )
+    PORT MAP (
+      Addr   => Addr,
+      ExpRd  => ExpRd,
+      ExpWr  => ExpWr,
+      clk    => clk,
+      rst    => ExpReset,
+      ExpAck => ExpAck(2),
+      RData  => RData(47 DOWNTO 32),
+      scl    => temp_scl,
+      sda    => temp_sda
     );
     
   sim : simfluor
