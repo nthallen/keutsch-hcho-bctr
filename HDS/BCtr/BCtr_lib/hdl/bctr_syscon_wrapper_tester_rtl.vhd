@@ -19,7 +19,7 @@ ENTITY BCtr_syscon_wrapper_tester IS
   GENERIC( 
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
-    BIN_OPT    : integer range 10 downto 1      := 3; -- 1,2,3 currently supported
+    BIN_OPT    : integer range 10 downto 0      := 0; -- 0,1,2,3 currently supported
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -45,6 +45,7 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL SimDone : std_logic;
   SIGNAL ReadResult : std_logic_vector(15 DOWNTO 0);
   SIGNAL ctr_base : unsigned(7 DOWNTO 0);
+  CONSTANT temp_base : unsigned(7 DOWNTO 0) := to_unsigned(16#30#,8);
   CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
   alias RdEn is Ctrl(0);
   alias WrEn is Ctrl(1);
@@ -124,6 +125,22 @@ BEGIN
       -- pragma synthesis_on
       return;
     end procedure sbrd;
+    
+    procedure check_read(addr_in : unsigned(7 DOWNTO 0);
+                  expected : std_logic_vector(15 DOWNTO 0) ) is
+      variable my_line : line;
+    begin
+      if ReadResult /= expected then
+        write(my_line, now);
+        write(my_line, string'(": sbrd("));
+        hwrite(my_line, std_logic_vector(addr_in));
+        write(my_line, string'(") Expected: "));
+        hwrite(my_line, expected, RIGHT, 4);
+        write(my_line, string'(" read: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+      end if;
+    end procedure check_read;
    
     variable my_line : line;
   Begin
@@ -154,92 +171,109 @@ BEGIN
     sbrd(ctr_base, '1');
     assert ReadResult = X"0000" report "Invalid startup status" severity error;
 
-    CASE BIN_OPT IS
-    WHEN 1 =>
-      -- Configure for 1 bins of 10
-      sbwr(ctr_base+3, std_logic_vector(to_unsigned(10,16)), '1');
-      sbwr(ctr_base+4, std_logic_vector(to_unsigned(1,16)), '1');
+    IF BIN_OPT > 0 THEN
+      CASE BIN_OPT IS
+      WHEN 1 =>
+        -- Configure for 1 bins of 10
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(10,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+        -- Now add a second bin of 350ns
+        sbwr(ctr_base+5, std_logic_vector(to_unsigned(35,16)), '1');
+        sbwr(ctr_base+6, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
+        -- And a third bin of 2500ns
+        sbwr(ctr_base+7, std_logic_vector(to_unsigned(250,16)), '1');
+        sbwr(ctr_base+8, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"00C0" report "Expecte N_NAB=3 status still" severity error;
+      WHEN 2 => -- 75x4, needs to be the bin ctr
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(4,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
+        -- Check the status again: should be 'Ready' but not enabled
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+      WHEN OTHERS =>
+        -- Configure for 45 bins of 1
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
+        -- Check the status again: should be 'Ready' but not enabled
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+        -- 40 bins of 5
+        sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
+        sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
+      END CASE;
+      sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
+      sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
-      -- Now add a second bin of 350ns
-      sbwr(ctr_base+5, std_logic_vector(to_unsigned(35,16)), '1');
-      sbwr(ctr_base+6, std_logic_vector(to_unsigned(1,16)), '1');
+      assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
+  
+      -- Enable and check status
+      sbwr(ctr_base, X"0001", '1');
       sbrd(ctr_base, '1');
-      assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
-      -- And a third bin of 2500ns
-      sbwr(ctr_base+7, std_logic_vector(to_unsigned(250,16)), '1');
-      sbwr(ctr_base+8, std_logic_vector(to_unsigned(1,16)), '1');
-      sbrd(ctr_base, '1');
-      assert ReadResult = X"00C0" report "Expecte N_NAB=3 status still" severity error;
-    WHEN 2 => -- 75x4, needs to be the bin ctr
-      sbwr(ctr_base+3, std_logic_vector(to_unsigned(4,16)), '1');
-      sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
-      -- Check the status again: should be 'Ready' but not enabled
-      sbrd(ctr_base, '1');
-      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
-    WHEN OTHERS =>
-      -- Configure for 45 bins of 1
-      sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
-      sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
-      -- Check the status again: should be 'Ready' but not enabled
-      sbrd(ctr_base, '1');
-      assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
-      -- 40 bins of 5
-      sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
-      sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
-      sbrd(ctr_base, '1');
-      assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
-    END CASE;
-    sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
-    sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
-    sbrd(ctr_base, '1');
-    assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
-
-    -- Enable and check status
-    sbwr(ctr_base, X"0001", '1');
-    sbrd(ctr_base, '1');
-    assert ReadResult(5 DOWNTO 0) = "100001" report "Expected Ready|En status" severity error;
-    
-    for i in 1 to SIM_LOOPS loop
+      assert ReadResult(5 DOWNTO 0) = "100001" report "Expected Ready|En status" severity error;
+      
+      for i in 1 to SIM_LOOPS loop
+        sbrd(ctr_base,'1');
+        while ReadResult(1) = '0' loop
+          sbrd(ctr_base,'1');
+        end loop;
+        write(my_line, now);
+        sbrd(ctr_base+1,'1'); -- NWords
+        NWords <= unsigned(ReadResult);
+        wait for 10 ns;
+        write(my_line, string'(": "));
+        write(my_line, to_integer(NWords));
+        write(my_line, string'(":"));
+        while NWords > 0 loop
+          sbrd(ctr_base+2,'1');
+          write(my_line, string'(" "));
+          write(my_line, to_integer(unsigned(ReadResult)));
+          NWords <= NWords - 1;
+          wait for 10 ns;
+        end loop;
+        writeline(output, my_line);
+      end loop;
+      
       sbrd(ctr_base,'1');
       while ReadResult(1) = '0' loop
         sbrd(ctr_base,'1');
       end loop;
-      write(my_line, now);
       sbrd(ctr_base+1,'1'); -- NWords
       NWords <= unsigned(ReadResult);
       wait for 10 ns;
-      write(my_line, string'(": "));
-      write(my_line, to_integer(NWords));
-      write(my_line, string'(":"));
-      while NWords > 0 loop
-        sbrd(ctr_base+2,'1');
-        write(my_line, string'(" "));
-        write(my_line, to_integer(unsigned(ReadResult)));
-        NWords <= NWords - 1;
-        wait for 10 ns;
+      sbrd(ctr_base,'1'); -- Check status inbetween
+      sbrd(ctr_base+2,'1'); -- Read NSkipped
+      sbrd(ctr_base,'1'); -- Check status inbetween
+  
+      sbwr(ctr_base, X"0000", '1'); -- Try to disable the counter
+      sbrd(ctr_base, '1');
+      assert ReadResult(0) = '0' report "Counter not disabled after writing disable" severity error;
+      
+      sbwr(ctr_base, X"8000", '1'); -- Try reset
+      sbrd(ctr_base, '1');
+      assert ReadResult = X"0000" report "Counter not reset after reset" severity error;
+    END IF;
+    
+    -- Temp sensor test
+    for i in 1 to 2 loop
+      if i > 1 then
+        wait for 1000 ms;
+      end if;
+      for sensor in 0 to 5 loop
+        sbrd(temp_base + sensor*3,'1');
+        check_read(temp_base+sensor*3, X"0000");
+        sbrd(temp_base + sensor*3+1,'1');
+        check_read(temp_base+sensor*3, X"0000");
+        sbrd(temp_base + sensor*3+2,'1');
+        check_read(temp_base+sensor*3, X"0000");
       end loop;
-      writeline(output, my_line);
     end loop;
-    
-    sbrd(ctr_base,'1');
-    while ReadResult(1) = '0' loop
-      sbrd(ctr_base,'1');
-    end loop;
-    sbrd(ctr_base+1,'1'); -- NWords
-    NWords <= unsigned(ReadResult);
-    wait for 10 ns;
-    sbrd(ctr_base,'1'); -- Check status inbetween
-    sbrd(ctr_base+2,'1'); -- Read NSkipped
-    sbrd(ctr_base,'1'); -- Check status inbetween
-
-    sbwr(ctr_base, X"0000", '1'); -- Try to disable the counter
-    sbrd(ctr_base, '1');
-    assert ReadResult(0) = '0' report "Counter not disabled after writing disable" severity error;
-    
-    sbwr(ctr_base, X"8000", '1'); -- Try reset
-    sbrd(ctr_base, '1');
-    assert ReadResult = X"0000" report "Counter not reset after reset" severity error;
     
     SimDone <= '1';
     wait;

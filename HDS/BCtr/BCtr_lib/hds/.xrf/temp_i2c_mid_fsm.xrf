@@ -1,0 +1,2213 @@
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+NO_GRAPHIC 0
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 50,0 11 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 13,0 16 1 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 51,0 20 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 374,0 21 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 76,0 22 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 86,0 23 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 91,0 24 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 111,0 25 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 116,0 26 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 131,0 27 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 136,0 28 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 56,0 29 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 66,0 30 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 71,0 31 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 81,0 32 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 96,0 33 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 101,0 34 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 106,0 35 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 121,0 36 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 126,0 37 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 1,0 40 0 
+DESIGN temp_i2c_mid
+VIEW symbol.sb
+GRAPHIC 1,0 41 0 
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 33,0 62 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 65
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 32,0 69 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 71
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 147 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 148
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1178,0 151 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1367,0 152 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1604,0 153 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1906,0 154 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2110,0 155 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2244,0 156 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2410,0 157 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2570,0 158 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2915,0 159 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 160
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 175 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 176
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 178 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 179
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 62,0 180 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 72,0 181 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 184
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 201 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 308,0 202 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 323,0 203 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 478,0 207 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 493,0 208 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 507,0 214 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 556,0 215 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 557,0 216 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 218
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 561,0 219 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 576,0 220 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 598,0 226 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 647,0 227 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 648,0 228 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 230
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 652,0 231 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 667,0 232 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 669,0 237 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 728,0 238 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 729,0 239 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 241
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 772,0 242 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 787,0 243 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 816,0 245 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 831,0 246 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 900,0 251 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 915,0 252 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 944,0 253 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 959,0 254 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 259 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1043,0 260 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1068,0 261 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1083,0 262 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1124,0 264 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1139,0 265 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1151,0 270 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1166,0 271 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1205,0 273 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1220,0 274 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1232,0 278 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1247,0 279 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1259,0 281 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1274,0 282 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1286,0 284 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1301,0 285 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1313,0 290 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1328,0 291 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 293 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1409,0 294 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1461,0 297 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1476,0 298 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1494,0 303 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1509,0 304 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1521,0 306 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1536,0 307 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1548,0 308 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1563,0 309 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1577,0 316 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1592,0 317 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1631,0 319 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1646,0 320 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1678,0 324 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1693,0 325 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1825,0 327 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1840,0 328 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1842,0 330 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1857,0 331 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1859,0 336 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1874,0 337 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1933,0 339 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1948,0 340 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 344 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1965,0 345 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1997,0 348 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2012,0 349 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2066,0 351 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2081,0 352 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2083,0 357 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2098,0 358 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2153,0 360 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2168,0 361 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2180,0 365 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2195,0 366 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2210,0 370 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2225,0 371 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2227,0 376 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2242,0 377 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2267,0 379 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2282,0 380 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2284,0 384 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2299,0 385 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2376,0 389 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2391,0 390 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2393,0 395 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2408,0 396 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2433,0 398 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2448,0 399 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2450,0 403 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2465,0 404 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2536,0 408 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2551,0 409 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2553,0 414 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2568,0 415 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2593,0 417 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2608,0 418 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2610,0 422 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2625,0 423 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 427 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2766,0 428 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2861,0 429 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2876,0 430 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2888,0 432 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2903,0 433 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3318,0 434 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3333,0 435 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 436
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 438 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 439
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 441 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 442
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 444 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 445
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1178,0 458 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1367,0 459 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1604,0 460 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1906,0 461 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2110,0 462 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2244,0 463 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2410,0 464 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2570,0 465 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2915,0 466 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 467 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 308,0 468 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3318,0 469 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 470 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 794,0 471 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 772,0 472 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 473
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 474 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 475
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 478,0 476 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 507,0 477 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 556,0 479 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 534,0 480 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 481
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 507,0 482 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 483
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 534,0 484 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 561,0 485 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 598,0 487 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 647,0 489 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 625,0 490 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 491
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 598,0 492 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 493
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 625,0 494 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 652,0 495 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 669,0 497 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 728,0 499 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 686,0 500 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 501
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 669,0 502 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 503
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 686,0 504 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 772,0 505 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 842,0 507 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 816,0 508 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 804,0 509 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 772,0 510 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 970,0 511 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 944,0 512 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 513
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 900,0 514 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 515
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 816,0 516 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1090,0 517 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1068,0 518 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 519
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 816,0 520 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 521
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 900,0 522 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 523 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 944,0 524 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1881,0 525 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1825,0 526 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 527
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 944,0 528 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 529
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 530 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 531 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1068,0 532 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1146,0 533 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1124,0 534 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 535
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1068,0 536 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 537
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1124,0 538 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1173,0 539 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1151,0 540 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 541
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1124,0 542 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 543
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1151,0 544 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1200,0 545 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1178,0 548 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 550
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1151,0 551 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 552
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1178,0 553 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1227,0 554 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1205,0 555 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1442,0 556 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 557 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 558
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1178,0 559 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 560
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1205,0 561 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1281,0 562 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1259,0 565 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1254,0 566 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1232,0 569 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 570
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1205,0 571 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 572
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1232,0 573 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1489,0 574 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1461,0 575 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 576
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1232,0 577 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 578
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1259,0 579 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1308,0 580 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1286,0 581 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 582
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1259,0 583 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 584
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1286,0 585 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1335,0 586 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1313,0 587 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 588
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1286,0 589 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 590
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1313,0 591 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1389,0 592 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1367,0 595 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 597
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1313,0 598 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 599
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1367,0 600 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1416,0 601 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 602 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1426,0 603 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 604 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 605
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1367,0 606 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 607
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 608 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2777,0 609 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 612 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1755,0 613 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 614 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1050,0 615 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 616 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 617
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 900,0 618 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 619
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1461,0 620 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1516,0 621 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1494,0 622 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 623
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1461,0 624 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 625
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1494,0 626 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1543,0 627 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1521,0 628 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 629
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1494,0 630 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 631
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1521,0 632 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1548,0 633 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1599,0 635 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1577,0 636 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 637
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1548,0 638 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 639
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1577,0 640 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1626,0 641 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1604,0 644 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 646
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1577,0 647 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 648
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1604,0 649 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1653,0 650 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1631,0 651 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1663,0 652 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 653 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 654
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1604,0 655 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 656
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1631,0 657 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1673,0 658 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1394,0 661 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1700,0 662 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1678,0 665 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 666
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1631,0 667 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 668
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1678,0 669 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2777,0 670 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 673 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1755,0 674 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 675 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1050,0 676 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 677 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 678
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 900,0 679 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 680
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1825,0 681 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1891,0 682 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1842,0 683 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 684
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1825,0 685 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 686
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1842,0 687 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1901,0 688 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1859,0 689 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 690
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1842,0 691 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 692
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1859,0 693 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1928,0 694 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1906,0 697 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 699
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1859,0 700 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 701
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1906,0 702 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1972,0 703 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1933,0 704 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1992,0 705 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 706 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 707
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1906,0 708 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 709
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1933,0 710 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1982,0 711 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 714 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2019,0 715 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1997,0 718 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 719
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1933,0 720 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 721
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 722 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3233,0 723 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1997,0 724 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2066,0 725 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2105,0 727 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2083,0 728 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 729
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2066,0 730 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 731
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2083,0 732 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2132,0 733 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2110,0 736 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 738
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2083,0 739 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 740
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2110,0 741 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2148,0 742 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 743 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2175,0 744 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2153,0 745 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 746
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2110,0 747 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 748
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2153,0 749 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2202,0 750 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2180,0 751 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 752
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2153,0 753 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 754
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2180,0 755 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2210,0 756 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2306,0 758 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2227,0 759 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 760
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2210,0 761 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 762
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2227,0 763 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2316,0 764 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2244,0 767 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 769
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2227,0 770 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 771
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2244,0 772 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2326,0 773 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 774 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2346,0 775 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2267,0 776 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 777
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2244,0 778 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 779
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2267,0 780 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2336,0 781 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2284,0 782 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 783
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2267,0 784 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 785
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2284,0 786 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2376,0 787 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2481,0 789 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2393,0 790 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 791
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2376,0 792 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 793
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2393,0 794 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2491,0 795 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2410,0 798 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 800
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2393,0 801 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 802
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2410,0 803 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2501,0 804 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 805 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2521,0 806 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2433,0 807 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 808
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2410,0 809 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 810
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2433,0 811 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2511,0 812 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2450,0 813 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 814
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2433,0 815 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 816
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2450,0 817 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2536,0 818 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2641,0 820 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2553,0 821 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 822
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2536,0 823 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 824
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2553,0 825 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2651,0 826 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2570,0 829 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 831
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2553,0 832 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 833
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2570,0 834 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2661,0 835 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1950,0 836 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2681,0 837 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2593,0 838 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 839
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2570,0 840 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 841
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2593,0 842 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2671,0 843 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2610,0 844 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 845
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2593,0 846 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 847
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2610,0 848 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2777,0 849 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 852 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1791,0 853 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 854 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 855
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 856 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 857
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 858 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2883,0 859 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2861,0 862 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 863
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 864 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 865
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2861,0 866 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2910,0 867 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2888,0 868 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2937,0 869 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2915,0 872 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 874
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2861,0 875 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 876
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2888,0 877 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 772,0 878 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2915,0 879 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2957,0 880 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2888,0 881 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2967,0 882 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 883 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 884
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2915,0 885 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 886
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3233,0 887 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2777,0 888 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2751,0 891 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1791,0 892 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 451,0 893 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 894
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 1028,0 895 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 896
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 3318,0 897 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 478,0 898 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 95,0 899 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 901
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 902 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 903
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 905 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 917
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 2,0 920 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 954
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+GRAPHIC 32,0 955 0
+LIBRARY BCtr_lib
+DESIGN temp_i2c_mid
+VIEW fsm.sm
+NO_GRAPHIC 965

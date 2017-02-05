@@ -39,6 +39,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL SimPMT  : std_logic;
   SIGNAL SimTrig : std_logic;
   SIGNAL Status  : std_logic_vector(3 DOWNTO 0);
+  SIGNAL temp_scl : std_logic;
+  SIGNAL temp_sda : std_logic;
 
 
   -- Component declarations
@@ -50,6 +52,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       PMTs    : IN     std_logic_vector(1 DOWNTO 0);
       Trigger : IN     std_logic;
       clk     : IN     std_logic;
+      temp_scl : INOUT  std_logic;
+      temp_sda : INOUT  std_logic;
       Data_i  : OUT    std_logic_vector(15 DOWNTO 0);
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
@@ -85,6 +89,8 @@ BEGIN
         PMTs    => PMTs,
         Trigger => Trigger,
         clk     => clk,
+        temp_scl => temp_scl,
+        temp_sda => temp_sda,
         Data_i  => Data_i,
         Fail    => Fail,
         SimPMT  => SimPMT,
@@ -105,4 +111,6 @@ BEGIN
   Trigger <= SimTrig;
   PMTs(0) <= SimPMT;
   PMTS(1) <= '0';
+  temp_scl <= 'H';
+  temp_sda <= 'H';
 END ARCHITECTURE rtl;
