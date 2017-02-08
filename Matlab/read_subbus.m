@@ -1,5 +1,5 @@
 function [ value, ack_out ] = read_subbus(s, addr)
-  % [value, ack] = read_subbus(addr);
+  % [value, ack] = read_subbus(s, addr);
   % s: serial port object
   % addr: subbus address
   % value: data

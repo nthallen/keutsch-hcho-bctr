@@ -73,19 +73,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 5/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "day"
-value "Sun"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Sunday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "05"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -113,7 +113,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 5/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -125,7 +125,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "12:33:03"
+value "22:33:12"
 )
 (vvPair
 variable "group"
@@ -229,7 +229,7 @@ value "fsm"
 )
 (vvPair
 variable "time"
-value "12:33:03"
+value "22:33:12"
 )
 (vvPair
 variable "unit"
@@ -2227,7 +2227,8 @@ start &2
 end &19
 ss 0
 es 0
-cond "rdy = '1'"
+cond "rdy = '1' 
+AND ack_cld = '0'"
 tb (TransitionBlock
 uid 319,0
 ps "CenterOffsetStrategy"
@@ -2239,7 +2240,7 @@ fg "65535,65535,65535"
 bg "0,0,0"
 lineColor "0,32768,49152"
 )
-xt "20505,32423,24605,34423"
+xt "20505,32423,28405,35423"
 )
 autoResize 1
 lineShape (Line
@@ -2258,15 +2259,16 @@ condition (MLText
 uid 322,0
 va (VaSet
 )
-xt "21005,32923,24105,33923"
-st "rdy = '1'"
+xt "21005,32923,27905,34923"
+st "rdy = '1' 
+AND ack_cld = '0'"
 tm "Condition"
 )
 actions (MLText
 uid 323,0
 va (VaSet
 )
-xt "22555,34323,22555,34323"
+xt "24455,35323,24455,35323"
 tm "Actions"
 )
 )
@@ -3111,8 +3113,8 @@ tm "SmCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "-8,-8,1928,1058"
-viewArea "-1245,-2213,121796,63413"
+windowSize "0,0,1921,1066"
+viewArea "-1200,-2200,122389,64303"
 cachedDiagramExtent "0,-1000,84460,61620"
 pageSetupInfo (PageSetupInfo
 ptrCmd "Degas Ricoh Aficio MP C3501 PLC6,winspool,"
@@ -3535,7 +3537,7 @@ stateOrder [
 name "csm"
 )
 ]
-lastUid 636,0
+lastUid 694,0
 commonDM (CommonDM
 ldm (LogicalDM
 emptyRow *67 (LEmptyRow

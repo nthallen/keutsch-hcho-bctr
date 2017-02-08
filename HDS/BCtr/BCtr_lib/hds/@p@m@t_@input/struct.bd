@@ -26,6 +26,16 @@ name "U_1"
 duLibraryName "BCtr_lib"
 duName "BitClk"
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 mwi 0
 uid 305,0
@@ -35,6 +45,16 @@ name "U_2"
 duLibraryName "BCtr_lib"
 duName "BitClk"
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 mwi 0
 uid 315,0
@@ -44,6 +64,16 @@ name "U_3"
 duLibraryName "BCtr_lib"
 duName "BitClk"
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 mwi 0
 uid 349,0
@@ -62,8 +92,8 @@ libraryRefs [
 "ieee"
 ]
 )
-version "30.1"
-appVersion "2013.1b (Build 2)"
+version "31.1"
+appVersion "2016.1 (Build 8)"
 noEmbeddedEditors 1
 model (BlockDiag
 VExpander (VariableExpander
@@ -110,19 +140,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "10/19/2016"
+value "02/ 7/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "19"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -150,15 +180,19 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "10/14/16"
+value "02/ 7/2017"
 )
 (vvPair
 variable "graphical_source_group"
-value "Domain Users"
+value "UNKNOWN"
+)
+(vvPair
+variable "graphical_source_host"
+value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "19:29:26"
+value "21:45:43"
 )
 (vvPair
 variable "group"
@@ -186,7 +220,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "10"
+value "02"
 )
 (vvPair
 variable "module_name"
@@ -194,11 +228,11 @@ value "PMT_Input"
 )
 (vvPair
 variable "month"
-value "Oct"
+value "Feb"
 )
 (vvPair
 variable "month_long"
-value "October"
+value "February"
 )
 (vvPair
 variable "p"
@@ -230,7 +264,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "C:\\modeltech64_10.3\\win64"
+value "C:\\modeltech64_10.6\\win64"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -262,7 +296,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "16:49:43"
+value "21:45:43"
 )
 (vvPair
 variable "unit"
@@ -274,7 +308,7 @@ value "nort"
 )
 (vvPair
 variable "version"
-value "2013.1b (Build 2)"
+value "2016.1 (Build 8)"
 )
 (vvPair
 variable "view"
@@ -282,11 +316,11 @@ value "struct"
 )
 (vvPair
 variable "year"
-value "2016"
+value "2017"
 )
 (vvPair
 variable "yy"
-value "16"
+value "17"
 )
 ]
 )
@@ -722,8 +756,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,2000,30500,2800"
-st "PMT : std_logic
-"
+st "PMT : std_logic"
 )
 )
 *17 (Net
@@ -741,8 +774,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,2800,30500,3600"
-st "clk : std_logic
-"
+st "clk : std_logic"
 )
 )
 *18 (Net
@@ -760,8 +792,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,6200,34500,7000"
-st "SIGNAL EN1 : std_logic
-"
+st "SIGNAL EN1 : std_logic"
 )
 )
 *19 (Net
@@ -779,8 +810,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,7000,34500,7800"
-st "SIGNAL EN2 : std_logic
-"
+st "SIGNAL EN2 : std_logic"
 )
 )
 *20 (Net
@@ -798,8 +828,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,7800,34500,8600"
-st "SIGNAL EN3 : std_logic
-"
+st "SIGNAL EN3 : std_logic"
 )
 )
 *21 (SaComponent
@@ -1041,11 +1070,24 @@ uid 313,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "13000,13000,13000,13000"
+xt "13000,13000,30500,14600"
+st "TRIG_POS = true    ( boolean )  
+TRIG_NEG = true    ( boolean )  
+"
 )
 header ""
 )
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 )
 viewicon (ZoomableIcon
@@ -1302,11 +1344,24 @@ uid 323,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "13000,24000,13000,24000"
+xt "13000,24000,30500,25600"
+st "TRIG_POS = true    ( boolean )  
+TRIG_NEG = true    ( boolean )  
+"
 )
 header ""
 )
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 )
 viewicon (ZoomableIcon
@@ -1563,11 +1618,24 @@ uid 357,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "13000,35000,13000,35000"
+xt "13000,35000,30500,36600"
+st "TRIG_POS = true    ( boolean )  
+TRIG_NEG = true    ( boolean )  
+"
 )
 header ""
 )
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "true"
+)
 ]
 )
 viewicon (ZoomableIcon
@@ -1605,8 +1673,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,8600,34500,9400"
-st "SIGNAL Q1  : std_logic
-"
+st "SIGNAL Q1  : std_logic"
 )
 )
 *49 (Net
@@ -1624,8 +1691,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,10200,34500,11000"
-st "SIGNAL Q3  : std_logic
-"
+st "SIGNAL Q3  : std_logic"
 )
 )
 *50 (Net
@@ -1643,8 +1709,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,9400,34500,10200"
-st "SIGNAL Q2  : std_logic
-"
+st "SIGNAL Q2  : std_logic"
 )
 )
 *51 (PortIoIn
@@ -1840,8 +1905,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,4400,30500,5200"
-st "SIG : std_logic
-"
+st "SIG : std_logic"
 )
 )
 *58 (PortIoOut
@@ -1947,8 +2011,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,3600,30500,4400"
-st "rst : std_logic
-"
+st "rst : std_logic"
 )
 )
 *61 (Wire
@@ -2844,12 +2907,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "192,108,1212,798"
-viewArea "-5500,-1000,72908,49391"
+windowSize "192,108,1213,798"
+viewArea "-5500,-1000,73007,49391"
 cachedDiagramExtent "0,0,68000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 718,0
+lastUid 759,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

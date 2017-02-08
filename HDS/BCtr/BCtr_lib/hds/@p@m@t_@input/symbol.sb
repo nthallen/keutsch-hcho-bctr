@@ -19,8 +19,8 @@ libraryRefs [
 "ieee"
 ]
 )
-version "25.1"
-appVersion "2013.1b (Build 2)"
+version "26.1"
+appVersion "2016.1 (Build 8)"
 model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
@@ -422,11 +422,11 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "SideDataDesignDir"
-value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\interface.info"
+value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\symbol.sb.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\interface.user"
+value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\symbol.sb.user"
 )
 (vvPair
 variable "SourceDir"
@@ -438,7 +438,7 @@ value "HDL Designer"
 )
 (vvPair
 variable "arch_name"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "config"
@@ -454,19 +454,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "10/19/2016"
+value "02/ 7/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "19"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -478,15 +478,15 @@ value "<TBD>"
 )
 (vvPair
 variable "f"
-value "interface"
+value "symbol.sb"
 )
 (vvPair
 variable "f_logical"
-value "interface"
+value "symbol.sb"
 )
 (vvPair
 variable "f_noext"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "graphical_source_author"
@@ -494,15 +494,19 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "10/19/16"
+value "02/ 7/2017"
 )
 (vvPair
 variable "graphical_source_group"
-value "Domain Users"
+value "UNKNOWN"
+)
+(vvPair
+variable "graphical_source_host"
+value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "16:49:43"
+value "21:45:43"
 )
 (vvPair
 variable "group"
@@ -530,7 +534,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "10"
+value "02"
 )
 (vvPair
 variable "module_name"
@@ -538,19 +542,19 @@ value "PMT_Input"
 )
 (vvPair
 variable "month"
-value "Oct"
+value "Feb"
 )
 (vvPair
 variable "month_long"
-value "October"
+value "February"
 )
 (vvPair
 variable "p"
-value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\interface"
+value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\@p@m@t_@input\\symbol.sb"
 )
 (vvPair
 variable "p_logical"
-value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\PMT_Input\\interface"
+value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds\\PMT_Input\\symbol.sb"
 )
 (vvPair
 variable "package_name"
@@ -574,7 +578,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "C:\\modeltech64_10.3\\win64"
+value "C:\\modeltech64_10.6\\win64"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -594,19 +598,19 @@ value "<TBD>"
 )
 (vvPair
 variable "this_ext"
-value "<TBD>"
+value "sb"
 )
 (vvPair
 variable "this_file"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "this_file_logical"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "time"
-value "16:49:43"
+value "21:45:43"
 )
 (vvPair
 variable "unit"
@@ -618,19 +622,19 @@ value "nort"
 )
 (vvPair
 variable "version"
-value "2013.1b (Build 2)"
+value "2016.1 (Build 8)"
 )
 (vvPair
 variable "view"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "year"
-value "2016"
+value "2017"
 )
 (vvPair
 variable "yy"
-value "16"
+value "17"
 )
 ]
 )
@@ -672,8 +676,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,2800,58000,3600"
-st "clk : IN     std_logic  ;
-"
+st "clk : IN     std_logic  ;"
 )
 thePort (LogicalPort
 lang 11
@@ -717,8 +720,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,2000,58000,2800"
-st "PMT : IN     std_logic  ;
-"
+st "PMT : IN     std_logic  ;"
 )
 thePort (LogicalPort
 lang 11
@@ -762,8 +764,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,3600,58000,4400"
-st "rst : IN     std_logic  ;
-"
+st "rst : IN     std_logic  ;"
 )
 thePort (LogicalPort
 decl (Decl
@@ -807,8 +808,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,4400,57000,5200"
-st "SIG : OUT    std_logic 
-"
+st "SIG : OUT    std_logic "
 )
 thePort (LogicalPort
 lang 11
@@ -1184,7 +1184,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "31200,49000,42200,50000"
+xt "31200,49000,41600,50000"
 st "
 %library/%unit/%view
 "
@@ -1517,6 +1517,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 716,0
+lastUid 739,0
 activeModelName "Symbol:CDM"
 )

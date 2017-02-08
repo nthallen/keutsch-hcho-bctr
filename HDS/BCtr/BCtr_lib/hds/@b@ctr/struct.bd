@@ -55,6 +55,16 @@ name "trig"
 duLibraryName "BCtr_lib"
 duName "BitClk"
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "false"
+)
 ]
 mwi 0
 uid 1151,0
@@ -145,19 +155,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "01/11/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -185,7 +195,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "01/11/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -197,7 +207,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "20:22:37"
+value "21:42:36"
 )
 (vvPair
 variable "group"
@@ -225,7 +235,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "01"
+value "02"
 )
 (vvPair
 variable "module_name"
@@ -233,11 +243,11 @@ value "BCtr"
 )
 (vvPair
 variable "month"
-value "Jan"
+value "Feb"
 )
 (vvPair
 variable "month_long"
-value "January"
+value "February"
 )
 (vvPair
 variable "p"
@@ -301,7 +311,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "20:22:37"
+value "21:42:36"
 )
 (vvPair
 variable "unit"
@@ -2379,13 +2389,27 @@ uid 1158,0
 text (MLText
 uid 1159,0
 va (VaSet
+isHidden 1
 font "Courier New,8,0"
 )
-xt "26000,51000,26000,51000"
+xt "26000,51000,43500,52600"
+st "TRIG_POS = true    ( boolean )  
+TRIG_NEG = true    ( boolean )  
+"
 )
 header ""
 )
 elements [
+(GiElement
+name "TRIG_POS"
+type "boolean"
+value "true"
+)
+(GiElement
+name "TRIG_NEG"
+type "boolean"
+value "false"
+)
 ]
 )
 viewicon (ZoomableIcon
@@ -5586,8 +5610,8 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "0,51,1282,937"
-viewArea "-1400,-1400,108392,72038"
+windowSize "0,51,1283,937"
+viewArea "-1400,-1400,108496,72038"
 cachedDiagramExtent "0,0,98000,73000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -5611,7 +5635,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 3346,0
+lastUid 3435,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

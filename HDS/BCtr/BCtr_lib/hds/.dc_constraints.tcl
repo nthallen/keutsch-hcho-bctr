@@ -3,7 +3,7 @@
 #
 # Created:
 #          by - nort.UNKNOWN (NORT-XPS14)
-#          at - 10:18:44 02/ 5/2017
+#          at - 22:25:09 02/ 7/2017
 #
 # using Mentor Graphics HDL Designer(TM) 2016.1 (Build 8)
 #
@@ -24,3 +24,4 @@ dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr
 dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\i2c_master_top.vhd} -start_line 81 -end_line 81 -check {RuleSets\Essentials\Downstream Checks\Initialization Assignments} -comment {OK}
 dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\i2c_master_bit_ctrl.vhd} -start_line 416 -end_line 416 -check {RuleSets\Essentials\Coding Practices\Internally Generated Resets} -comment {OK}
 dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\BCtr_data_beh.vhdl} -start_line 110 -end_line 110 -check {RuleSets\Essentials\Coding Practices\FSM Transitions} -comment {It does}
+dc_exclude -design_unit {BCtr_syscon_wrapper_tester} -check {RuleSets\Essentials\Downstream Checks\Non Synthesizable Constructs} -comment {OK}

@@ -106,7 +106,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 BEGIN
 
   -- Instance port mappings.
-  U_0 : BCtr_syscon
+  top : BCtr_syscon
     GENERIC MAP (
       BUILD_NUMBER   => X"0005",      -- Relative to HCHO
       INSTRUMENT_ID  => X"0008",      -- HCHO

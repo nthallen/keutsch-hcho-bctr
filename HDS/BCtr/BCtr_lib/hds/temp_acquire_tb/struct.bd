@@ -15,7 +15,7 @@ itemName "ALL"
 ]
 instances [
 (Instance
-name "U_0"
+name "dut"
 duLibraryName "BCtr_lib"
 duName "temp_acquire"
 elements [
@@ -24,7 +24,7 @@ mwi 0
 uid 41,0
 )
 (Instance
-name "U_1"
+name "tester"
 duLibraryName "BCtr_lib"
 duName "temp_acquire_tester"
 elements [
@@ -33,7 +33,7 @@ mwi 0
 uid 115,0
 )
 (Instance
-name "U_2"
+name "slave"
 duLibraryName "BCtr_lib"
 duName "i2c_slave"
 elements [
@@ -99,19 +99,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 5/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "day"
-value "Sun"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Sunday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "05"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -139,7 +139,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 5/2017"
+value "02/ 7/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -151,7 +151,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "09:33:51"
+value "21:49:49"
 )
 (vvPair
 variable "group"
@@ -255,7 +255,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "09:33:51"
+value "21:49:49"
 )
 (vvPair
 variable "unit"
@@ -623,8 +623,8 @@ uid 46,0
 va (VaSet
 font "arial,8,1"
 )
-xt "14200,47000,16000,48000"
-st "U_0"
+xt "14200,47000,15900,48000"
+st "dut"
 blo "14200,47800"
 tm "InstanceNameMgr"
 )
@@ -847,8 +847,8 @@ uid 120,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "44550,37500,46350,38500"
-st "U_1"
+xt "44550,37500,47050,38500"
+st "tester"
 blo "44550,38300"
 tm "InstanceNameMgr"
 )
@@ -1662,8 +1662,8 @@ uid 394,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "72050,51000,73850,52000"
-st "U_2"
+xt "72050,51000,74350,52000"
+st "slave"
 blo "72050,51800"
 tm "InstanceNameMgr"
 )
@@ -2835,8 +2835,8 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "96,0,1380,1010"
-viewArea "-1400,-1400,99976,78184"
+windowSize "96,0,1381,1010"
+viewArea "-1400,-1400,100072,78184"
 cachedDiagramExtent "0,0,98000,73000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -2860,7 +2860,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 1034,0
+lastUid 1125,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

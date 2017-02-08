@@ -12,17 +12,17 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 
 ENTITY TriEn IS
-   PORT( 
-      clk : IN     std_logic;
-      EN1 : OUT    std_logic;
-      EN2 : OUT    std_logic;
-      EN3 : OUT    std_logic;
-      rst : IN     std_logic
-   );
+  PORT( 
+    clk : IN     std_logic;
+    EN1 : OUT    std_logic;
+    EN2 : OUT    std_logic;
+    EN3 : OUT    std_logic;
+    rst : IN     std_logic
+  );
 
 -- Declarations
 
-END TriEn ;
+END ENTITY TriEn ;
 
 --
 ARCHITECTURE beh OF TriEn IS
