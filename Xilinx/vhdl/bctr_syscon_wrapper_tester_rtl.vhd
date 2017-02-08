@@ -29,7 +29,15 @@ ENTITY BCtr_syscon_wrapper_tester IS
     Data_o  : OUT    std_logic_vector(15 DOWNTO 0);
     clk     : OUT    std_logic;
     Data_i  : IN     std_logic_vector(15 DOWNTO 0);
-    Status  : IN     std_logic_vector(3 DOWNTO 0)
+    Status  : IN     std_logic_vector(3 DOWNTO 0);
+    en      : OUT    std_logic;
+    rdata   : OUT    std_logic_vector (7 DOWNTO 0);
+    WE      : IN     std_logic;
+    rdreq   : IN     std_logic;
+    start   : IN     std_ulogic;
+    stop    : IN     std_ulogic;
+    wdata   : IN     std_ulogic_vector (7 DOWNTO 0);
+    RE      : INOUT  std_logic
   );
 END ENTITY BCtr_syscon_wrapper_tester;
 
@@ -149,6 +157,9 @@ BEGIN
     ReadResult <= (others => '0');
     Data_o <= (others => '0');
     Ctrl <= (others => '0');
+    en <= '1';
+    RE <= '0';
+    rdata <= (others => '0');
     
     CASE BIN_OPT IS
     WHEN 1 =>

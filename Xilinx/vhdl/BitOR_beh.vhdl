@@ -12,16 +12,16 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 
 ENTITY BitOR IS
-   PORT( 
-      Q1 : IN     std_logic;
-      Q2 : IN     std_logic;
-      Q3 : IN     std_logic;
-      SIG : OUT   std_logic
-   );
+  PORT( 
+    Q1  : IN     std_logic;
+    Q2  : IN     std_logic;
+    Q3  : IN     std_logic;
+    SIG : OUT    std_logic
+  );
 
 -- Declarations
 
-END BitOR ;
+END ENTITY BitOR ;
 
 --
 ARCHITECTURE beh OF BitOR IS

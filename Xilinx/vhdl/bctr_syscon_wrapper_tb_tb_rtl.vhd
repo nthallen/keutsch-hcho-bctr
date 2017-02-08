@@ -41,6 +41,15 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL Status  : std_logic_vector(3 DOWNTO 0);
   SIGNAL temp_scl : std_logic;
   SIGNAL temp_sda : std_logic;
+  SIGNAL RE        : std_logic;
+  SIGNAL WE        : std_logic;
+  SIGNAL start     : std_ulogic;
+  SIGNAL wdata     : std_ulogic_vector(7 DOWNTO 0);
+  SIGNAL rdata     : std_logic_vector(7 DOWNTO 0);
+  SIGNAL en        : std_logic;
+  SIGNAL stop      : std_logic;
+  SIGNAL rdreq     : std_logic;
+  SIGNAL rst       : std_logic;
 
 
   -- Component declarations
@@ -69,19 +78,48 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       Data_o  : OUT    std_logic_vector(15 DOWNTO 0);
       clk     : OUT    std_logic;
       Data_i  : IN     std_logic_vector(15 DOWNTO 0);
-      Status  : IN     std_logic_vector(3 DOWNTO 0)
+      Status  : IN     std_logic_vector(3 DOWNTO 0);
+      en      : OUT    std_logic;
+      rdata   : OUT    std_logic_vector (7 DOWNTO 0);
+      WE      : IN     std_logic;
+      rdreq   : IN     std_logic;
+      start   : IN     std_ulogic;
+      stop    : IN     std_ulogic;
+      wdata   : IN     std_ulogic_vector (7 DOWNTO 0);
+      RE      : INOUT  std_logic
     );
   END COMPONENT BCtr_syscon_wrapper_tester;
 
+  COMPONENT i2c_slave
+  GENERIC (
+    I2C_ADDR : std_logic_vector(6 DOWNTO 0) := "1000000"
+  );
+  PORT (
+    clk   : IN     std_ulogic;
+    rst   : IN     std_ulogic;
+    scl   : IN     std_logic;
+    en    : IN     std_logic;
+    rdata : IN     std_logic_vector (7 DOWNTO 0);
+    WE    : OUT    std_logic;
+    rdreq : OUT    std_logic;
+    start : OUT    std_ulogic;
+    stop  : OUT    std_ulogic;
+    wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+    RE    : INOUT  std_logic;
+    sda   : INOUT  std_logic
+  );
+  END COMPONENT i2c_slave;
+
   -- embedded configurations
   -- pragma synthesis_off
-  FOR U_0 : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
-  FOR U_1 : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
+  FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
+  FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
+  FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
   -- pragma synthesis_on
 
 BEGIN
 
-    U_0 : BCtr_syscon_wrapper
+    dut : BCtr_syscon_wrapper
       PORT MAP (
         Addr    => Addr,
         Ctrl    => Ctrl,
@@ -98,14 +136,41 @@ BEGIN
         Status  => Status
       );
 
-    U_1 : BCtr_syscon_wrapper_tester
+    tester : BCtr_syscon_wrapper_tester
       PORT MAP (
         Addr    => Addr,
         Ctrl    => Ctrl,
         Data_o  => Data_o,
         clk     => clk,
         Data_i  => Data_i,
-        Status  => Status
+        Status  => Status,
+        en    => en,
+        rdata => rdata,
+        WE    => WE,
+        start => start,
+        stop  => stop,
+        wdata => wdata,
+        rdreq => rdreq,
+        RE    => RE
+      );
+
+    slave : i2c_slave
+      GENERIC MAP (
+        I2C_ADDR => "0010100"
+      )
+      PORT MAP (
+        clk   => clk,
+        rdata => rdata,
+        rst   => Ctrl(4),
+        scl   => temp_scl,
+        en    => en,
+        WE    => WE,
+        start => start,
+        stop  => stop,
+        wdata => wdata,
+        rdreq => rdreq,
+        RE    => RE,
+        sda   => temp_sda
       );
 
   Trigger <= SimTrig;
