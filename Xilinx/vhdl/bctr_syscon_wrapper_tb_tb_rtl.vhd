@@ -20,7 +20,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 -- LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
+-- USE BCtr_lib.ALL;
 
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
@@ -112,9 +112,9 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
 
   -- embedded configurations
   -- pragma synthesis_off
-  FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
-  FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
-  FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
+  -- FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
+  -- FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
+  -- FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
   -- pragma synthesis_on
 
 BEGIN
@@ -161,7 +161,7 @@ BEGIN
       PORT MAP (
         clk   => clk,
         rdata => rdata,
-        rst   => Ctrl(4),
+        rst   => rst,
         scl   => temp_scl,
         en    => en,
         WE    => WE,
@@ -178,4 +178,5 @@ BEGIN
   PMTS(1) <= '0';
   temp_scl <= 'H';
   temp_sda <= 'H';
+  rst <= Ctrl(4);
 END ARCHITECTURE rtl;

@@ -94,19 +94,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 4/2017"
+value "02/ 8/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "04"
+value "08"
 )
 (vvPair
 variable "entity_name"
@@ -134,7 +134,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 4/2017"
+value "02/ 8/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -146,7 +146,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "11:55:01"
+value "13:31:31"
 )
 (vvPair
 variable "group"
@@ -258,7 +258,7 @@ value "fsm"
 )
 (vvPair
 variable "time"
-value "11:55:01"
+value "13:31:31"
 )
 (vvPair
 variable "unit"
@@ -4295,8 +4295,8 @@ yShown 1
 color "26368,26368,26368"
 )
 packageList &0
-windowSize "220,54,1921,1074"
-viewArea "-8600,9100,101875,73975"
+windowSize "1280,231,2881,1131"
+viewArea "-8600,9100,110851,76351"
 cachedDiagramExtent "12968,10027,96967,73807"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -16711,7 +16711,7 @@ vasetType 1
 fg "65280,65280,46080"
 lineColor "0,0,32768"
 )
-xt "18903,87652,29903,90652"
+xt "18903,87652,29903,90877"
 )
 oxt "0,0,15000,5000"
 text (MLText
@@ -16720,14 +16720,15 @@ va (VaSet
 fg "0,0,32768"
 font "arial,8,0"
 )
-xt "19103,87852,29403,89852"
+xt "19103,87852,29803,89852"
 st "
 Why is this one set to X\"69\"?
+STO, RD, NACK, IACK
 "
 tm "CommentText"
 wrapOption 3
-visibleHeight 2600
-visibleWidth 10600
+visibleHeight 3225
+visibleWidth 11000
 )
 )
 *182 (CommentText
@@ -20264,8 +20265,8 @@ yShown 1
 color "26368,26368,26368"
 )
 packageList &0
-windowSize "1912,380,3528,1296"
-viewArea "-19700,7417,131170,90135"
+windowSize "1280,231,2881,1131"
+viewArea "-30,50270,93515,102936"
 cachedDiagramExtent "2008,4063,123904,93904"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -24197,8 +24198,8 @@ tm "SmCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1912,380,3528,1296"
-viewArea "-19700,-2600,117712,72739"
+windowSize "1280,231,2881,1131"
+viewArea "-19700,-2600,117600,74700"
 cachedDiagramExtent "0,-1000,113050,82981"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -24685,7 +24686,7 @@ stateOrder [
 name "csm"
 )
 ]
-lastUid 3433,0
+lastUid 3462,0
 commonDM (CommonDM
 ldm (LogicalDM
 emptyRow *297 (LEmptyRow
@@ -26311,6 +26312,6 @@ pts [
 ]
 )
 )
-activeModelName "csm/i2c_rd"
+activeModelName "csm/i2c_init"
 LanguageMgr "VhdlLangMgr"
 )

@@ -73,19 +73,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 7/2017"
+value "02/ 8/2017"
 )
 (vvPair
 variable "day"
-value "Tue"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Tuesday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "07"
+value "08"
 )
 (vvPair
 variable "entity_name"
@@ -113,7 +113,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 7/2017"
+value "02/ 8/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -125,7 +125,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "22:33:12"
+value "15:45:55"
 )
 (vvPair
 variable "group"
@@ -229,7 +229,7 @@ value "fsm"
 )
 (vvPair
 variable "time"
-value "22:33:12"
+value "15:45:55"
 )
 (vvPair
 variable "unit"
@@ -1258,7 +1258,7 @@ lineColor "39936,56832,65280"
 lineWidth -1
 fillStyle 1
 )
-xt "29279,46675,47179,54875"
+xt "29429,46175,47029,55375"
 )
 autoResize 1
 tline (Line
@@ -1269,10 +1269,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29379,46575,47079,46575"
+xt "29529,46075,46929,46075"
 pts [
-"29379,46575"
-"47079,46575"
+"29529,46075"
+"46929,46075"
 ]
 )
 bline (Line
@@ -1283,10 +1283,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29379,51175,47079,51175"
+xt "29529,51425,46929,51425"
 pts [
-"29379,51175"
-"47079,51175"
+"29529,51425"
+"46929,51425"
 ]
 )
 ttri (Triangle
@@ -1300,7 +1300,7 @@ bg "0,0,0"
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "28929,46200,29279,46550"
+xt "29079,45700,29429,46050"
 )
 btri (Triangle
 uid 257,0
@@ -1313,26 +1313,27 @@ bg "0,0,0"
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "28929,47400,29279,47750"
+xt "29079,47400,29429,47750"
 )
 entryActions (MLText
 uid 258,0
 va (VaSet
 )
-xt "29379,46375,29379,46375"
+xt "29529,45875,29529,45875"
 tm "Actions"
 )
 inActions (MLText
 uid 259,0
 va (VaSet
 )
-xt "29379,46775,47079,54775"
+xt "29529,46275,46929,55275"
 st "IF brd_num <= \"101\" THEN
   brd_num_i := to_integer(unsigned(brd_num));
   CntArray(brd_num_i) <=
     CntArray(brd_num_i) + 1;
   AccArray(brd_num_i) <=
-    AccArray(brd_num_i) + unsigned(rd_data_o);
+    AccArray(brd_num_i) +
+     unsigned('0'&rd_data_o(30 DOWNTO 0));
 END IF;
 ack_cld <= '1';"
 tm "Actions"
@@ -3113,8 +3114,8 @@ tm "SmCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "0,0,1921,1066"
-viewArea "-1200,-2200,122389,64303"
+windowSize "0,0,1281,1024"
+viewArea "21000,37000,48378,59646"
 cachedDiagramExtent "0,-1000,84460,61620"
 pageSetupInfo (PageSetupInfo
 ptrCmd "Degas Ricoh Aficio MP C3501 PLC6,winspool,"
@@ -3537,7 +3538,7 @@ stateOrder [
 name "csm"
 )
 ]
-lastUid 694,0
+lastUid 752,0
 commonDM (CommonDM
 ldm (LogicalDM
 emptyRow *67 (LEmptyRow

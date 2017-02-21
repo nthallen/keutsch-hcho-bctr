@@ -15,16 +15,16 @@ ENTITY i2c_slave_bits IS
       I2C_ADDR : std_logic_vector(6 downto 0) := "1000000"
    );
    PORT( 
-      clk   : IN     std_logic;
-      err   : IN     std_logic;
+      clk   : IN     std_ulogic;
+      err   : IN     std_ulogic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
-      rst   : IN     std_logic;
+      rst   : IN     std_ulogic;
       scl   : IN     std_logic;
-      start : IN     std_logic;
-      stop  : IN     std_logic;
+      start : IN     std_ulogic;
+      stop  : IN     std_ulogic;
       en    : IN     std_logic;
       WE    : OUT    std_logic;
-      wdata : OUT    std_logic_vector (7 DOWNTO 0);
+      wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
       sda   : INOUT  std_logic
@@ -53,9 +53,10 @@ ARCHITECTURE fsm OF i2c_slave_bits IS
    SIGNAL addd : std_ulogic;  
    SIGNAL nb : unsigned(3 DOWNTO 0);  
    SIGNAL rval : unsigned(7 DOWNTO 0);  
-   SIGNAL sclq : std_logic;  
-   SIGNAL sdaq : std_logic;  
-   SIGNAL sr : std_logic_vector(7 DOWNTO 0);  
+   SIGNAL sclq : std_ulogic;  
+   SIGNAL sdaq : std_ulogic;  
+   SIGNAL sr : std_logic_vector(7 DOWNTO 0);
+   SIGNAL rdreq_cld : std_logic;   
 
    TYPE STATE_TYPE IS (
       i2cs_stop,
@@ -86,8 +87,7 @@ ARCHITECTURE fsm OF i2c_slave_bits IS
 
    -- Declare any pre-registered internal signals
    SIGNAL WE_cld : std_logic ;
-   SIGNAL wdata_cld : std_logic_vector (7 DOWNTO 0);
-   SIGNAL rdreq_cld : std_logic;
+   SIGNAL wdata_cld : std_ulogic_vector (7 DOWNTO 0);
 
 BEGIN
 
@@ -149,7 +149,8 @@ BEGIN
                      addd <= '0';
                   END IF;
                WHEN i2cs_w2 => 
-                  wdata_cld <= sr;
+                  wdata_cld <=
+                    std_ulogic_vector(sr);
                   WE_cld <= '1';
                WHEN i2cs_w3 => 
                   IF (sclq = '0') THEN 
@@ -421,8 +422,10 @@ BEGIN
            WHEN i2cs_w6 => 
               sda <= '0';
            WHEN OTHERS =>
-              NULL;
+              sda <= 'Z';
         END CASE;
+      ELSE
+        sda <= 'Z';
       END IF;
    END PROCESS output_proc;
  

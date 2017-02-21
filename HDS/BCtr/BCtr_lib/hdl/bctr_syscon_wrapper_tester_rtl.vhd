@@ -20,6 +20,7 @@ ENTITY BCtr_syscon_wrapper_tester IS
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
     BIN_OPT    : integer range 10 downto 0      := 0; -- 0,1,2,3 currently supported
+    TEMP_OPT   : std_logic := '0';
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -34,9 +35,9 @@ ENTITY BCtr_syscon_wrapper_tester IS
     rdata   : OUT    std_logic_vector (7 DOWNTO 0);
     WE      : IN     std_logic;
     rdreq   : IN     std_logic;
-    start   : IN     std_ulogic;
-    stop    : IN     std_ulogic;
-    wdata   : IN     std_ulogic_vector (7 DOWNTO 0);
+    start   : IN     std_logic;
+    stop    : IN     std_logic;
+    wdata   : IN     std_logic_vector (7 DOWNTO 0);
     RE      : INOUT  std_logic
   );
 END ENTITY BCtr_syscon_wrapper_tester;
@@ -54,6 +55,7 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL ReadResult : std_logic_vector(15 DOWNTO 0);
   SIGNAL ctr_base : unsigned(7 DOWNTO 0);
   CONSTANT temp_base : unsigned(7 DOWNTO 0) := to_unsigned(16#30#,8);
+  CONSTANT aio_base : unsigned(7 DOWNTO 0) := to_unsigned(16#50#,8);
   CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
   alias RdEn is Ctrl(0);
   alias WrEn is Ctrl(1);
@@ -272,18 +274,34 @@ BEGIN
     END IF;
     
     -- Temp sensor test
-    for i in 1 to 2 loop
-      if i > 1 then
-        wait for 1000 ms;
-      end if;
-      for sensor in 0 to 5 loop
-        sbrd(temp_base + sensor*3,'1');
-        check_read(temp_base+sensor*3, X"0000");
-        sbrd(temp_base + sensor*3+1,'1');
-        check_read(temp_base+sensor*3, X"0000");
-        sbrd(temp_base + sensor*3+2,'1');
-        check_read(temp_base+sensor*3, X"0000");
+    if TEMP_OPT = '1' then
+      for i in 1 to 2 loop
+        if i > 1 then
+          wait for 1000 ms;
+        end if;
+        for sensor in 0 to 5 loop
+          sbrd(temp_base + sensor*3,'1');
+          check_read(temp_base+sensor*3, X"0000");
+          sbrd(temp_base + sensor*3+1,'1');
+          check_read(temp_base+sensor*3, X"0000");
+          sbrd(temp_base + sensor*3+2,'1');
+          check_read(temp_base+sensor*3, X"0000");
+        end loop;
       end loop;
+    end if;
+    
+    -- Heater Controller Test
+    for i in 1 to 10 loop
+      sbrd(aio_base,'1'); -- Status
+      sbrd(aio_base+1,'1');
+      check_read(aio_base+1, X"0000"); -- DAC1 Setpoint
+      sbrd(aio_base+2,'1'); -- DAC1 Readback VSet1
+      sbrd(aio_base+3,'1');
+      check_read(aio_base+3, X"0000"); -- DAC2 Setpoint
+      sbrd(aio_base+4,'1'); -- DAC2 Readback VSet2
+      sbrd(aio_base+5,'1'); -- ADC Channel 1 VTemp1
+      sbrd(aio_base+6,'1'); -- ADC Channel 2 VTemp1
+      wait for 100 ms;
     end loop;
     
     SimDone <= '1';

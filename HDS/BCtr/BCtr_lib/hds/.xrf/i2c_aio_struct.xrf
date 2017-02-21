@@ -1,0 +1,629 @@
+DESIGN i2c_aio
+VIEW symbol.sb
+NO_GRAPHIC 0
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 50,0 11 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 13,0 16 1 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 898,0 21 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 908,0 22 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 913,0 23 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 893,0 24 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 3041,0 25 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 1171,0 26 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 918,0 27 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 903,0 28 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 112,0 29 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 117,0 30 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 1,0 33 0 
+DESIGN i2c_aio
+VIEW symbol.sb
+GRAPHIC 1,0 34 0 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 37
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 41,0 53 0 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 56
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 0,0 59 2 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2224,0 64 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2704,0 65 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2668,0 66 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 434,0 67 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 436,0 68 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 358,0 69 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2272,0 70 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2276,0 71 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2798,0 72 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 452,0 73 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 392,0 74 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 4015,0 75 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 356,0 76 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2664,0 77 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 969,0 78 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2509,0 79 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 943,0 80 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2517,0 81 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2374,0 82 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2274,0 83 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 370,0 84 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 334,0 85 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 955,0 86 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2666,0 87 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 190,0 88 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 200,0 89 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 210,0 90 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 220,0 91 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 230,0 92 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 240,0 93 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 250,0 94 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 260,0 95 0 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 96
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 97
+LIBRARY BCtr_lib
+DESIGN aio_acq
+VIEW fsm
+GRAPHIC 312,0 99 0 
+DESIGN aio_acq
+VIEW interface
+GRAPHIC 14,0 100 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2634,0 104 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 396,0 105 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 406,0 106 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2626,0 107 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1693,0 108 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2017,0 109 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 362,0 110 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2027,0 111 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2642,0 112 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 348,0 113 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 454,0 114 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 384,0 115 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 338,0 116 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2652,0 117 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 959,0 118 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 935,0 119 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 324,0 120 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 947,0 121 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2788,0 122 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 4017,0 123 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2172,0 126 0 
+DESIGN aio_addr
+VIEW interface
+GRAPHIC 14,0 127 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2234,0 132 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2210,0 133 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2652,0 134 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2511,0 135 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2388,0 136 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2684,0 137 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2226,0 138 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2706,0 139 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2634,0 140 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 887,0 141 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2626,0 142 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2266,0 143 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2642,0 144 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2788,0 145 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 3347,0 146 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1923,0 149 0 
+DESIGN aio_dpram
+VIEW symbol.sb
+GRAPHIC 14,0 150 1 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 56,0 156 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 66,0 157 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 81,0 158 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 86,0 159 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 51,0 160 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 71,0 161 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 76,0 162 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 91,0 163 0 
+DESIGN aio_dpram
+VIEW beh
+GRAPHIC 61,0 164 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 726,0 167 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 56,0 169 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 76,0 170 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 81,0 171 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 86,0 172 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 101,0 173 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 106,0 174 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 61,0 175 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 66,0 176 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 71,0 177 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 91,0 178 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 96,0 179 0 
+DESIGN aio_i2c
+VIEW beh
+GRAPHIC 51,0 180 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 808,0 183 0 
+DESIGN aio_txn
+VIEW symbol.sb
+GRAPHIC 14,0 184 1 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 76,0 188 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 86,0 189 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 91,0 190 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 136,0 191 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 51,0 192 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 71,0 193 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 81,0 194 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 96,0 195 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 116,0 196 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 121,0 197 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 56,0 198 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 61,0 199 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 310,0 200 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 66,0 201 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 101,0 202 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 106,0 203 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 111,0 204 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 126,0 205 0 
+DESIGN aio_txn
+VIEW fsm
+GRAPHIC 131,0 206 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2162,0 209 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2169,0 210 1 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 222
+LIBRARY BCtr_lib
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 224
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 312,0 227 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2172,0 228 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1923,0 229 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 726,0 230 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 808,0 231 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2162,0 232 0 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 235
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 237
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 312,0 239 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 319,0 240 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2172,0 265 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2179,0 266 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1923,0 287 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1930,0 288 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 887,0 294 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2266,0 295 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 959,0 296 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 935,0 297 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 915,0 298 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 925,0 299 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 947,0 300 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 1693,0 301 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2250,0 302 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 726,0 304 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 152,0 306 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 192,0 307 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 202,0 308 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 212,0 309 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 242,0 310 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 252,0 311 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 162,0 312 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 172,0 313 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 182,0 314 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 222,0 315 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 232,0 316 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 142,0 317 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 808,0 319 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 815,0 320 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 348,0 324 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 454,0 325 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 384,0 326 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 338,0 327 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 416,0 328 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 324,0 329 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 426,0 330 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 182,0 331 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 222,0 332 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 232,0 333 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 396,0 334 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 406,0 335 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 4017,0 336 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 362,0 337 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 192,0 338 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 202,0 339 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 212,0 340 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 242,0 341 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 252,0 342 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2162,0 344 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2169,0 345 1 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2302,0 349 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2314,0 350 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2338,0 351 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2288,0 352 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2210,0 353 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2511,0 354 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2226,0 355 0 
+DESIGN i2c_aio
+VIEW struct.bd
+GRAPHIC 2706,0 356 0 
+DESIGN i2c_aio
+VIEW struct.bd
+NO_GRAPHIC 359
