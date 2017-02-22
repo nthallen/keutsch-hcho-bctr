@@ -90,7 +90,7 @@ BEGIN
     IF clk'EVENT AND clk = '1' THEN
       IF rst = '1' THEN
         ptr <= "00";
-        regs(0) <= X"0000";
+        regs(0) <= X"AAAA";
         regs(1) <= X"8000"; -- Not converting
         regs(2) <= X"0000";
         regs(3) <= X"0000";

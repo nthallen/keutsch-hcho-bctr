@@ -54,6 +54,7 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL SimDone : std_logic;
   SIGNAL ReadResult : std_logic_vector(15 DOWNTO 0);
   SIGNAL ctr_base : unsigned(7 DOWNTO 0);
+  SIGNAL sp_updated : std_logic;
   CONSTANT temp_base : unsigned(7 DOWNTO 0) := to_unsigned(16#30#,8);
   CONSTANT aio_base : unsigned(7 DOWNTO 0) := to_unsigned(16#50#,8);
   CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
@@ -291,16 +292,53 @@ BEGIN
     end if;
     
     -- Heater Controller Test
+    sp_updated <= '0';
+    sbrd(aio_base+1,'1');
+    check_read(aio_base+1, X"0000"); -- Verify DAC1 Setpoint init
+      write(my_line, now);
+      write(my_line, string'(": sbwr(DAC1)"));
+      writeline(output, my_line);
+    sbwr(aio_base+1,X"1234",'1');
+    sbrd(aio_base+1,'1');
+    if ReadResult = X"0000" then
+      write(my_line, now);
+      write(my_line, string'(": readback is still zero"));
+      writeline(output, my_line);
+      while sp_updated = '0' loop
+        sbrd(aio_base+1,'1');
+        if ReadResult /= X"0000" then
+          sp_updated <= '1';
+          wait for 10 ns;
+        end if;
+      end loop;
+    end if;
+    write(my_line, now);
+    write(my_line, string'(": readback now "));
+    hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+    writeline(output, my_line);
+    wait for 100 ms;
     for i in 1 to 10 loop
       sbrd(aio_base,'1'); -- Status
+        write(my_line, now);
+        write(my_line, string'(": Status: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       sbrd(aio_base+1,'1');
       check_read(aio_base+1, X"0000"); -- DAC1 Setpoint
       sbrd(aio_base+2,'1'); -- DAC1 Readback VSet1
+        write(my_line, string'(" VSet1: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       sbrd(aio_base+3,'1');
       check_read(aio_base+3, X"0000"); -- DAC2 Setpoint
       sbrd(aio_base+4,'1'); -- DAC2 Readback VSet2
+        write(my_line, string'(" VSet2: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       sbrd(aio_base+5,'1'); -- ADC Channel 1 VTemp1
+        write(my_line, string'(" VTemp1: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       sbrd(aio_base+6,'1'); -- ADC Channel 2 VTemp1
+        write(my_line, string'(" VTemp2: "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
       wait for 100 ms;
     end loop;
     
