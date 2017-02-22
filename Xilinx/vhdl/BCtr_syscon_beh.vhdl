@@ -36,6 +36,10 @@ ENTITY BCtr_syscon IS
       temp_sda : INOUT std_logic;
       aio_scl  : INOUT std_logic;
       aio_sda  : INOUT std_logic;
+      aio_scl_mon  : OUT std_logic;
+      aio_sda_mon  : OUT std_logic;
+      htr1_cmd : OUT std_logic;
+      htr2_cmd : OUT std_logic;
       SimTrig  : OUT std_logic;
       SimPMT   : OUT std_logic
     );
@@ -167,7 +171,11 @@ ARCHITECTURE beh OF BCtr_syscon IS
       ExpAck  : OUT    std_logic;
       rData   : OUT    std_logic_vector(15 DOWNTO 0);
       scl     : INOUT  std_logic;
-      sda     : INOUT  std_logic
+      sda     : INOUT  std_logic;
+      scl_mon : OUT std_logic;
+      sda_mon : OUT std_logic;
+      htr1_cmd : OUT std_logic;
+      htr2_cmd : OUT std_logic
     );
   END COMPONENT i2c_aio;
 BEGIN
@@ -284,7 +292,11 @@ BEGIN
       ExpAck  => ExpAck(3),
       rData   => RData(16*3+15 DOWNTO 16*3),
       scl     => aio_scl,
-      sda     => aio_sda
+      sda     => aio_sda,
+      scl_mon => aio_scl_mon,
+      sda_mon => aio_sda_mon,
+      htr1_cmd => htr1_cmd,
+      htr2_cmd => htr2_cmd
     );
     
   sim : simfluor

@@ -3,7 +3,7 @@
 #
 # Created:
 #          by - nort.UNKNOWN (NORT-XPS14)
-#          at - 16:50:45 02/20/2017
+#          at - 13:57:05 02/22/2017
 #
 # using Mentor Graphics HDL Designer(TM) 2016.1 (Build 8)
 #
@@ -27,3 +27,8 @@ dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr
 dc_exclude -design_unit {BCtr_syscon_wrapper_tester} -check {RuleSets\Essentials\Downstream Checks\Non Synthesizable Constructs} -comment {OK}
 dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\aio_addr_beh.vhdl} -start_line 26 -end_line 26 -check {RuleSets\Essentials\Downstream Checks\Register IO} -comment {OK}
 dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\aio_addr_beh.vhdl} -start_line 27 -end_line 27 -check {RuleSets\Essentials\Downstream Checks\Register IO} -comment {OK}
+dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\aio_acq_fsm.vhdl} -start_line 43 -end_line 43 -check {RuleSets\Essentials\Downstream Checks\Register IO} -comment {OK}
+dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\aio_acq_fsm.vhdl} -start_line 44 -end_line 44 -check {RuleSets\Essentials\Downstream Checks\Register IO} -comment {OK}
+dc_exclude -source_file {C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\HDS\BCtr\BCtr_lib\hdl\aio_acq_fsm.vhdl} -check {RuleSets\Essentials\Downstream Checks\Register Reset Control} -comment {Don't Care
+}
+dc_exclude -design_unit {aio_acq} -check {RuleSets\Essentials\Downstream Checks\Register Controllability} -comment {Don't Care}

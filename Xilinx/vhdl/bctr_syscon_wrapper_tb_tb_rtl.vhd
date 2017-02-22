@@ -51,6 +51,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL en        : std_logic;
   SIGNAL stop      : std_logic;
   SIGNAL rdreq     : std_logic;
+  SIGNAL htr1_cmd  : std_logic;
+  SIGNAL htr2_cmd  : std_logic;
 
   -- Component declarations
   COMPONENT BCtr_syscon_wrapper
@@ -65,6 +67,10 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       temp_sda : INOUT  std_logic;
       aio_scl  : INOUT  std_logic;
       aio_sda  : INOUT  std_logic;
+      aio_scl_mon  : OUT std_logic;
+      aio_sda_mon  : OUT std_logic;
+      htr1_cmd : OUT std_logic;
+      htr2_cmd : OUT std_logic;
       Data_i  : OUT    std_logic_vector(15 DOWNTO 0);
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
@@ -156,6 +162,8 @@ BEGIN
         temp_sda => temp_sda,
         aio_scl => aio_scl,
         aio_sda => aio_sda,
+        htr1_cmd => htr1_cmd,
+        htr2_cmd => htr2_cmd,
         Data_i  => Data_i,
         Fail    => Fail,
         SimPMT  => SimPMT,

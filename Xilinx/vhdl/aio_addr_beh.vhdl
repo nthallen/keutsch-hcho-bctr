@@ -23,7 +23,7 @@ ENTITY aio_addr IS
     WrEn      : IN     std_logic;
     clk       : IN     std_logic;
     wData     : IN     std_logic_vector (15 DOWNTO 0);
-    ChanAddr2 : OUT    std_logic;
+    ChanAddr2 : OUT    std_logic_vector (1 DOWNTO 0);
     RdAddr    : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
     WrEn2     : OUT    std_logic;
     dpRdEn    : OUT    std_logic;
@@ -51,7 +51,7 @@ BEGIN
        unsigned(ExpAddr) < unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0)) + 7 THEN
       BdEn <= '1';
       Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
-      IF Offset = 1 OR Offset = 3 THEN
+      IF Offset = 0 OR Offset = 1 OR Offset = 3 THEN
         WrOK <= '1';
       ELSE
         WrOK <= '0';
@@ -71,7 +71,7 @@ BEGIN
       ELSE
         IF WrEn = '1' AND WrOK = '1' THEN
           Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
-          ChanAddr2 <= Offset(1);
+          ChanAddr2 <= std_logic_vector(Offset(1 DOWNTO 0));
           WrEn2_int <= '1';
           wData2 <= wData;
         END IF;

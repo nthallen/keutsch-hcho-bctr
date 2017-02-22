@@ -32,6 +32,10 @@ ENTITY BCtr_syscon_wrapper IS
     temp_sda : INOUT  std_logic;
     aio_scl  : INOUT  std_logic;
     aio_sda  : INOUT  std_logic;
+    aio_scl_mon : OUT std_logic;
+    aio_sda_mon : OUT std_logic;
+    htr1_cmd : OUT    std_logic;
+    htr2_cmd : OUT    std_logic;
     SimPMT   : OUT    std_logic;
     SimTrig  : OUT    std_logic;
     Status   : OUT    std_logic_vector (3 DOWNTO 0)
@@ -94,6 +98,10 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     temp_sda : INOUT  std_logic;
     aio_scl  : INOUT  std_logic;
     aio_sda  : INOUT  std_logic;
+    aio_scl_mon : OUT std_logic;
+    aio_sda_mon : OUT std_logic;
+    htr1_cmd : OUT    std_logic;
+    htr2_cmd : OUT    std_logic;
     Data_i   : OUT    std_logic_vector (15 DOWNTO 0);
     Fail     : OUT    std_logic;
     SimPMT   : OUT    std_logic;
@@ -130,6 +138,10 @@ BEGIN
       temp_sda => temp_sda,
       aio_scl  => aio_scl,
       aio_sda  => aio_sda,
+      aio_scl_mon => aio_scl_mon,
+      aio_sda_mon => aio_sda_mon,
+      htr1_cmd => htr1_cmd,
+      htr2_cmd => htr2_cmd,
       Data_i   => Data_i,
       Data_o   => Data_o,
       Status   => Status,

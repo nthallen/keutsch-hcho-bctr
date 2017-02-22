@@ -152,6 +152,26 @@ BEGIN
         writeline(output, my_line);
       end if;
     end procedure check_read;
+    
+    procedure check_cmds(cmds : std_logic_vector(15 DOWNTO 0)) IS
+      variable my_line : line;
+    begin
+      sbrd(aio_base, '1');
+      sbwr(aio_base, cmds, '1');
+        write(my_line, now);
+        write(my_line, string'(": htr cmd "));
+        hwrite(my_line, cmds, RIGHT, 4);
+        write(my_line, string'(" status "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+      while ReadResult(5) /= cmds(5) OR ReadResult(9) /= cmds(9) loop
+        sbrd(aio_base, '1');
+      end loop;
+        write(my_line, now);
+        write(my_line, string'(": status "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+    end procedure check_cmds;
    
     variable my_line : line;
   Begin
@@ -293,6 +313,19 @@ BEGIN
     
     -- Heater Controller Test
     sp_updated <= '0';
+    sbwr(aio_base+2, X"0000", '0'); -- Should get NACK on write
+    -- Check digital commands
+    sbrd(aio_base, '1');
+    assert ReadResult(5) = '0' AND ReadResult(9) = '0'
+      report "Commands are not initialized to zero"
+      severity error;
+    check_cmds(X"0020");
+    check_cmds(X"0000");
+    check_cmds(X"0200");
+    check_cmds(X"0020");
+    check_cmds(X"0000");
+    
+    
     sbrd(aio_base+1,'1');
     check_read(aio_base+1, X"0000"); -- Verify DAC1 Setpoint init
       write(my_line, now);
@@ -316,6 +349,7 @@ BEGIN
     write(my_line, string'(": readback now "));
     hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
     writeline(output, my_line);
+    
     wait for 100 ms;
     for i in 1 to 10 loop
       sbrd(aio_base,'1'); -- Status

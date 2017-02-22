@@ -22,7 +22,7 @@ ENTITY aio_acq IS
     ADDR_WIDTH : integer range 16 downto 8 := 16
   );
   PORT( 
-    ChanAddr2 : IN     std_logic;
+    ChanAddr2 : IN     std_logic_vector(1 DOWNTO 0);
     Done      : IN     std_logic;
     Err       : IN     std_logic;
     WrEn2     : IN     std_logic;
@@ -40,6 +40,8 @@ ENTITY aio_acq IS
     WrEn1     : OUT    std_logic;
     i2c_wdata : OUT    std_logic_vector (7 DOWNTO 0);
     wData1    : OUT    std_logic_vector (15 DOWNTO 0);
+    htr1_cmd  : OUT    std_logic;
+    htr2_cmd  : OUT    std_logic;
     RdStat    : IN     std_logic;
     Timeout   : IN     std_logic
   );
@@ -52,9 +54,11 @@ END ENTITY aio_acq ;
 ARCHITECTURE fsm OF aio_acq IS
   TYPE State_t IS (
     S_INIT, S_INIT_1,
-    S_DAC1_INIT, S_DAC1_UPDATE, S_DAC1_UPDATE_1, S_DAC1_SET,
+    S_DAC1_INIT, S_DAC1_UPDATE, S_DAC1_UPDATE_1,
+    S_DAC1_SET, S_DAC1_SET_1,
     S_ADC1_READ, S_ADC2_CFG,
-    S_DAC2_INIT, S_DAC2_UPDATE, S_DAC2_UPDATE_1, S_DAC2_SET,
+    S_DAC2_INIT, S_DAC2_UPDATE, S_DAC2_UPDATE_1,
+    S_DAC2_SET, S_DAC2_SET_1,
     S_ADC2_READ, S_ADC1_CFG,
     S_DAC_INIT, S_DAC_INIT_2, S_DAC_INIT_3, S_DAC_INIT_4,
     S_TXN, S_TXN_1, S_TXN_ERR,
@@ -67,7 +71,9 @@ ARCHITECTURE fsm OF aio_acq IS
     S_ADC_RD_6, S_ADC_RD_7, S_ADC_RD_8, S_ADC_RD_9,
     S_ADC_RD_10, S_ADC_RD_11, S_ADC_RD_12, S_ADC_RD_13,
     S_ADC_WR, S_ADC_WR_1, S_ADC_WR_2, S_ADC_WR_3,
-    S_ADC_WR_4
+    S_ADC_WR_4,
+    S_WR_ACK, S_WR_ACK_1,
+    S_HTR_CMD, S_HTR_CMD_1
   );
   SIGNAL crnt_state : State_t;
   SIGNAL err_recovery_nxt : State_t;
@@ -76,6 +82,7 @@ ARCHITECTURE fsm OF aio_acq IS
   SIGNAL dac_nxt : State_t;
   SIGNAL dac_rw_nxt : State_t;
   SIGNAL ram_nxt : State_t;
+  SIGNAL ack_nxt : State_t;
 
   SIGNAL Status : std_logic_vector(15 DOWNTO 0);
   constant ADC_ACK_BIT : integer := 0;
@@ -83,10 +90,12 @@ ARCHITECTURE fsm OF aio_acq IS
   constant ADC1_FRESH_BIT : integer := 2;
   constant ADC2_FRESH_BIT : integer := 3;
   constant DAC1_INIT_BIT : integer := 4;
+  constant DAC1_CMD_BIT : integer := 5;
   -- constant DAC1_ACK_BIT : integer := 5;
   constant DAC1_NACK_BIT : integer := 6;
   constant DAC1_FRESH_BIT : integer := 7;
   constant DAC2_INIT_BIT : integer := 8;
+  constant DAC2_CMD_BIT : integer := 9;
   -- constant DAC2_ACK_BIT : integer := 9;
   constant DAC2_NACK_BIT : integer := 10;
   constant DAC2_FRESH_BIT : integer := 11;
@@ -106,7 +115,7 @@ ARCHITECTURE fsm OF aio_acq IS
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
   constant ADC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10010000";
   constant DAC1_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011000";
-  constant DAC2_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011000"; -- FIX THIS
+  constant DAC2_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011100";
   constant DAC_WR_IO : std_logic_vector(7 DOWNTO 0) := "00110000";
   constant DAC_WR_CTRL : std_logic_vector(7 DOWNTO 0) := "01000000";
   -- constant LO_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000010";
@@ -237,6 +246,13 @@ BEGIN
    	  crnt_state <= S_ADC_WR;
    	  return;
     END PROCEDURE start_adc_cfg;
+    
+    PROCEDURE write_ack(nxt : State_t) IS
+    BEGIN
+      ack_nxt <= nxt;
+      crnt_state <= S_WR_ACK;
+      return;
+    END PROCEDURE write_ack;
 
   BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -255,9 +271,18 @@ BEGIN
         adc_cfgd <= '0';
       ELSE
         IF RdStat = '1' THEN
-          Status <= (DAC1_INIT_BIT => Status(DAC1_INIT_BIT),
-            DAC2_INIT_BIT => Status(DAC2_INIT_BIT),
-            others => '0');
+          Status(ADC_ACK_BIT) <= '0';
+          Status(ADC_NACK_BIT) <= '0';
+          Status(ADC1_FRESH_BIT) <= '0';
+          Status(ADC2_FRESH_BIT) <= '0';
+          -- Status(DAC1_INIT_BIT) <= '0';
+          -- Status(DAC1_CMD_BIT) <= '0';
+          Status(DAC1_NACK_BIT) <= '0';
+          Status(DAC1_FRESH_BIT) <= '0';
+          -- Status(DAC2_INIT_BIT) <= '0';
+          -- Status(DAC2_CMD_BIT) <= '0';
+          Status(DAC2_NACK_BIT) <= '0';
+          Status(DAC2_FRESH_BIT) <= '0';
         END IF;
         CASE crnt_state IS
           WHEN S_INIT =>
@@ -268,32 +293,24 @@ BEGIN
             clear_txn(S_INIT_1);
           WHEN S_INIT_1 =>
             start_ram(STATUS_RAM_ADDR,Status,S_DAC1_INIT);
+
           WHEN S_DAC1_INIT =>
             nack_bit <= DAC1_NACK_BIT;
             dac_i2c_addr <= DAC1_I2C_ADDR;
             err_recovery_nxt <= S_ADC1_READ;
-            IF Status(DAC1_INIT_BIT) = '1' THEN
-              crnt_state <= S_DAC1_UPDATE;
-            ELSE
-              dac_init(DAC1_INIT_BIT, DAC1_SETPOINT_RAM_ADDR, S_DAC1_UPDATE);
-            END IF;
+            dac_init(DAC1_INIT_BIT, DAC1_SETPOINT_RAM_ADDR, S_DAC1_UPDATE);
           WHEN S_DAC1_UPDATE =>
-            IF WrEn2 = '1' AND ChanAddr2 = '0' THEN
+            IF WrEn2 = '1' AND ChanAddr2 = "01" THEN
               dac_wr_data <= wData2;
-              WrAck2 <= '1';
-              crnt_state <= S_DAC1_UPDATE_1;
+              write_ack(S_DAC1_SET);
             ELSE
               start_dac_rd(DAC1_READBACK_RAM_ADDR, DAC1_FRESH_BIT, S_ADC1_READ);
             END IF;
-          WHEN S_DAC1_UPDATE_1 =>
-            IF WrEn2 = '0' THEN
-              WrAck2 <= '0';
-              start_dac_wr(DAC_WR_IO, dac_wr_data, S_DAC1_SET);
-            ELSE
-              crnt_state <= S_DAC1_UPDATE_1;
-            END IF;
           WHEN S_DAC1_SET =>
+            start_dac_wr(DAC_WR_IO, dac_wr_data, S_DAC1_SET_1);
+          WHEN S_DAC1_SET_1 =>
             start_ram(DAC1_SETPOINT_RAM_ADDR, dac_wr_data, S_ADC1_READ);
+
           WHEN S_ADC1_READ =>
             nack_bit <= ADC_NACK_BIT;
             err_recovery_nxt <= S_ADC2_CFG;
@@ -310,28 +327,19 @@ BEGIN
             nack_bit <= DAC2_NACK_BIT;
             dac_i2c_addr <= DAC2_I2C_ADDR;
             err_recovery_nxt <= S_ADC2_READ;
-            IF Status(DAC2_INIT_BIT) = '1' THEN
-              crnt_state <= S_DAC2_UPDATE;
-            ELSE
-              dac_init(DAC2_INIT_BIT, DAC2_SETPOINT_RAM_ADDR, S_DAC2_UPDATE);
-            END IF;
+            dac_init(DAC2_INIT_BIT, DAC2_SETPOINT_RAM_ADDR, S_DAC2_UPDATE);
           WHEN S_DAC2_UPDATE =>
-            IF WrEn2 = '1' AND ChanAddr2 = '1' THEN
+            IF WrEn2 = '1' AND ChanAddr2 = "11" THEN
               dac_wr_data <= wData2;
-              WrAck2 <= '1';
-              crnt_state <= S_DAC2_UPDATE_1;
+              write_ack(S_DAC2_SET);
             ELSE
               start_dac_rd(DAC2_READBACK_RAM_ADDR, DAC2_FRESH_BIT, S_ADC2_READ);
             END IF;
-          WHEN S_DAC2_UPDATE_1 =>
-            IF WrEn2 = '0' THEN
-              WrAck2 <= '0';
-              start_dac_wr(DAC_WR_IO, dac_wr_data, S_DAC2_SET);
-            ELSE
-              crnt_state <= S_DAC2_UPDATE_1;
-            END IF;
           WHEN S_DAC2_SET =>
+            start_dac_wr(DAC_WR_IO, dac_wr_data, S_DAC2_SET_1);
+          WHEN S_DAC2_SET_1 =>
             start_ram(DAC2_SETPOINT_RAM_ADDR, dac_wr_data, S_ADC2_READ);
+            
           WHEN S_ADC2_READ =>
             nack_bit <= ADC_NACK_BIT;
             err_recovery_nxt <= S_ADC1_CFG;
@@ -342,7 +350,18 @@ BEGIN
             END IF;
           WHEN S_ADC1_CFG =>
             adc_cfgd <= '0';
-            start_adc_cfg(ADC1_MUX, S_DAC1_INIT);
+            start_adc_cfg(ADC1_MUX, S_HTR_CMD);
+          WHEN S_HTR_CMD =>
+            IF WrEn2 = '1' AND ChanAddr2 = "00" THEN
+              Status(DAC1_CMD_BIT) <= wData2(DAC1_CMD_BIT);
+              Status(DAC2_CMD_BIT) <= wData2(DAC2_CMD_BIT);
+              write_ack(S_HTR_CMD_1);
+            ELSE
+              crnt_state <= S_DAC1_INIT;
+            END IF;
+          WHEN S_HTR_CMD_1 =>
+            start_ram(STATUS_RAM_ADDR, Status, S_DAC1_INIT);
+             
             
             
           WHEN S_DAC_INIT =>
@@ -492,11 +511,25 @@ BEGIN
             adc_cfgd <= '1';
             crnt_state <= adc_nxt;
 
+          WHEN S_WR_ACK =>
+            WrAck2 <= '1';
+            crnt_state <= S_WR_ACK_1;
+          WHEN S_WR_ACK_1 =>
+            IF WrEn2 = '0' THEN
+              WrAck2 <= '0';
+              crnt_state <= ack_nxt;
+            ELSE
+              crnt_state <= S_WR_ACK_1;
+            END IF;
+
           WHEN OTHERS =>
             crnt_state <= S_INIT;
         END CASE;
       END IF;
     END IF;
   END PROCESS;
+  
+  htr1_cmd <= not(Status(DAC1_CMD_BIT));
+  htr2_cmd <= not(Status(DAC2_CMD_BIT));
 END ARCHITECTURE fsm;
 
