@@ -12,13 +12,13 @@ USE ieee.std_logic_arith.all;
 
 ENTITY i2c_slave_sup IS
    PORT( 
-      clk    : IN     std_ulogic;
-      rst    : IN     std_ulogic;
+      clk    : IN     std_logic;
+      rst    : IN     std_logic;
       scl_in : IN     std_logic;
       sda_in : IN     std_logic;
-      err    : OUT    std_ulogic;
-      start  : OUT    std_ulogic;
-      stop   : OUT    std_ulogic
+      err    : OUT    std_logic;
+      start  : OUT    std_logic;
+      stop   : OUT    std_logic
    );
 
 -- Declarations
@@ -41,7 +41,7 @@ USE ieee.std_logic_arith.all;
 ARCHITECTURE fsm OF i2c_slave_sup IS
 
    -- Architecture Declarations
-   SIGNAL prestart : std_ulogic;  
+   SIGNAL prestart : std_logic;  
    SIGNAL scl : std_logic;  
    SIGNAL sda : std_logic;  
 
@@ -58,9 +58,9 @@ ARCHITECTURE fsm OF i2c_slave_sup IS
    SIGNAL next_state : STATE_TYPE;
 
    -- Declare any pre-registered internal signals
-   SIGNAL err_cld : std_ulogic ;
-   SIGNAL start_cld : std_ulogic ;
-   SIGNAL stop_cld : std_ulogic ;
+   SIGNAL err_cld : std_logic ;
+   SIGNAL start_cld : std_logic ;
+   SIGNAL stop_cld : std_logic ;
 
 BEGIN
 

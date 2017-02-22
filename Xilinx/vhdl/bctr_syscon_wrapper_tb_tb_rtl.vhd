@@ -20,7 +20,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 -- LIBRARY BCtr_lib;
--- USE BCtr_lib.ALL;
+USE BCtr_lib.ALL;
 
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
@@ -41,16 +41,16 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL Status  : std_logic_vector(3 DOWNTO 0);
   SIGNAL temp_scl : std_logic;
   SIGNAL temp_sda : std_logic;
+  SIGNAL aio_scl  : std_logic;
+  SIGNAL aio_sda  : std_logic;
   SIGNAL RE        : std_logic;
   SIGNAL WE        : std_logic;
-  SIGNAL start     : std_ulogic;
-  SIGNAL wdata     : std_ulogic_vector(7 DOWNTO 0);
+  SIGNAL start     : std_logic;
+  SIGNAL wdata     : std_logic_vector(7 DOWNTO 0);
   SIGNAL rdata     : std_logic_vector(7 DOWNTO 0);
   SIGNAL en        : std_logic;
   SIGNAL stop      : std_logic;
   SIGNAL rdreq     : std_logic;
-  SIGNAL rst       : std_logic;
-
 
   -- Component declarations
   COMPONENT BCtr_syscon_wrapper
@@ -63,6 +63,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       clk     : IN     std_logic;
       temp_scl : INOUT  std_logic;
       temp_sda : INOUT  std_logic;
+      aio_scl  : INOUT  std_logic;
+      aio_sda  : INOUT  std_logic;
       Data_i  : OUT    std_logic_vector(15 DOWNTO 0);
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
@@ -83,9 +85,9 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       rdata   : OUT    std_logic_vector (7 DOWNTO 0);
       WE      : IN     std_logic;
       rdreq   : IN     std_logic;
-      start   : IN     std_ulogic;
-      stop    : IN     std_ulogic;
-      wdata   : IN     std_ulogic_vector (7 DOWNTO 0);
+      start   : IN     std_logic;
+      stop    : IN     std_logic;
+      wdata   : IN     std_logic_vector (7 DOWNTO 0);
       RE      : INOUT  std_logic
     );
   END COMPONENT BCtr_syscon_wrapper_tester;
@@ -95,26 +97,49 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
     I2C_ADDR : std_logic_vector(6 DOWNTO 0) := "1000000"
   );
   PORT (
-    clk   : IN     std_ulogic;
-    rst   : IN     std_ulogic;
+    clk   : IN     std_logic;
+    rst   : IN     std_logic;
     scl   : IN     std_logic;
     en    : IN     std_logic;
     rdata : IN     std_logic_vector (7 DOWNTO 0);
     WE    : OUT    std_logic;
     rdreq : OUT    std_logic;
-    start : OUT    std_ulogic;
-    stop  : OUT    std_ulogic;
-    wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+    start : OUT    std_logic;
+    stop  : OUT    std_logic;
+    wdata : OUT    std_logic_vector (7 DOWNTO 0);
     RE    : INOUT  std_logic;
     sda   : INOUT  std_logic
   );
   END COMPONENT i2c_slave;
 
+  COMPONENT ads1115
+    PORT (
+      clk : IN     std_logic;
+      rst : IN     std_logic;
+      sda : INOUT  std_logic;
+      scl : IN     std_logic
+    );
+  END COMPONENT ads1115;
+
+  COMPONENT ad5693
+    GENERIC (
+      I2C_ADDR : std_logic_vector(6 DOWNTO 0) := "1001100"
+    );
+    PORT (
+      clk : IN     std_logic;
+      rst : IN     std_logic;
+      sda : INOUT  std_logic;
+      scl : IN     std_logic
+    );
+  END COMPONENT ad5693;
+
   -- embedded configurations
   -- pragma synthesis_off
-  -- FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
-  -- FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
-  -- FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
+  FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
+  FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
+  FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
+-- FOR ALL : ads1115 USE ENTITY BCtr_lib.ads1115;
+-- FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
   -- pragma synthesis_on
 
 BEGIN
@@ -129,6 +154,8 @@ BEGIN
         clk     => clk,
         temp_scl => temp_scl,
         temp_sda => temp_sda,
+        aio_scl => aio_scl,
+        aio_sda => aio_sda,
         Data_i  => Data_i,
         Fail    => Fail,
         SimPMT  => SimPMT,
@@ -161,7 +188,7 @@ BEGIN
       PORT MAP (
         clk   => clk,
         rdata => rdata,
-        rst   => rst,
+        rst   => Ctrl(4),
         scl   => temp_scl,
         en    => en,
         WE    => WE,
@@ -173,10 +200,41 @@ BEGIN
         sda   => temp_sda
       );
 
+  adc : ads1115
+    PORT MAP (
+      clk => clk,
+      rst => Ctrl(4),
+      sda => aio_sda,
+      scl => aio_scl
+    );
+
+  dac1 : ad5693
+    GENERIC MAP (
+      I2C_ADDR => "1001100"
+    )
+    PORT MAP (
+      clk => clk,
+      rst => Ctrl(4),
+      sda => aio_sda,
+      scl => aio_scl
+    );
+
+  dac2 : ad5693
+    GENERIC MAP (
+      I2C_ADDR => "1001110"
+    )
+    PORT MAP (
+      clk => clk,
+      rst => Ctrl(4),
+      sda => aio_sda,
+      scl => aio_scl
+    );
+
   Trigger <= SimTrig;
   PMTs(0) <= SimPMT;
   PMTS(1) <= '0';
   temp_scl <= 'H';
   temp_sda <= 'H';
-  rst <= Ctrl(4);
+  aio_scl <= 'H';
+  aio_sda <= 'H';
 END ARCHITECTURE rtl;

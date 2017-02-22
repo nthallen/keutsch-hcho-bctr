@@ -13,10 +13,10 @@ USE ieee.numeric_std.all;
 
 ENTITY BCtr_syscon IS
     GENERIC (
-      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0005"; -- Relative to HCHO
+      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0006"; -- Relative to HCHO
       INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 3;
+      N_BOARDS      : integer range 15 downto 0     := 4;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
@@ -32,8 +32,10 @@ ENTITY BCtr_syscon IS
       Data_i   : OUT std_logic_vector(15 DOWNTO 0);
       Data_o   : IN std_logic_vector(15 DOWNTO 0);
       Status   : OUT std_logic_vector(3 DOWNTO 0);
-      temp_scl : INOUT  std_logic;
-      temp_sda : INOUT  std_logic;
+      temp_scl : INOUT std_logic;
+      temp_sda : INOUT std_logic;
+      aio_scl  : INOUT std_logic;
+      aio_sda  : INOUT std_logic;
       SimTrig  : OUT std_logic;
       SimPMT   : OUT std_logic
     );
@@ -149,6 +151,25 @@ ARCHITECTURE beh OF BCtr_syscon IS
       sda    : INOUT  std_logic
     );
   END COMPONENT temp_top;
+  
+  COMPONENT i2c_aio
+    GENERIC (
+      BASE_ADDR  : std_logic_vector(15 DOWNTO 0) := X"0050";
+      ADDR_WIDTH : integer                       := 16
+    );
+    PORT (
+      ExpAddr : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd   : IN     std_logic;
+      ExpWr   : IN     std_logic;
+      clk     : IN     std_logic;
+      rst     : IN     std_logic;
+      wData   : IN     std_logic_vector(15 DOWNTO 0);
+      ExpAck  : OUT    std_logic;
+      rData   : OUT    std_logic_vector(15 DOWNTO 0);
+      scl     : INOUT  std_logic;
+      sda     : INOUT  std_logic
+    );
+  END COMPONENT i2c_aio;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -246,6 +267,24 @@ BEGIN
       RData  => RData(47 DOWNTO 32),
       scl    => temp_scl,
       sda    => temp_sda
+    );
+
+  aio : i2c_aio
+    GENERIC MAP (
+      BASE_ADDR  => X"0050",
+      ADDR_WIDTH => 8
+    )
+    PORT MAP (
+      ExpAddr => ExpAddr,
+      ExpRd   => ExpRd,
+      ExpWr   => ExpWr,
+      clk     => clk,
+      rst     => ExpReset,
+      wData   => WData,
+      ExpAck  => ExpAck(3),
+      rData   => RData(16*3+15 DOWNTO 16*3),
+      scl     => aio_scl,
+      sda     => aio_sda
     );
     
   sim : simfluor

@@ -27,15 +27,15 @@ ENTITY i2c_slave IS
       I2C_ADDR : std_logic_vector(6 DOWNTO 0) := "1000000"
    );
    PORT( 
-      clk   : IN     std_ulogic;
+      clk   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
-      rst   : IN     std_ulogic;
+      rst   : IN     std_logic;
       scl   : IN     std_logic;
       en    : IN     std_logic;
       WE    : OUT    std_logic;
-      start : OUT    std_ulogic;
-      stop  : OUT    std_ulogic;
-      wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+      start : OUT    std_logic;
+      stop  : OUT    std_logic;
+      wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
       sda   : INOUT  std_logic
@@ -65,11 +65,11 @@ ARCHITECTURE struct OF i2c_slave IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL err  : std_ulogic;
-   SIGNAL stop_internal : std_ulogic;
+   SIGNAL err  : std_logic;
+   SIGNAL stop_internal : std_logic;
 
    -- Implicit buffer signal declarations
-   SIGNAL start_internal : std_ulogic;
+   SIGNAL start_internal : std_logic;
 
 
    -- Component Declarations
@@ -78,16 +78,16 @@ ARCHITECTURE struct OF i2c_slave IS
       I2C_ADDR : std_logic_vector(6 downto 0) := "1000000"
    );
    PORT (
-      clk   : IN     std_ulogic;
-      err   : IN     std_ulogic;
+      clk   : IN     std_logic;
+      err   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
-      rst   : IN     std_ulogic;
+      rst   : IN     std_logic;
       scl   : IN     std_logic;
-      start : IN     std_ulogic;
-      stop  : IN     std_ulogic;
+      start : IN     std_logic;
+      stop  : IN     std_logic;
       en    : IN     std_logic;
       WE    : OUT    std_logic;
-      wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+      wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
       sda   : INOUT  std_logic 
@@ -95,13 +95,13 @@ ARCHITECTURE struct OF i2c_slave IS
    END COMPONENT;
    COMPONENT i2c_slave_sup
    PORT (
-      clk    : IN     std_ulogic;
-      rst    : IN     std_ulogic;
+      clk    : IN     std_logic;
+      rst    : IN     std_logic;
       scl_in : IN     std_logic;
       sda_in : IN     std_logic;
-      err    : OUT    std_ulogic;
-      start  : OUT    std_ulogic;
-      stop   : OUT    std_ulogic 
+      err    : OUT    std_logic;
+      start  : OUT    std_logic;
+      stop   : OUT    std_logic 
    );
    END COMPONENT;
 
@@ -110,7 +110,7 @@ ARCHITECTURE struct OF i2c_slave IS
 BEGIN
 
    -- Instance port mappings.
-   slave_bits : i2c_slave_bits
+   U_0 : i2c_slave_bits
       GENERIC MAP (
          I2C_ADDR => I2C_ADDR
       )
@@ -129,7 +129,7 @@ BEGIN
          RE    => RE,
          sda   => sda
       );
-   slave_sup : i2c_slave_sup
+   U_1 : i2c_slave_sup
       PORT MAP (
          clk    => clk,
          rst    => rst,
