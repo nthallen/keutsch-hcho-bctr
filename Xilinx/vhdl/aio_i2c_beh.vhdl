@@ -19,8 +19,12 @@ ENTITY aio_i2c IS
       wb_dat_i  : IN     std_logic_vector (7 DOWNTO 0);
       wb_stb_i  : IN     std_logic;
       wb_we_i   : IN     std_logic;
-      scl       : INOUT  std_logic;
-      sda       : INOUT  std_logic;
+      scl_pad_i    : IN  std_logic;
+      scl_pad_o    : OUT std_logic;
+      scl_padoen_o : OUT std_logic;
+      sda_pad_i    : IN  std_logic;
+      sda_pad_o    : OUT std_logic;
+      sda_padoen_o : OUT std_logic;
       wb_ack_o  : OUT    std_logic;
       wb_dat_o  : OUT    std_logic_vector (7 DOWNTO 0);
       wb_inta_o : OUT    std_logic;
@@ -33,12 +37,6 @@ END aio_i2c ;
 
 --
 ARCHITECTURE beh OF aio_i2c IS
-   SIGNAL scl_pad_i    : std_logic;
-   SIGNAL scl_pad_o    : std_logic;
-   SIGNAL scl_padoen_o : std_logic;
-   SIGNAL sda_pad_i    : std_logic;
-   SIGNAL sda_pad_o    : std_logic;
-   SIGNAL sda_padoen_o : std_logic;
 
    COMPONENT i2c_master_top
       GENERIC (
@@ -89,25 +87,5 @@ BEGIN
          sda_pad_o    => sda_pad_o,
          sda_padoen_o => sda_padoen_o
       );
-  
-  sda_proc : Process (sda_padoen_o, sda_pad_o) IS
-  Begin
-    if sda_padoen_o = '0' then
-      sda <= sda_pad_o;
-    else
-      sda <= 'Z';
-    end if;
-  End Process;
-  sda_pad_i <= sda;
-
-  scl_proc : Process (scl_padoen_o, scl_pad_o) IS
-  Begin
-    if scl_padoen_o = '0' then
-      scl <= scl_pad_o;
-    else
-      scl <= 'Z';
-    end if;
-  End Process;
-  scl_pad_i <= scl;
 END ARCHITECTURE beh;
 

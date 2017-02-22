@@ -23,15 +23,15 @@ ENTITY aio_addr IS
     WrEn      : IN     std_logic;
     clk       : IN     std_logic;
     wData     : IN     std_logic_vector (15 DOWNTO 0);
-    BdEn      : OUT    std_logic;
-    BdWrEn    : OUT    std_logic;
     ChanAddr2 : OUT    std_logic;
     RdAddr    : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
     WrEn2     : OUT    std_logic;
     dpRdEn    : OUT    std_logic;
     wData2    : OUT    std_logic_vector (15 DOWNTO 0);
     RdStat    : OUT    std_logic;
-    rst       : IN     std_logic
+    rst       : IN     std_logic;
+    BdEn      : OUT    std_logic;
+    BdWrEn    : OUT    std_logic
   );
 
 -- Declarations

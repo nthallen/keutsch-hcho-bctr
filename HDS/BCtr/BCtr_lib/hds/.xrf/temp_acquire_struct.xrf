@@ -178,31 +178,10 @@ VIEW structural
 GRAPHIC 82,0 107 0 
 DESIGN temp_acquire
 VIEW struct.bd
-GRAPHIC 1598,0 110 0 
+GRAPHIC 1904,0 110 0 
 DESIGN temp_acquire
 VIEW struct.bd
-GRAPHIC 603,0 112 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 609,0 113 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 621,0 114 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 627,0 115 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 615,0 116 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 633,0 117 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 705,0 118 0 
-DESIGN temp_acquire
-VIEW struct.bd
-GRAPHIC 711,0 119 0 
+NO_GRAPHIC 120
 DESIGN temp_acquire
 VIEW struct.bd
 GRAPHIC 1490,0 122 0 
@@ -314,7 +293,7 @@ VIEW struct.bd
 GRAPHIC 177,0 167 0 
 DESIGN temp_acquire
 VIEW struct.bd
-GRAPHIC 1598,0 168 0 
+GRAPHIC 1904,0 168 0 
 DESIGN temp_acquire
 VIEW struct.bd
 GRAPHIC 1490,0 169 0 
@@ -386,7 +365,31 @@ VIEW struct.bd
 GRAPHIC 627,0 198 0 
 DESIGN temp_acquire
 VIEW struct.bd
-GRAPHIC 1598,0 200 0 
+GRAPHIC 1904,0 200 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 603,0 202 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 609,0 203 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 621,0 204 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 627,0 205 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 615,0 206 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 633,0 207 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 705,0 208 0 
+DESIGN temp_acquire
+VIEW struct.bd
+GRAPHIC 711,0 209 0 
 DESIGN temp_acquire
 VIEW struct.bd
 GRAPHIC 1490,0 211 0 

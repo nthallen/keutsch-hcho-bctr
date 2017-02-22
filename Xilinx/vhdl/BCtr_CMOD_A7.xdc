@@ -8,7 +8,9 @@
 # SimPMT  to PIO.3   A16
 #
 # temp_scl to PIO.35 V3
-# temp.sda to PIO.34 W3
+# temp_sda to PIO.34 W3
+# aio_scl to SCL3 at PIO.31 U1
+# aio_sda to SDA3 at PIO.30 T2
 #create_clock -period 10 [get_ports { PMTs[0] }];
 #create_clock -period 10 [get_ports { PMTs[1] }];
 #create_clock -period 10 [get_ports Trigger];
@@ -27,9 +29,12 @@ set_property PACKAGE_PIN W3 [get_ports temp_sda]
 set_property IOSTANDARD LVCMOS33 [get_ports temp_sda]
 set_property PULLUP true [get_ports temp_sda]
 
+set_property PACKAGE_PIN U1 [get_ports aio_scl]
+set_property IOSTANDARD LVCMOS33 [get_ports aio_scl]
+set_property PULLUP true [get_ports aio_scl]
+set_property PACKAGE_PIN T2 [get_ports aio_sda]
+set_property IOSTANDARD LVCMOS33 [get_ports aio_sda]
+set_property PULLUP true [get_ports aio_sda]
+
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
-
-set_property MARK_DEBUG true [get_nets BCtr_block_i/BCtr_syscon_wrapper_0/U0/top/temps/acquire/sda_padoen_o]
-set_property MARK_DEBUG false [get_nets BCtr_block_i/BCtr_syscon_wrapper_0/U0/top/temps/acquire/i2c_iface/sda_pad_i]
-set_property MARK_DEBUG false [get_nets BCtr_block_i/BCtr_syscon_wrapper_0/U0/top/temps/acquire/i2c_iface/sda_padoen_o]
