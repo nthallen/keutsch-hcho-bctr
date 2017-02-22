@@ -15,6 +15,8 @@
 # aio_sda_mon to SDA2, J5.4 at PIO.32 W2
 # htr1_cmd to htr1, PIO.47 U8
 # htr2_cmd to htr2, PIO.41 U5
+# dac_reset, PIO.45 U7
+# dac_ldac, PIO.44 U3
 #create_clock -period 10 [get_ports { PMTs[0] }];
 #create_clock -period 10 [get_ports { PMTs[1] }];
 #create_clock -period 10 [get_ports Trigger];
@@ -49,6 +51,11 @@ set_property PACKAGE_PIN U8 [get_ports htr1_cmd]
 set_property IOSTANDARD LVCMOS33 [get_ports htr1_cmd]
 set_property PACKAGE_PIN U5 [get_ports htr2_cmd]
 set_property IOSTANDARD LVCMOS33 [get_ports htr2_cmd]
+
+set_property PACKAGE_PIN U7 [get_ports dac_reset]
+set_property IOSTANDARD LVCMOS33 [get_ports dac_reset]
+set_property PACKAGE_PIN U3 [get_ports dac_ldac]
+set_property IOSTANDARD LVCMOS33 [get_ports dac_ldac]
 
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]

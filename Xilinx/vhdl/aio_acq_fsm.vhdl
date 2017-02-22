@@ -320,7 +320,6 @@ BEGIN
               crnt_state <= S_ADC2_CFG;
             END IF;
           WHEN S_ADC2_CFG =>
-            adc_cfgd <= '0';
             start_adc_cfg(ADC2_MUX, S_DAC2_INIT);
 
           WHEN S_DAC2_INIT =>
@@ -349,7 +348,6 @@ BEGIN
               crnt_state <= S_ADC1_CFG;
             END IF;
           WHEN S_ADC1_CFG =>
-            adc_cfgd <= '0';
             start_adc_cfg(ADC1_MUX, S_HTR_CMD);
           WHEN S_HTR_CMD =>
             IF WrEn2 = '1' AND ChanAddr2 = "00" THEN
@@ -505,7 +503,7 @@ BEGIN
             start_txn('1','0','0','0',adc_wr_data(15 DOWNTO 8),
               S_ADC_WR_2,S_ADC_WR_3);
           WHEN S_ADC_WR_3 =>
-            start_txn('1','0','0','0',adc_wr_data(7 DOWNTO 0),
+            start_txn('1','0','0','1',adc_wr_data(7 DOWNTO 0),
               S_ADC_WR_3,S_ADC_WR_4);
           WHEN S_ADC_WR_4 =>
             adc_cfgd <= '1';

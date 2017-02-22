@@ -38,7 +38,9 @@ ENTITY BCtr_syscon_wrapper IS
     htr2_cmd : OUT    std_logic;
     SimPMT   : OUT    std_logic;
     SimTrig  : OUT    std_logic;
-    Status   : OUT    std_logic_vector (3 DOWNTO 0)
+    Status   : OUT    std_logic_vector (3 DOWNTO 0);
+    dac_reset : OUT   std_logic;
+    dac_ldac : OUT    std_logic
   );
 
 -- Declarations
@@ -150,4 +152,6 @@ BEGIN
     );
 
   Fail <= Fail_int;
+  dac_reset <= '1';
+  dac_ldac <= '1';
 END ARCHITECTURE struct;
