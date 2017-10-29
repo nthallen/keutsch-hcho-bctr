@@ -56,7 +56,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF pps_sbbd IS
 
@@ -108,8 +108,8 @@ ARCHITECTURE struct OF pps_sbbd IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : ppsgen USE ENTITY BCtr_lib.ppsgen;
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+-- FOR ALL : ppsgen USE ENTITY BCtr_lib.ppsgen;
+-- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
   -- pragma synthesis_on
 
 

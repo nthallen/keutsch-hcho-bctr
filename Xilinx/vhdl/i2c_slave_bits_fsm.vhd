@@ -239,10 +239,12 @@ BEGIN
                next_state <= i2cs_addr0;
             ELSIF (sclq = '0' and
                    nb = conv_unsigned(8,4) and
+                   en = '1' and
                    sr(7 downto 1) = I2C_ADDR) THEN 
                next_state <= i2cs_addr2;
             ELSIF (sclq = '0' and nb = 8 and
-                   sr(7 downto 1) /= I2C_ADDR) THEN 
+                   (en = '0' or
+                    sr(7 downto 1) /= I2C_ADDR)) THEN 
                next_state <= i2cs_addr4;
             ELSE
                next_state <= i2cs_addr1;

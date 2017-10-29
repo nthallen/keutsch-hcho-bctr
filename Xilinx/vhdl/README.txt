@@ -1,3 +1,5 @@
+10/29/2017 Build 7 (still)
+  Fixes to temp sensor to avoid overflow and wrapping
 10/16/2017 Build 7
   Provide Rx/Tx on external pads to work around QNX's inability to
   reset the baud rate to 115200

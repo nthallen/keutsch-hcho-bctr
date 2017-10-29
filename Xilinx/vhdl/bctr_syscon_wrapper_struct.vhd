@@ -83,7 +83,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0007";    -- Relative to HCHO
     INSTRUMENT_ID  : std_logic_vector(15 DOWNTO 0) := X"0008";    -- HCHO
     N_INTERRUPTS   : integer range 15 downto 0     := 1;
-    N_BOARDS       : integer range 15 downto 0     := 4;
+    N_BOARDS       : integer range 15 downto 0     := 5;
     ADDR_WIDTH     : integer range 16 downto 8     := 8;
     FAIL_WIDTH     : integer range 16 downto 1     := 1;
     SW_WIDTH       : integer range 16 DOWNTO 0     := 1;

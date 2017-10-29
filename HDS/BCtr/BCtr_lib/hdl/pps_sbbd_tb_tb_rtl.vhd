@@ -10,13 +10,15 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
+USE std.textio.all;
 
 
 ENTITY pps_sbbd_tb IS
   GENERIC (
     ADDR_WIDTH : integer range 16 downto 8 := 8;
     BASE_ADDR  : unsigned(15 downto 0)     := x"0060";
-    CLK_FREQ : unsigned(31 downto 0) := to_unsigned(1000,32)
+    CLK_FREQ : unsigned(31 downto 0) := to_unsigned(100000,32);
+    MSW_SHIFT : integer range 16 downto 0  := 1
   );
 END ENTITY pps_sbbd_tb;
 
@@ -42,6 +44,7 @@ ARCHITECTURE rtl OF pps_sbbd_tb IS
   SIGNAL PPS      : std_logic;
   SIGNAL RData    : std_logic_vector(15 DOWNTO 0);
   SIGNAL WData    : std_logic_vector(15 DOWNTO 0);
+  SIGNAL ReadData : std_logic_vector(15 DOWNTO 0);
   SIGNAL SimDone  : std_logic;
 
 
@@ -50,7 +53,8 @@ ARCHITECTURE rtl OF pps_sbbd_tb IS
     GENERIC (
       ADDR_WIDTH : integer range 16 downto 8 := 8;
       BASE_ADDR  : unsigned(15 downto 0)     := x"0060";
-      CLK_FREQ : unsigned(31 DOWNTO 0) := to_unsigned(1000,32)
+      CLK_FREQ : unsigned(31 DOWNTO 0) := to_unsigned(100000000,32);
+      MSW_SHIFT : integer range 16 downto 0 := 11
     );
     PORT (
       clk      : IN     std_logic;
@@ -76,7 +80,8 @@ BEGIN
     GENERIC MAP (
       ADDR_WIDTH => ADDR_WIDTH,
       BASE_ADDR  => BASE_ADDR,
-      CLK_FREQ => CLK_FREQ
+      CLK_FREQ   => CLK_FREQ,
+      MSW_SHIFT  => MSW_SHIFT
     )
     PORT MAP (
       clk      => clk,
@@ -90,22 +95,86 @@ BEGIN
       WData    => WData
     );
 
-  f1k_clk : Process is
+  f100k_clk : Process is
   Begin
     clk <= '0';
     -- pragma synthesis_off
     wait for 20 ns;
     while SimDone = '0' loop
       clk <= '1';
-      wait for 500 us;
+      wait for 5 us;
       clk <= '0';
-      wait for 500 us;
+      wait for 5 us;
     end loop;
     wait;
     -- pragma synthesis_on
   End Process;
 
   test_proc: Process is
+    procedure sbwr(
+        addr : IN std_logic_vector(15 DOWNTO 0);
+        data : IN std_logic_vector(15 DOWNTO 0);
+        AckExpected : std_logic ) is
+    begin
+      ExpAddr <= addr(ADDR_WIDTH-1 DOWNTO 0);
+      WData <= data;
+      -- pragma synthesis_off
+      wait until clk'EVENT AND clk = '1';
+      ExpWr <= '1';
+      for i in 1 to 8 loop
+        wait until clk'EVENT AND clk = '1';
+      end loop;
+      if AckExpected = '1' then
+        assert ExpAck = '1' report "Expected Ack" severity error;
+      else
+        assert ExpAck = '0' report "Expected no Ack" severity error;
+      end if;
+      ExpWr <= '0';
+      wait until clk'EVENT AND clk = '1';
+      -- pragma synthesis_on
+      return;
+    end procedure sbwr;
+
+    procedure sbrd(
+        addr : IN std_logic_vector(15 DOWNTO 0) ) is
+    begin
+      ExpAddr <= addr(ADDR_WIDTH-1 DOWNTO 0);
+      -- pragma synthesis_off
+      wait until clk'EVENT AND clk = '1';
+      ExpRd <= '1';
+      for i in 1 to 8 loop
+        wait until clk'EVENT AND clk = '1';
+      end loop;
+      assert ExpAck = '1' report "Expected Ack on sbrd" severity error;
+      ReadData <= RData;
+      ExpRd <= '0';
+      wait until clk'EVENT AND clk = '1';
+      -- pragma synthesis_on
+      return;
+    end procedure sbrd;
+    
+    procedure rpt_MSW is
+      variable my_line : line;
+    begin
+      sbrd(x"0060");
+      write(my_line, now);
+      write(my_line, string'(": MSW "));
+      write(my_line, to_integer(unsigned(ReadData)));
+      writeline(output, my_line);
+    end procedure rpt_MSW;
+    
+    procedure rpt_fine is
+      variable my_line : line;
+    begin
+      sbrd(x"0061");
+      write(my_line, now);
+      write(my_line, string'(": Fine "));
+      write(my_line, to_integer(unsigned(ReadData)));
+      writeline(output, my_line);
+    end procedure rpt_fine;
+    
+    variable my_line : line;
+    variable toff : std_logic_vector(31 downto 0);
   Begin
     SimDone <= '0';
     WData <= (others => '0');
@@ -119,9 +188,29 @@ BEGIN
     wait until clk'Event and clk = '1';
     ExpReset <= '0';
     
+    for i in 1 to 9 loop
+      wait for 100 ms;
+      rpt_MSW;
+    end loop;
     wait until PPS = '1';
-    wait until PPS = '0';
-    wait until PPS = '1';
+    rpt_MSW;
+    toff := std_logic_vector(to_unsigned(75000,32));
+    sbwr(x"0064", toff(15 downto 0),'1');
+    sbwr(x"0065", toff(31 downto 16),'1');
+    write(my_line, now);
+    write(my_line, string'(": Writing offset of "));
+    write(my_line, to_integer(unsigned(toff)));
+    writeline(output, my_line);
+    for i in 1 to 4 loop
+      rpt_MSW;
+      wait for 100 ms;
+    end loop;
+    rpt_fine;
+    sbwr(x"0061", std_logic_vector(to_signed(2000,16)),'1');
+    rpt_fine;
+    wait for 10 ms;
+    rpt_fine;
+    
     wait until clk'Event and clk = '1';
     wait until clk'Event and clk = '1';
 

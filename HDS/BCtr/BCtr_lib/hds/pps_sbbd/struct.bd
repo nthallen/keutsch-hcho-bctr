@@ -14,7 +14,7 @@ unitName "numeric_std"
 ]
 instances [
 (Instance
-name "U_0"
+name "subbus"
 duLibraryName "BCtr_lib"
 duName "subbus_io"
 elements [
@@ -28,7 +28,7 @@ mwi 0
 uid 237,0
 )
 (Instance
-name "U_1"
+name "pps_gen"
 duLibraryName "BCtr_lib"
 duName "ppsgen"
 elements [
@@ -46,6 +46,11 @@ value "BASE_ADDR"
 name "CLK_FREQ"
 type "unsigned(31 DOWNTO 0)"
 value "CLK_FREQ"
+)
+(GiElement
+name "MSW_SHIFT"
+type "integer range 16 downto 0"
+value "MSW_SHIFT"
 )
 ]
 mwi 0
@@ -104,19 +109,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "10/26/2017"
+value "10/29/2017"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Sun"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Sunday"
 )
 (vvPair
 variable "dd"
-value "26"
+value "29"
 )
 (vvPair
 variable "entity_name"
@@ -144,7 +149,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "10/26/2017"
+value "10/29/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -156,7 +161,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "15:39:17"
+value "11:37:59"
 )
 (vvPair
 variable "group"
@@ -260,7 +265,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "15:39:17"
+value "11:37:59"
 )
 (vvPair
 variable "unit"
@@ -1311,8 +1316,8 @@ uid 242,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "5350,38000,7150,39000"
-st "U_0"
+xt "5350,38000,8550,39000"
+st "subbus"
 blo "5350,38800"
 tm "InstanceNameMgr"
 )
@@ -1743,8 +1748,8 @@ uid 284,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "38250,35000,40050,36000"
-st "U_1"
+xt "38250,35000,41850,36000"
+st "pps_gen"
 blo "38250,35800"
 tm "InstanceNameMgr"
 )
@@ -1761,10 +1766,11 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "32000,25600,63000,28000"
+xt "32000,25600,63000,28800"
 st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8 )  
 BASE_ADDR  = BASE_ADDR     ( unsigned(15 DOWNTO 0)     )  
 CLK_FREQ   = CLK_FREQ      ( unsigned(31 DOWNTO 0)     )  
+MSW_SHIFT  = MSW_SHIFT     ( integer range 16 downto 0 )  
 "
 )
 header ""
@@ -1784,6 +1790,11 @@ value "BASE_ADDR"
 name "CLK_FREQ"
 type "unsigned(31 DOWNTO 0)"
 value "CLK_FREQ"
+)
+(GiElement
+name "MSW_SHIFT"
+type "integer range 16 downto 0"
+value "MSW_SHIFT"
 )
 ]
 )
@@ -2696,12 +2707,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "80,45,1411,735"
-viewArea "-6600,-1000,102597,49391"
+windowSize "80,45,1415,735"
+viewArea "-6600,-1000,102993,49391"
 cachedDiagramExtent "-5600,0,63000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-7000,0"
-lastUid 454,0
+lastUid 556,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4199,6 +4210,14 @@ value "to_unsigned(100000000,32)"
 )
 uid 428,0
 )
+*172 (LogGeneric
+generic (GiElement
+name "MSW_SHIFT"
+type "integer range 16 downto 0"
+value "11"
+)
+uid 480,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -4206,7 +4225,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 191,0
 optionalChildren [
-*172 (Sheet
+*173 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -4223,49 +4242,55 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *173 (MRCItem
+emptyMRCItem *174 (MRCItem
 litem &157
-pos 3
+pos 4
 dimension 20
 )
 uid 193,0
 optionalChildren [
-*174 (MRCItem
+*175 (MRCItem
 litem &158
 pos 0
 dimension 20
 uid 194,0
 )
-*175 (MRCItem
+*176 (MRCItem
 litem &159
 pos 1
 dimension 23
 uid 195,0
 )
-*176 (MRCItem
+*177 (MRCItem
 litem &160
 pos 2
 hidden 1
 dimension 20
 uid 196,0
 )
-*177 (MRCItem
+*178 (MRCItem
 litem &169
 pos 0
 dimension 20
 uid 400,0
 )
-*178 (MRCItem
+*179 (MRCItem
 litem &170
 pos 1
 dimension 20
 uid 402,0
 )
-*179 (MRCItem
+*180 (MRCItem
 litem &171
 pos 2
 dimension 20
 uid 429,0
+)
+*181 (MRCItem
+litem &172
+pos 3
+dimension 20
+uid 481,0
 )
 ]
 )
@@ -4278,43 +4303,43 @@ textAngle 90
 )
 uid 197,0
 optionalChildren [
-*180 (MRCItem
+*182 (MRCItem
 litem &161
 pos 0
 dimension 20
 uid 198,0
 )
-*181 (MRCItem
+*183 (MRCItem
 litem &163
 pos 1
 dimension 50
 uid 199,0
 )
-*182 (MRCItem
+*184 (MRCItem
 litem &164
 pos 2
 dimension 100
 uid 200,0
 )
-*183 (MRCItem
+*185 (MRCItem
 litem &165
 pos 3
-dimension 100
+dimension 166
 uid 201,0
 )
-*184 (MRCItem
+*186 (MRCItem
 litem &166
 pos 4
 dimension 149
 uid 202,0
 )
-*185 (MRCItem
+*187 (MRCItem
 litem &167
 pos 5
 dimension 50
 uid 203,0
 )
-*186 (MRCItem
+*188 (MRCItem
 litem &168
 pos 6
 dimension 80

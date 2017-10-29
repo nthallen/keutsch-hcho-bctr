@@ -10,13 +10,15 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
+LIBRARY BCtr_lib;
+USE BCtr_lib.ALL;
 
 ENTITY BCtr_syscon IS
     GENERIC (
-      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0006"; -- Relative to HCHO
+      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007"; -- Relative to HCHO
       INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 4;
+      N_BOARDS      : integer range 15 downto 0     := 5;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
@@ -61,6 +63,7 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL Fail_Out      : std_logic_vector(FAIL_WIDTH-1 DOWNTO 0);
   SIGNAL Switches      : std_logic_vector(SW_WIDTH-1 DOWNTO 0);
   SIGNAL Flt_CPU_Reset : std_logic;
+  SIGNAL PPS           : std_logic;
 
   COMPONENT syscon
     GENERIC (
@@ -178,6 +181,26 @@ ARCHITECTURE beh OF BCtr_syscon IS
       htr2_cmd : OUT std_logic
     );
   END COMPONENT i2c_aio;
+  
+  COMPONENT pps_sbbd
+    GENERIC (
+      ADDR_WIDTH : integer range 16 downto 8 := 8;
+      BASE_ADDR  : unsigned(15 downto 0)     := x"0060";
+      CLK_FREQ   : unsigned(31 downto 0)     := to_unsigned(100000000,32);
+      MSW_SHIFT  : integer range 16 downto 0 := 11
+    );
+    PORT (
+      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd    : IN     std_logic;
+      ExpReset : IN     std_logic;
+      ExpWr    : IN     std_logic;
+      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      clk      : IN     std_logic;
+      ExpAck   : OUT    std_logic;
+      PPS      : OUT    std_logic;
+      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+    );
+  END COMPONENT pps_sbbd;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -310,6 +333,25 @@ BEGIN
       PMT => SimPMT,
       clk => clk,
       rst => ExpReset
+    );
+
+  pps_gen : pps_sbbd
+    GENERIC MAP (
+      ADDR_WIDTH => ADDR_WIDTH,
+      BASE_ADDR  => x"0060",
+      CLK_FREQ   => to_unsigned(100000000,32),
+      MSW_SHIFT  => 11
+    )
+    PORT MAP (
+      ExpAddr  => ExpAddr,
+      ExpRd    => ExpRd,
+      ExpReset => ExpReset,
+      ExpWr    => ExpWr,
+      WData    => WData,
+      clk      => clk,
+      ExpAck   => ExpAck(4),
+      PPS      => PPS,
+      RData    => RData(16*4+15 DOWNTO 16*4)
     );
     
   BdIntr <= (others => '0');
