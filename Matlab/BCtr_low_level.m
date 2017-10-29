@@ -2,6 +2,7 @@
 serial_port_clear();
 %%
 [s,port] = serial_port_init();
+set(s,'BaudRate',115200);
 %%
 ctr = 32;
 %%

@@ -39,10 +39,24 @@ for i = 1:length(SPs)
       % fprintf(1, 'values(2) = %d values(3) = %d\n', values(2), values(3));
     end
   end
+  pause(.02);
   temp1 = read_subbus(s, aio_base+5);
   VRB(i) = 6.144 * temp1/32768;
   fprintf(1,'i=%d SP = %d Vset = %.3f Vtemp = %.3f\n', i, SP, Vset(i), VRB(i));
   % pause(1);
 end
+%%
+SPs = 0:100:65535;
+chan = 2;
+D = AIO_ramp(s,chan,SPs);
+SPs = 65535:-100:0;
+D2 = AIO_ramp(s,chan,SPs);
+%
+V = D.Vset < 4.82;
+V2 = D2.Vset < 4.82;
+figure;
+plot(D.Vset(V),D.VRB(V)-D.Vset(V),'.',D2.Vset(V2),D2.VRB(V2)-D2.Vset(V2),'.');
+title(sprintf('Channel %d', chan));
+ylabel('dV V'); xlabel('Setpoint V');
 %%
 serial_port_clear;

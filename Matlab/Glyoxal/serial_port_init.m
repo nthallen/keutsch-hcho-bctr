@@ -10,9 +10,6 @@ function [s, port_out] = serial_port_init(port)
 % If opening the serial port fails, an error dialog is displayed and
 % an empty array is returned.
 s = [];
-if nargin < 1
-  port = '';
-end
 if nargout > 1
   port_out = '';
 end

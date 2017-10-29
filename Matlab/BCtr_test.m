@@ -1,8 +1,10 @@
 %%
+cd C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\Matlab
 %%
 serial_port_clear();
 %%
 [s,port] = serial_port_init();
+set(s,'BaudRate',115200);
 %%
 ctr = 32;
 %%
@@ -15,7 +17,7 @@ end
 %%
 NChannels = 2;
 Channel = 1; % 1 or 2
-bin_opt = 3;
+bin_opt = 2;
 if bin_opt == 1
   bin_NA = [10,35,200];
   bin_NB = [1, 1, 1];
@@ -221,3 +223,12 @@ plot(bT,bStd*[1,-1],'k',bT,bStd*[3,-3],'c');
 legend('residual','1 \sigma','','3 \sigma','');
 xlabel('Time after trigger, sec');
 ylabel('Normalized residual counts');
+%% BCtr HCHO Data Requirements
+NChannels = 2;
+NBins = 101;
+CPB = 5; % ASCII representation: MXXXX
+SampleRate = 10; % Hz
+
+Bytes = SampleRate * NBins * NChannels;
+Chars = Bytes * CPB;
+Baud = Chars * 10;
