@@ -73,19 +73,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 8/2017"
+value "10/28/2017"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Sat"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Saturday"
 )
 (vvPair
 variable "dd"
-value "08"
+value "28"
 )
 (vvPair
 variable "entity_name"
@@ -113,7 +113,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 8/2017"
+value "10/28/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -125,7 +125,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "15:45:55"
+value "15:51:10"
 )
 (vvPair
 variable "group"
@@ -153,7 +153,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "02"
+value "10"
 )
 (vvPair
 variable "module_name"
@@ -161,11 +161,11 @@ value "temp_avg"
 )
 (vvPair
 variable "month"
-value "Feb"
+value "Oct"
 )
 (vvPair
 variable "month_long"
-value "February"
+value "October"
 )
 (vvPair
 variable "p"
@@ -229,7 +229,7 @@ value "fsm"
 )
 (vvPair
 variable "time"
-value "15:45:55"
+value "15:51:10"
 )
 (vvPair
 variable "unit"
@@ -723,7 +723,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "47660,60620,56360,61620"
+xt "47660,60620,56260,61620"
 st "
 by %user on %dd %month %year
 "
@@ -1091,7 +1091,7 @@ lineColor "39936,56832,65280"
 lineWidth -1
 fillStyle 1
 )
-xt "62031,25924,82631,34124"
+xt "62031,25424,82631,34624"
 )
 autoResize 1
 tline (Line
@@ -1102,10 +1102,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "62131,25824,82531,25824"
+xt "62131,25324,82531,25324"
 pts [
-"62131,25824"
-"82531,25824"
+"62131,25324"
+"82531,25324"
 ]
 )
 bline (Line
@@ -1116,10 +1116,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "62131,30424,82531,30424"
+xt "62131,30674,82531,30674"
 pts [
-"62131,30424"
-"82531,30424"
+"62131,30674"
+"82531,30674"
 ]
 )
 ttri (Triangle
@@ -1133,7 +1133,7 @@ bg "0,0,0"
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "61681,25449,62031,25799"
+xt "61681,24949,62031,25299"
 )
 btri (Triangle
 uid 240,0
@@ -1152,19 +1152,20 @@ entryActions (MLText
 uid 241,0
 va (VaSet
 )
-xt "62131,25624,62131,25624"
+xt "62131,25124,62131,25124"
 tm "Actions"
 )
 inActions (MLText
 uid 242,0
 va (VaSet
 )
-xt "62131,26024,82531,34024"
+xt "62131,25524,82531,34524"
 st "IF Sensor <= \"101\" THEN
   brd_num_i := to_integer(unsigned(Sensor));
   RData_cld <= std_logic_vector(CntArray(brd_num_i));
   CntArray(brd_num_i) <= (others => '0');
-  OutCache <= std_logic_vector(AccArray(brd_num_i));
+  AccTemp := std_logic_vector(AccArray(brd_num_i));
+  OutCache <= AccTemp(33 downto 2);
   AccArray(brd_num_i) <= (others => '0');
 END IF;
 RdProcessed <= '1';"
@@ -1258,7 +1259,7 @@ lineColor "39936,56832,65280"
 lineWidth -1
 fillStyle 1
 )
-xt "29429,46175,47029,55375"
+xt "29058,46570,46858,58770"
 )
 autoResize 1
 tline (Line
@@ -1269,10 +1270,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29529,46075,46929,46075"
+xt "29158,46470,46758,46470"
 pts [
-"29529,46075"
-"46929,46075"
+"29158,46470"
+"46758,46470"
 ]
 )
 bline (Line
@@ -1283,10 +1284,10 @@ isHidden 1
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29529,51425,46929,51425"
+xt "29158,54070,46758,54070"
 pts [
-"29529,51425"
-"46929,51425"
+"29158,54070"
+"46758,54070"
 ]
 )
 ttri (Triangle
@@ -1300,7 +1301,7 @@ bg "0,0,0"
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29079,45700,29429,46050"
+xt "28708,46095,29058,46445"
 )
 btri (Triangle
 uid 257,0
@@ -1313,27 +1314,30 @@ bg "0,0,0"
 lineColor "39936,56832,65280"
 lineWidth -1
 )
-xt "29079,47400,29429,47750"
+xt "28708,49295,29058,49645"
 )
 entryActions (MLText
 uid 258,0
 va (VaSet
 )
-xt "29529,45875,29529,45875"
+xt "29158,46270,29158,46270"
 tm "Actions"
 )
 inActions (MLText
 uid 259,0
 va (VaSet
 )
-xt "29529,46275,46929,55275"
+xt "29158,46670,46758,58670"
 st "IF brd_num <= \"101\" THEN
   brd_num_i := to_integer(unsigned(brd_num));
-  CntArray(brd_num_i) <=
-    CntArray(brd_num_i) + 1;
-  AccArray(brd_num_i) <=
-    AccArray(brd_num_i) +
-     unsigned('0'&rd_data_o(30 DOWNTO 0));
+  IF rd_data_o(31 downto 29) /= \"001\" AND
+    rd_data_o(31 downto 29) /= \"110\" THEN
+    CntArray(brd_num_i) <=
+      CntArray(brd_num_i) + 1;
+    AccArray(brd_num_i) <=
+      AccArray(brd_num_i) +
+       resize(signed(rd_data_o(30 downto 0)),34);
+  END IF;
 END IF;
 ack_cld <= '1';"
 tm "Actions"
@@ -1342,7 +1346,7 @@ exitActions (MLText
 uid 260,0
 va (VaSet
 )
-xt "34229,47575,34229,47575"
+xt "33958,49470,33958,49470"
 tm "Actions"
 )
 )
@@ -2575,9 +2579,9 @@ uid 424,0
 va (VaSet
 vasetType 3
 )
-xt "50056,29974,53963,29979"
+xt "50056,29975,53963,29979"
 pts [
-"50056,29974"
+"50056,29975"
 "53963,29979"
 ]
 )
@@ -2637,7 +2641,7 @@ isHidden 1
 fg "65535,65535,65535"
 bg "0,0,0"
 )
-xt "49665,29193,51227,30755"
+xt "49665,29194,51227,30756"
 radius 781
 )
 pr (Text
@@ -2645,10 +2649,10 @@ uid 432,0
 va (VaSet
 isHidden 1
 )
-xt "50046,29474,50846,30474"
+xt "50046,29475,50846,30475"
 st "1"
 ju 0
-blo "50446,30274"
+blo "50446,30275"
 tm "TransitionPriority"
 )
 padding "100,100"
@@ -2661,9 +2665,9 @@ uid 434,0
 va (VaSet
 vasetType 3
 )
-xt "57087,40917,59761,40946"
+xt "57087,40917,59761,40941"
 pts [
-"57087,40946"
+"57087,40941"
 "59761,40917"
 ]
 )
@@ -2682,7 +2686,7 @@ fg "65535,65535,65535"
 bg "0,0,0"
 lineColor "0,32768,49152"
 )
-xt "57924,40926,62324,41936"
+xt "57924,40924,62324,41934"
 )
 autoResize 1
 lineShape (Line
@@ -2691,24 +2695,24 @@ va (VaSet
 vasetType 3
 isHidden 1
 )
-xt "60124,42331,60124,42331"
+xt "60124,42329,60124,42329"
 pts [
-"60124,42331"
-"60124,42331"
+"60124,42329"
+"60124,42329"
 ]
 )
 condition (MLText
 uid 438,0
 va (VaSet
 )
-xt "58424,40931,61824,41931"
+xt "58424,40929,61824,41929"
 tm "Condition"
 )
 actions (MLText
 uid 439,0
 va (VaSet
 )
-xt "60124,42331,60124,42331"
+xt "60124,42329,60124,42329"
 tm "Actions"
 )
 )
@@ -2723,7 +2727,7 @@ isHidden 1
 fg "65535,65535,65535"
 bg "0,0,0"
 )
-xt "56573,40162,58135,41724"
+xt "56573,40157,58135,41719"
 radius 781
 )
 pr (Text
@@ -2731,10 +2735,10 @@ uid 442,0
 va (VaSet
 isHidden 1
 )
-xt "56954,40443,57754,41443"
+xt "56954,40438,57754,41438"
 st "1"
 ju 0
-blo "57354,41243"
+blo "57354,41238"
 tm "TransitionPriority"
 )
 padding "100,100"
@@ -2747,9 +2751,9 @@ uid 450,0
 va (VaSet
 vasetType 3
 )
-xt "35001,43336,39131,43352"
+xt "35001,43338,39131,43352"
 pts [
-"35001,43336"
+"35001,43338"
 "39131,43352"
 ]
 )
@@ -2768,7 +2772,7 @@ fg "65535,65535,65535"
 bg "0,0,0"
 lineColor "0,32768,49152"
 )
-xt "36566,43339,40966,44349"
+xt "36566,43340,40966,44350"
 )
 autoResize 1
 lineShape (Line
@@ -2777,24 +2781,24 @@ va (VaSet
 vasetType 3
 isHidden 1
 )
-xt "38766,44744,38766,44744"
+xt "38766,44745,38766,44745"
 pts [
-"38766,44744"
-"38766,44744"
+"38766,44745"
+"38766,44745"
 ]
 )
 condition (MLText
 uid 454,0
 va (VaSet
 )
-xt "37066,43344,40466,44344"
+xt "37066,43345,40466,44345"
 tm "Condition"
 )
 actions (MLText
 uid 455,0
 va (VaSet
 )
-xt "38766,44744,38766,44744"
+xt "38766,44745,38766,44745"
 tm "Actions"
 )
 )
@@ -2809,7 +2813,7 @@ isHidden 1
 fg "65535,65535,65535"
 bg "0,0,0"
 )
-xt "34633,42556,36195,44118"
+xt "34633,42558,36195,44120"
 radius 781
 )
 pr (Text
@@ -2817,10 +2821,10 @@ uid 458,0
 va (VaSet
 isHidden 1
 )
-xt "35014,42837,35814,43837"
+xt "35014,42839,35814,43839"
 st "1"
 ju 0
-blo "35414,43637"
+blo "35414,43639"
 tm "TransitionPriority"
 )
 padding "100,100"
@@ -3114,8 +3118,8 @@ tm "SmCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "0,0,1281,1024"
-viewArea "21000,37000,48378,59646"
+windowSize "0,0,1467,1024"
+viewArea "813,-16079,95728,64851"
 cachedDiagramExtent "0,-1000,84460,61620"
 pageSetupInfo (PageSetupInfo
 ptrCmd "Degas Ricoh Aficio MP C3501 PLC6,winspool,"
@@ -3260,7 +3264,7 @@ font "Courier New,8,0"
 )
 xt "22100,0,42100,4800"
 st "TYPE AccArray_t is array (5 downto 0)
- of unsigned (31 downto 0);
+ of signed (33 downto 0);
 SIGNAL AccArray : AccArray_t;
 TYPE CntArray_t is array (5 downto 0)
  of unsigned(15 downto 0);
@@ -3320,8 +3324,9 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "47745,9792,72745,10592"
-st "Variable brd_num_i : integer range 5 DOWNTO 0;"
+xt "47745,9792,74245,11392"
+st "Variable brd_num_i : integer range 5 DOWNTO 0;
+Variable AccTemp : std_logic_vector(33 downto 0);"
 tm "ProcessDeclTextMgr"
 )
 *56 (Text
@@ -3329,16 +3334,16 @@ uid 16,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "47745,10592,54645,11592"
+xt "47745,11392,54645,12392"
 st "Output Process:"
-blo "47745,11392"
+blo "47745,12192"
 )
 *57 (MLText
 uid 17,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "47745,11592,47745,11592"
+xt "47745,12392,47745,12392"
 tm "ProcessDeclTextMgr"
 )
 ]
@@ -3430,14 +3435,14 @@ uid 32,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "47737,462,80737,6062"
-st "SIGNAL       MODE    DEFAULT  RESET                    SCHEME 
-RData        OUT              (others => '0')          CLKD   
-ack          OUT              '0'                      CLKD   
-AccArray     LOCAL            (others => X\"00000000\")  CLKD   
-CntArray     LOCAL            (others => X\"0000\")      CLKD   
-OutCache     LOCAL            (others => '0')          CLKD   
-RdProcessed  LOCAL            '0'                      CLKD   
+xt "47737,462,82237,6062"
+st "SIGNAL       MODE    DEFAULT  RESET                       SCHEME 
+RData        OUT              (others => '0')             CLKD   
+ack          OUT              '0'                         CLKD   
+AccArray     LOCAL            (others => 34X\"000000000\")  CLKD   
+CntArray     LOCAL            (others => X\"0000\")         CLKD   
+OutCache     LOCAL            (others => '0')             CLKD   
+RdProcessed  LOCAL            '0'                         CLKD   
 "
 tm "SmSignalsGenStatusTextMgr"
 )
@@ -3538,7 +3543,7 @@ stateOrder [
 name "csm"
 )
 ]
-lastUid 752,0
+lastUid 781,0
 commonDM (CommonDM
 ldm (LogicalDM
 emptyRow *67 (LEmptyRow
@@ -3716,7 +3721,7 @@ o 11
 )
 uid 223,0
 scheme 1
-rstVal "(others => X\"00000000\")"
+rstVal "(others => 34X\"000000000\")"
 direct 0
 )
 *96 (LeafLogPort
@@ -3827,85 +3832,85 @@ uid 205,0
 )
 *105 (MRCItem
 litem &86
-pos 5
+pos 3
 dimension 20
 uid 161,0
 )
 *106 (MRCItem
 litem &87
-pos 8
+pos 6
 dimension 20
 uid 163,0
 )
 *107 (MRCItem
 litem &88
-pos 9
+pos 7
 dimension 20
 uid 165,0
 )
 *108 (MRCItem
 litem &89
-pos 1
+pos 0
 dimension 20
 uid 167,0
 )
 *109 (MRCItem
 litem &90
-pos 3
+pos 2
 dimension 20
 uid 169,0
 )
 *110 (MRCItem
 litem &91
-pos 6
+pos 4
 dimension 20
 uid 171,0
 )
 *111 (MRCItem
 litem &92
-pos 7
+pos 5
 dimension 20
 uid 173,0
 )
 *112 (MRCItem
 litem &93
-pos 4
+pos 13
 dimension 20
 uid 175,0
 )
 *113 (MRCItem
 litem &94
-pos 0
+pos 12
 dimension 20
 uid 177,0
 )
 *114 (MRCItem
 litem &95
-pos 10
+pos 8
 dimension 20
 uid 224,0
 )
 *115 (MRCItem
 litem &96
-pos 11
+pos 9
 dimension 20
 uid 226,0
 )
 *116 (MRCItem
 litem &97
-pos 12
+pos 10
 dimension 20
 uid 299,0
 )
 *117 (MRCItem
 litem &98
-pos 13
+pos 11
 dimension 20
 uid 392,0
 )
 *118 (MRCItem
 litem &99
-pos 2
+pos 1
 dimension 20
 uid 567,0
 )
@@ -3935,13 +3940,13 @@ uid 208,0
 *121 (MRCItem
 litem &74
 pos 2
-dimension 70
+dimension 77
 uid 209,0
 )
 *122 (MRCItem
 litem &75
 pos 3
-dimension 40
+dimension 47
 uid 210,0
 )
 *123 (MRCItem

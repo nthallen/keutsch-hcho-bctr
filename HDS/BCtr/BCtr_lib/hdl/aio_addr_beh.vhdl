@@ -31,7 +31,9 @@ ENTITY aio_addr IS
     RdStat    : OUT    std_logic;
     rst       : IN     std_logic;
     BdEn      : OUT    std_logic;
-    BdWrEn    : OUT    std_logic
+    BdWrEn    : OUT    std_logic;
+    idxData   : IN     std_logic_vector (15 DOWNTO 0);
+    idxWr     : IN     std_logic
   );
 
 -- Declarations
@@ -74,6 +76,10 @@ BEGIN
           ChanAddr2 <= std_logic_vector(Offset(1 DOWNTO 0));
           WrEn2_int <= '1';
           wData2 <= wData;
+        ELSIF idxWr = '1' THEN
+          ChanAddr2 <= "11";
+          WData2 <= idxData;
+          WrEn2_int <= '1';
         END IF;
         IF WrAck2 = '1' THEN
           WrEn2_int <= '0';

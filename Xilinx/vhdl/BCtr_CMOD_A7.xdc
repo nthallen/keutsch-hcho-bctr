@@ -1,4 +1,5 @@
 # clk, uart, reset are handled by board definition
+# For Build 7, uart will be mapped to pads
 
 # FAIL to led[0]
 # Trigger to PIO.46  W7
@@ -17,6 +18,10 @@
 # htr2_cmd to htr2, PIO.41 U5
 # dac_reset, PIO.45 U7
 # dac_ldac, PIO.44 U3
+#
+# uart_rx, E18 PIO.38 U4
+# uart_tx, E19 PIO.37 V4
+#
 #create_clock -period 10 [get_ports { PMTs[0] }];
 #create_clock -period 10 [get_ports { PMTs[1] }];
 #create_clock -period 10 [get_ports Trigger];
@@ -56,6 +61,11 @@ set_property PACKAGE_PIN U7 [get_ports dac_reset]
 set_property IOSTANDARD LVCMOS33 [get_ports dac_reset]
 set_property PACKAGE_PIN U3 [get_ports dac_ldac]
 set_property IOSTANDARD LVCMOS33 [get_ports dac_ldac]
+
+set_property PACKAGE_PIN U4 [get_ports uart_rx]
+set_property IOSTANDARD LVCMOS33 [get_ports uart_rx]
+set_property PACKAGE_PIN V4 [get_ports uart_tx]
+set_property IOSTANDARD LVCMOS33 [get_ports uart_tx]
 
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]

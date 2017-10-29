@@ -89,7 +89,7 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "02/ 4/2017"
+value "10/28/2017"
 )
 (vvPair
 variable "day"
@@ -101,7 +101,7 @@ value "Saturday"
 )
 (vvPair
 variable "dd"
-value "04"
+value "28"
 )
 (vvPair
 variable "entity_name"
@@ -129,7 +129,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "02/ 4/2017"
+value "10/28/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -141,7 +141,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "10:36:56"
+value "15:02:45"
 )
 (vvPair
 variable "group"
@@ -177,7 +177,7 @@ value "$HDS_PROJECT_DIR/hds_scratch/BCtr_lib/ls_work"
 )
 (vvPair
 variable "mm"
-value "02"
+value "10"
 )
 (vvPair
 variable "module_name"
@@ -185,11 +185,11 @@ value "temp_i2c_top"
 )
 (vvPair
 variable "month"
-value "Feb"
+value "Oct"
 )
 (vvPair
 variable "month_long"
-value "February"
+value "October"
 )
 (vvPair
 variable "p"
@@ -253,7 +253,7 @@ value "fsm"
 )
 (vvPair
 variable "time"
-value "10:36:56"
+value "15:02:45"
 )
 (vvPair
 variable "unit"
@@ -591,7 +591,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "47008,60815,59108,61815"
+xt "47008,60815,59008,61815"
 st "
 by Ivan Cisneros on %dd %month %year
 "
@@ -1166,7 +1166,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "30200,51000,42300,52000"
+xt "30200,51000,42200,52000"
 st "
 by Ivan Cisneros on %dd %month %year
 "
@@ -2641,7 +2641,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "118564,113968,130664,114968"
+xt "118564,113968,130564,114968"
 st "
 by Ivan Cisneros on %dd %month %year
 "
@@ -13742,7 +13742,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "67078,78907,79178,79907"
+xt "67078,78907,79078,79907"
 st "
 by Ivan Cisneros on %dd %month %year
 "
@@ -19997,8 +19997,8 @@ yShown 1
 color "26368,26368,26368"
 )
 packageList &0
-windowSize "0,0,1699,1020"
-viewArea "-17600,500,119203,83549"
+windowSize "192,54,1893,1074"
+viewArea "-17600,500,119389,83549"
 cachedDiagramExtent "2818,2165,103878,79907"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -20117,7 +20117,7 @@ vasetType 1
 fg "65280,65280,46080"
 lineColor "0,0,32768"
 )
-xt "36882,19260,50882,21260"
+xt "36882,19260,54870,21260"
 )
 oxt "0,0,15000,5000"
 text (MLText
@@ -20126,14 +20126,14 @@ va (VaSet
 fg "0,0,32768"
 font "arial,8,0"
 )
-xt "37082,19460,50182,20460"
+xt "37082,19460,53182,20460"
 st "
-if all are non resp. try to reconfigure
+unless none are non resp. try to reconfigure
 "
 tm "CommentText"
 wrapOption 3
-visibleHeight 1600
-visibleWidth 13600
+visibleHeight 2000
+visibleWidth 17988
 )
 )
 *243 (SmClockPoint
@@ -20695,7 +20695,7 @@ arrow 1
 start &42
 end &168
 ss 0
-cond "resp = \"000000\""
+cond "resp /= \"111111\""
 tb (TransitionBlock
 uid 1107,0
 ps "CenterOffsetStrategy"
@@ -20707,7 +20707,7 @@ fg "65535,65535,65535"
 bg "0,0,0"
 lineColor "0,32768,49152"
 )
-xt "40289,21689,47489,23689"
+xt "40289,21689,47689,23689"
 )
 autoResize 1
 lineShape (Line
@@ -20727,8 +20727,8 @@ uid 1110,0
 va (VaSet
 font "arial,8,0"
 )
-xt "40789,22189,46989,23189"
-st "resp = \"000000\""
+xt "40789,22189,47189,23189"
+st "resp /= \"111111\""
 tm "Condition"
 )
 actions (MLText
@@ -20736,7 +20736,7 @@ uid 1111,0
 va (VaSet
 font "arial,8,0"
 )
-xt "43889,23589,43889,23589"
+xt "43989,23589,43989,23589"
 tm "Actions"
 )
 )
@@ -20881,8 +20881,8 @@ tm "SmCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "192,54,1892,1074"
-viewArea "-12600,-2600,102216,67054"
+windowSize "192,54,1893,1074"
+viewArea "-12600,-2600,102294,67054"
 cachedDiagramExtent "0,-1000,85925,61815"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -21351,7 +21351,7 @@ stateOrder [
 name "csm"
 )
 ]
-lastUid 2879,0
+lastUid 2908,0
 commonDM (CommonDM
 ldm (LogicalDM
 emptyRow *278 (LEmptyRow
