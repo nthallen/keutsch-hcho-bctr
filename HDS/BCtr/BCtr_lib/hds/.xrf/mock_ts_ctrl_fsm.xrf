@@ -1,0 +1,502 @@
+DESIGN mock_ts_ctrl
+VIEW interface
+NO_GRAPHIC 0
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 50,0 11 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 270,0 19 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 285,0 20 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 295,0 21 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 300,0 22 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 305,0 23 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 310,0 24 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 315,0 25 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 290,0 26 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 275,0 27 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 280,0 28 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 1,0 31 0 
+DESIGN mock_ts_ctrl
+VIEW interface
+GRAPHIC 1,0 32 0 
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 33,0 59 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 64
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 32,0 68 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 69
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 88 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 89
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 314,0 92 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 93
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 102 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 103
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 105 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 106
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 62,0 107 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 72,0 108 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 111
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 121 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 45,0 122 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 60,0 123 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 178,0 124 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 193,0 125 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 195,0 127 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 210,0 128 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 229,0 130 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 244,0 131 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 263,0 133 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 278,0 134 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 297,0 136 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 312,0 137 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 469,0 139 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 470,0 140 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 141
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 144 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 145
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 147 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 148
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 150 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 151
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 314,0 161 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 162 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 45,0 163 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 336,0 164 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 178,0 165 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 166
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 45,0 167 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 168
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 178,0 169 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 346,0 170 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 559,0 171 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 172
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 178,0 173 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 174
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 195,0 175 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 409,0 176 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 212,0 177 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 178
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 195,0 179 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 180
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 212,0 181 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 419,0 182 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 229,0 183 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 184
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 212,0 185 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 186
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 229,0 187 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 429,0 188 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 246,0 189 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 190
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 229,0 191 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 192
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 246,0 193 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 439,0 194 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 263,0 195 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 196
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 246,0 197 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 198
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 263,0 199 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 449,0 200 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 280,0 201 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 202
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 263,0 203 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 204
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 280,0 205 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 459,0 206 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 297,0 207 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 208
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 280,0 209 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 210
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 297,0 211 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 469,0 212 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 314,0 213 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 215
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 297,0 216 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 217
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 314,0 218 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 479,0 219 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 45,0 220 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 221
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 314,0 222 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 223
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 559,0 224 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 399,0 225 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 195,0 226 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 227
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 559,0 228 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 229
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 95,0 230 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 232
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 233 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 234
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 236 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 240
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 2,0 243 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 261
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+GRAPHIC 32,0 262 0
+LIBRARY BCtr_lib
+DESIGN mock_ts_ctrl
+VIEW fsm.sm
+NO_GRAPHIC 266

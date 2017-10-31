@@ -1,0 +1,170 @@
+DESIGN mock_ts
+VIEW symbol.sb
+NO_GRAPHIC 0
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 50,0 11 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 13,0 18 1 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 51,0 22 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 56,0 23 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 61,0 24 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 71,0 25 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 76,0 26 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 66,0 27 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 1,0 30 0 
+DESIGN mock_ts
+VIEW symbol.sb
+GRAPHIC 1,0 31 0 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 34
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 137,0 50 0 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 55
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 0,0 58 2 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 321,0 63 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 313,0 64 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 273,0 65 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 305,0 66 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 297,0 67 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 329,0 68 0 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 69
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 70
+LIBRARY BCtr_lib
+DESIGN i2c_slave
+VIEW struct
+GRAPHIC 253,0 72 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 260,0 73 1 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 89
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 263,0 91 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 15,0 93 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 307,0 94 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 29,0 95 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 299,0 96 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 331,0 97 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 71,0 98 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 85,0 99 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 323,0 100 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 315,0 101 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 275,0 102 0 
+LIBRARY BCtr_lib
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 105
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 253,0 108 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 263,0 109 0 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 112
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 114
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 253,0 116 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 260,0 117 1 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 281,0 121 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 275,0 122 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 287,0 123 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 43,0 124 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 315,0 125 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 299,0 127 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 331,0 128 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 307,0 130 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 323,0 131 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 57,0 132 0 
+DESIGN mock_ts
+VIEW struct.bd
+GRAPHIC 263,0 134 0 
+DESIGN mock_ts
+VIEW struct.bd
+NO_GRAPHIC 148

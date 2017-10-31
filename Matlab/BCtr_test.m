@@ -4,6 +4,7 @@ cd C:\Users\nort.ARP\Documents\Exp\HCHO\BCtr\Matlab
 serial_port_clear();
 %%
 [s,port] = serial_port_init();
+%set(s,'BaudRate',57600);
 set(s,'BaudRate',115200);
 %%
 ctr = 32;
