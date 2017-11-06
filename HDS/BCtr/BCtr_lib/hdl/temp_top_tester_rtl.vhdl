@@ -151,8 +151,7 @@ BEGIN
     -- tsen14 <= '1';
     
     -- large positive value
-    --   readback should be 7FDD9910/8
-    --   (this test value for 7 does not make sense: fix)
+    --   readback should be 7FDD9910/8 or 6FE1E5EE/7
     test_value(x"BFEECC88", 8, x"7FDD9910", 7, x"6FE1E5EE");
     -- small negative value
     --   readback should be FFDD9910/8 or FFE1E5EE/7
