@@ -1,7 +1,13 @@
 function rm_obj = read_multi_prep(varargin)
   % rm_obj = read_multi_prep(addr [, addr ...]);
   % addr can be a scalar for a single read, a [count addr] pair or
-  % an [addr incr addr] triple.
+  % an [addr incr addr] triple. If a 4-element array is used,
+  % it designates the conditional read length code "%X|%X@%X"
+  % where the first element is an address that will return the
+  % number of additional words to read, the second element is
+  % the maximum number of words to read, and the third element is
+  % the address from which to read the additional words. The fourth
+  % element is ignored.
 
   % build a command string
   N = length(varargin);

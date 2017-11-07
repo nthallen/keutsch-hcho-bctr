@@ -123,7 +123,7 @@ BEGIN
   -- Instance port mappings.
   top : BCtr_syscon
     GENERIC MAP (
-      BUILD_NUMBER   => X"0006",      -- Relative to HCHO
+      BUILD_NUMBER   => X"0007",      -- Relative to HCHO
       INSTRUMENT_ID  => X"0008",      -- HCHO
       N_INTERRUPTS   => 0,
       FAIL_WIDTH     => 1,
