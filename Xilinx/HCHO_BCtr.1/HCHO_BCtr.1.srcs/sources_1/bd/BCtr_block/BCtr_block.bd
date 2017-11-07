@@ -14,6 +14,12 @@
     </spirit:parameters>
     <spirit:busInterfaces>
       <spirit:busInterface>
+        <spirit:name>usb_uart</spirit:name>
+        <spirit:master/>
+        <spirit:busType spirit:library="interface" spirit:name="uart" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+        <spirit:abstractionType spirit:library="interface" spirit:name="uart_rtl" spirit:vendor="xilinx.com" spirit:version="1.0"/>
+      </spirit:busInterface>
+      <spirit:busInterface>
         <spirit:name>RST.RESET</spirit:name>
         <spirit:displayName>Reset</spirit:displayName>
         <spirit:description>Reset</spirit:description>
@@ -200,18 +206,6 @@
             <spirit:direction>out</spirit:direction>
           </spirit:wire>
         </spirit:port>
-        <spirit:port>
-          <spirit:name>uart_rx</spirit:name>
-          <spirit:wire>
-            <spirit:direction>in</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
-        <spirit:port>
-          <spirit:name>uart_tx</spirit:name>
-          <spirit:wire>
-            <spirit:direction>out</spirit:direction>
-          </spirit:wire>
-        </spirit:port>
       </spirit:ports>
     </spirit:model>
   </spirit:component>
@@ -296,7 +290,7 @@
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">BCtr_block_axi_uartlite_0_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_BAUDRATE">115200</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="USE_BOARD_FLOW">true</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="UARTLITE_BOARD_INTERFACE">Custom</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="UARTLITE_BOARD_INTERFACE">usb_uart</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -610,17 +604,12 @@
         <spirit:internalPortReference spirit:componentRef="BCtr_syscon_wrapper_0" spirit:portRef="dac_ldac"/>
         <spirit:externalPortReference spirit:portRef="dac_ldac"/>
       </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>rx_1</spirit:name>
-        <spirit:externalPortReference spirit:portRef="uart_rx"/>
-        <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="rx"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>axi_uartlite_0_tx</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="tx"/>
-        <spirit:externalPortReference spirit:portRef="uart_tx"/>
-      </spirit:adHocConnection>
     </spirit:adHocConnections>
+    <spirit:hierConnections>
+      <spirit:hierConnection spirit:interfaceRef="usb_uart/axi_uartlite_0_UART">
+        <spirit:activeInterface spirit:busRef="UART" spirit:componentRef="axi_uartlite_0"/>
+      </spirit:hierConnection>
+    </spirit:hierConnections>
   </spirit:design>
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">

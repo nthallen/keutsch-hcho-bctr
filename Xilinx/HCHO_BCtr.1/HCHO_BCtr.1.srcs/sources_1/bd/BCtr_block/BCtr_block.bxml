@@ -96,7 +96,6 @@
 			</File>
 			<File Name="ip\BCtr_block_microblaze_0_axi_periph_0\BCtr_block_microblaze_0_axi_periph_0.xci"
 					Type="IP">
-				<Instance HierarchyPath="microblaze_0_axi_periph"/>
 				<Properties IsEditable="false"
 						IsVisible="false"
 						Timestamp="0"
