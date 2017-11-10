@@ -47,7 +47,7 @@ for i = 1:length(SPs)
 end
 %%
 SPs = 0:100:65535;
-chan = 2;
+chan = 1;
 D = AIO_ramp(s,chan,SPs);
 SPs = 65535:-100:0;
 D2 = AIO_ramp(s,chan,SPs);

@@ -116,23 +116,38 @@ if bitand(status,1) == 1
   warning('Counter still enabled after reset');
 end
 %%
+% Power Meter Initialization
 ts_base = hex2dec('30');
 rm_obj3 = read_multi_prep([ts_base, 1, ts_base+17]);
 %%
+% Power Meter acquisition loop
 [values,ack] = read_multi(s,rm_obj3);
 if ack ~= 1
   error('No acknowledge from temp sensor circuit');
 end
 while true
   pause(1);
+  %%
   [values,ack] = read_multi(s,rm_obj3);
   if ack ~= 1 || length(values) ~= 18
     error('Unexpected return from read multi');
   end
   counts = values([1:3:16]);
   words = uint16(values([2,3,5,6,8,9,11,12,14,15,17,18]));
-  swords = typecase(words,'int32');
-  dwords = (1.25/8388608.)*double(swords)./counts;
+  swords = typecast(words,'int32');
+  dwords = (1.25/(32*8388608.))*double(swords)./counts;
   fprintf(1,' %8.5f', dwords);
   fprintf(1,' V\n');
+end
+%%
+% Laser Voltage via Heater Controller 2 interface
+vset2_sp_addr = hex2dec('53');
+vset2_addr = hex2dec('54');
+V = 0.250;
+sp = floor(V*65536/5);
+write_subbus(s, vset2_sp_addr, sp);
+sprb1 = read_subbus(s, vset2_sp_addr);
+sprb2 = read_subbus(s, vset2_addr);
+if sprb1 ~= sp
+  fprintf(1,'sp = %d sprb1 = %d sbrb2 = %d\n', sp, sprb1, sprb2);
 end
