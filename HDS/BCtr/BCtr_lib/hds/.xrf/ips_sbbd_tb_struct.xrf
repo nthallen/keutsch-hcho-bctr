@@ -48,225 +48,234 @@ VIEW struct.bd
 GRAPHIC 70,0 54 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 134,0 55 0 
+GRAPHIC 702,0 55 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 78,0 56 0 
+GRAPHIC 134,0 56 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 496,0 57 0 
+GRAPHIC 78,0 57 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 118,0 58 0 
+GRAPHIC 496,0 58 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 102,0 59 0 
+GRAPHIC 118,0 59 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-NO_GRAPHIC 60
+GRAPHIC 102,0 60 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
 NO_GRAPHIC 61
+DESIGN ips_sbbd_tb
+VIEW struct.bd
+NO_GRAPHIC 62
 LIBRARY BCtr_lib
 DESIGN ips_sbbd
 VIEW struct
-GRAPHIC 52,0 63 0 
+GRAPHIC 52,0 64 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 14,0 64 1 
+GRAPHIC 14,0 65 1 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 144,0 68 0 
+GRAPHIC 144,0 69 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 124,0 69 0 
+GRAPHIC 124,0 70 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 237,0 70 0 
+GRAPHIC 237,0 71 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 129,0 71 0 
+GRAPHIC 129,0 72 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 336,0 72 0 
+GRAPHIC 336,0 73 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 149,0 73 0 
+GRAPHIC 149,0 74 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 134,0 74 0 
+GRAPHIC 134,0 75 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 139,0 75 0 
+GRAPHIC 139,0 76 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 154,0 76 0 
+GRAPHIC 154,0 77 0 
 DESIGN ips_sbbd
 VIEW symbol.sb
-GRAPHIC 159,0 77 0 
+GRAPHIC 435,0 78 0 
+DESIGN ips_sbbd
+VIEW symbol.sb
+GRAPHIC 159,0 79 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 142,0 80 0 
+GRAPHIC 142,0 82 0 
 DESIGN ips_sbbd_tester
 VIEW interface
-GRAPHIC 14,0 81 1 
+GRAPHIC 14,0 83 1 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 224,0 85 0 
+GRAPHIC 224,0 87 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 490,0 86 0 
+GRAPHIC 490,0 88 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 216,0 87 0 
+GRAPHIC 216,0 89 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 208,0 88 0 
+GRAPHIC 208,0 90 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 176,0 89 0 
+GRAPHIC 176,0 91 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 200,0 90 0 
+GRAPHIC 200,0 92 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 160,0 91 0 
+GRAPHIC 160,0 93 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 192,0 92 0 
+GRAPHIC 192,0 94 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 168,0 93 0 
+GRAPHIC 168,0 95 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 184,0 94 0 
+GRAPHIC 184,0 96 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 448,0 97 0 
+GRAPHIC 448,0 99 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 14,0 98 1 
+GRAPHIC 14,0 100 1 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 130,0 105 0 
+GRAPHIC 130,0 107 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 184,0 106 0 
+GRAPHIC 184,0 108 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 125,0 107 0 
+GRAPHIC 125,0 109 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 189,0 108 0 
+GRAPHIC 189,0 110 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 135,0 109 0 
+GRAPHIC 135,0 111 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 120,0 110 0 
+GRAPHIC 120,0 112 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 179,0 111 0 
+GRAPHIC 179,0 113 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 145,0 112 0 
+GRAPHIC 145,0 114 0 
 DESIGN pps_sbbd
 VIEW symbol.sb
-GRAPHIC 140,0 113 0 
+GRAPHIC 140,0 115 0 
 LIBRARY BCtr_lib
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-NO_GRAPHIC 116
+NO_GRAPHIC 118
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 52,0 119 0 
+GRAPHIC 52,0 121 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 142,0 120 0 
+GRAPHIC 142,0 122 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 448,0 121 0 
-DESIGN ips_sbbd_tb
-VIEW struct.bd
-NO_GRAPHIC 124
+GRAPHIC 448,0 123 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
 NO_GRAPHIC 126
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 52,0 128 0 
+NO_GRAPHIC 128
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 59,0 129 1 
+GRAPHIC 52,0 130 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 112,0 133 0 
+GRAPHIC 59,0 131 1 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 88,0 134 0 
+GRAPHIC 112,0 135 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 128,0 135 0 
+GRAPHIC 88,0 136 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 96,0 136 0 
+GRAPHIC 128,0 137 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 136,0 137 0 
+GRAPHIC 96,0 138 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 120,0 138 0 
+GRAPHIC 136,0 139 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 104,0 139 0 
+GRAPHIC 120,0 140 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 64,0 140 0 
+GRAPHIC 104,0 141 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 72,0 141 0 
+GRAPHIC 64,0 142 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 80,0 142 0 
+GRAPHIC 72,0 143 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 142,0 144 0 
+GRAPHIC 704,0 144 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 149,0 145 1 
+GRAPHIC 80,0 145 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 448,0 160 0 
+GRAPHIC 142,0 147 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 455,0 161 1 
+GRAPHIC 149,0 148 1 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 504,0 168 0 
+GRAPHIC 448,0 163 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 476,0 169 0 
+GRAPHIC 455,0 164 1 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 470,0 170 0 
+GRAPHIC 504,0 171 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 482,0 171 0 
+GRAPHIC 476,0 172 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 510,0 172 0 
+GRAPHIC 470,0 173 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 464,0 173 0 
+GRAPHIC 482,0 174 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 490,0 174 0 
+GRAPHIC 510,0 175 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 458,0 175 0 
+GRAPHIC 464,0 176 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-GRAPHIC 498,0 176 0 
+GRAPHIC 490,0 177 0 
 DESIGN ips_sbbd_tb
 VIEW struct.bd
-NO_GRAPHIC 179
+GRAPHIC 458,0 178 0 
+DESIGN ips_sbbd_tb
+VIEW struct.bd
+GRAPHIC 498,0 179 0 
+DESIGN ips_sbbd_tb
+VIEW struct.bd
+NO_GRAPHIC 182

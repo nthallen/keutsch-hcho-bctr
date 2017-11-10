@@ -68,9 +68,11 @@ BEGIN
         wait until clk'EVENT AND clk = '1';
       end loop;
       if AckExpected = '1' then
-        assert ExpAck = '1' report "Expected Ack" severity error;
+        assert ExpAck = '1' or ExpAck1 = '1'
+         report "Expected Ack on write" severity error;
       else
-        assert ExpAck = '0' report "Expected no Ack" severity error;
+        assert ExpAck = '0' and ExpAck1 = '0'
+         report "Expected no Ack" severity error;
       end if;
       ExpWr <= '0';
       wait until clk'EVENT AND clk = '1';
@@ -88,7 +90,8 @@ BEGIN
       for i in 1 to 8 loop
         wait until clk'EVENT AND clk = '1';
       end loop;
-      assert ExpAck = '1' report "Expected Ack on sbrd" severity error;
+      assert ExpAck = '1' or ExpAck1 = '1'
+       report "Expected Ack on sbrd" severity error;
       ReadData <= RData;
       ExpRd <= '0';
       wait until clk'EVENT AND clk = '1';
@@ -111,8 +114,9 @@ BEGIN
     wait until clk'Event and clk = '1';
     
     wait for 10 ms;
-    sbwr(x"0073", x"0100",'1');
-    wait for 2000 ms;
+    --sbwr(x"0073", x"0100",'1');
+    sbwr(x"0061", std_logic_vector(to_unsigned(300,16)),'1');
+    wait for 4000 ms;
 
     SimDone <= '1';
     wait;

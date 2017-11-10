@@ -50,13 +50,17 @@ ARCHITECTURE beh OF ipsgen IS
   SIGNAL IPnum_int : unsigned(5 downto 0);
   SIGNAL NC0 : unsigned(27 downto 0);
   SIGNAL NC1 : unsigned(27 downto 0); -- NC0+NCcorr-1
+  -- SIGNAL NC1_int : unsigned(27 downto 0); -- NC0+NCcorr-1
   SIGNAL NCcorr : signed(15 downto 0);
+  SIGNAL NCcorr_int : signed(15 downto 0);
   SIGNAL NCerr : signed(15 downto 0);
+  SIGNAL NCerr_int : signed(15 downto 0);
   SIGNAL NCctr : signed(28 downto 0);
   SIGNAL NCerr_povf : std_logic;
   SIGNAL NCerr_novf : std_logic;
   SIGNAL startup : std_logic;
-  SIGNAL update_NC1 : std_logic;
+  TYPE NCcorr_state IS ( NCc_idle, NCc_check, NCc_pos, NCc_neg, NCc_NC1 );
+  SIGNAL NCc_state : NCcorr_state;
 BEGIN
   addr : PROCESS (ExpAddr) IS
     VARIABLE offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
@@ -74,7 +78,7 @@ BEGIN
       when 0 => Nbps_en <= '1'; BdWrEn <= '1';
       when 1 => NC0lsb_en <= '1'; BdWrEn <= '1';
       when 2 => NC0msb_en <= '1'; BdWrEn <= '1';
-      when 3 => NCcorr_en <= '1'; BdWrEn <= '1';
+      when 3 => NCcorr_en <= '1';
       when 4 => NCerr_en <= '1';
       when 5 => Status_en <= '1';
       when others => BdEn <= '0';
@@ -90,8 +94,11 @@ BEGIN
         Nbps <= to_unsigned(Nbps_default,Nbps'length);
         NC0 <= to_unsigned(NC0_default,NC0'length);
         NC1 <= to_unsigned(NC0_default-1,NC1'length);
+        -- NC1_int <= to_unsigned(NC0_default-1,NC1'length);
         NCcorr <= (others => '0');
         NCerr <= (others => '0');
+        NCcorr_int <= (others => '0');
+        NCerr_int <= (others => '0');
         NCctr <= (others => '0');
         RData <= (others => '0');
         IPctr <= (others => '0');
@@ -100,11 +107,13 @@ BEGIN
         NCerr_novf <= '0';
         IPS <= '0';
         startup <= '1';
-        update_NC1 <= '1';
+        NCc_state <= NCc_idle;
       else
         if PPS = '1' then
           startup <= '0';
           NCerr <= NCctr(15 downto 0);
+          NCerr_int <= NCctr(15 downto 0);
+          NCcorr <= NCcorr_int;
           all_ones := '1';
           all_zeros := '1';
           for i in NCctr'length-1 downto 15 loop
@@ -117,6 +126,8 @@ BEGIN
           if all_ones = '1' or all_zeros = '1' then
             NCerr_povf <= '0';
             NCerr_novf <= '0';
+            -- NCc_state <= NCc_check;
+            -- NCcorr_int <= NCcorr;
           elsif NCctr(NCctr'length-1) = '1' then
             NCerr_novf <= '1';
             NCerr_povf <= '0';
@@ -125,6 +136,7 @@ BEGIN
             NCerr_povf <= '1';
           end if;
           NCctr <= signed(resize(NC1,NCctr'length));
+          -- NC1 <= NC1_int;
           IPctr <= Nbps-1;
           IPnum_int <= (others => '0');
           IPS <= '1';
@@ -161,26 +173,55 @@ BEGIN
             Nbps <= unsigned(WData(Nbps'length-1 downto 0));
           elsif NC0lsb_en = '1' then
             NC0(15 downto 0) <= unsigned(WData);
-            update_NC1 <= '1';
           elsif NC0msb_en = '1' then
             NC0(NC0'length-1 downto 16) <=
               unsigned(WData(NC0'length-17 downto 0));
-            update_NC1 <= '1';
-          elsif NCcorr_en = '1' then
-            NCcorr <= signed(WData);
-            update_NC1 <= '1';
           end if;
         end if;
         
-        if update_NC1 = '1' then
-          update_NC1 <= '0';
-          NC1 <= NC0 + unsigned(resize(NCcorr,NC0'length)) - 1;
-        end if;
+        case NCc_state is
+          when NCc_idle =>
+            if PPS = '1' and (all_ones = '1' OR all_zeros = '1') then
+              NCc_state <= NCc_check;
+            end if;
+          when NCc_check =>
+            if NCerr_int > to_signed(0,NCerr_int'length) then
+              NCerr_int <= NCerr_int -
+                 signed(resize(Nbps(5 downto 1),NCerr_int'length));
+              NCc_state <= NCc_pos;
+            else
+              NCerr_int <= - NCerr_int -
+                 signed(resize(Nbps(5 downto 1),NCerr_int'length));
+              NCc_state <= NCc_neg;
+            end if;
+          when NCc_pos =>
+            if NCerr_int > 0 then
+              NCcorr_int <= NCcorr_int - 1;
+              NCerr_int <= NCerr_int -
+                 signed(resize(Nbps,NCerr_int'length));
+            else
+              NCc_state <= NCc_NC1;
+            end if;
+          when NCc_neg =>
+            if NCerr_int > 0 then
+              NCcorr_int <= NCcorr_int + 1;
+              NCerr_int <= NCerr_int -
+                 signed(resize(Nbps,NCerr_int'length));
+            else
+              NCc_state <= NCc_NC1;
+            end if;
+          when NCc_NC1 =>
+            NC1 <=
+              NC0 + unsigned(resize(NCcorr_int,NC0'length)) - 1;
+            NCc_state <= NCc_idle;
+          when others =>
+            NCc_state <= NCc_idle;
+        end case;
       end if;
     end if;
   END PROCESS;
   
-  IPnum <= IPnum_int;
+  IPnum <= std_logic_vector(IPnum_int);
   
 END ARCHITECTURE beh;
 
