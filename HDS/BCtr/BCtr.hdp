@@ -4,8 +4,6 @@ BCtr_lib = $HDS_PROJECT_DIR\BCtr_lib\designcheck
 BCtr_lib = $HDS_PROJECT_DIR\BCtr_lib\work
 [hdl]
 BCtr_lib = $HDS_PROJECT_DIR/BCtr_lib/hdl
-[hdl_vm]
-BCtr_lib = https://forge.abcd.harvard.edu/svn/arp-eos/trunk/HDS/BCtr_lib
 [hdl_ws]
 BCtr_lib = $HDS_PROJECT_DIR
 [hds]
