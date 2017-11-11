@@ -33,7 +33,9 @@ ENTITY aio_addr IS
     BdEn      : OUT    std_logic;
     BdWrEn    : OUT    std_logic;
     idxData   : IN     std_logic_vector (15 DOWNTO 0);
-    idxWr     : IN     std_logic
+    idxWr     : IN     std_logic;
+    idxAck    : OUT    std_logic;
+    IdxWrAck  : IN     std_logic
   );
 
 -- Declarations
@@ -45,6 +47,7 @@ ARCHITECTURE beh OF aio_addr IS
   SIGNAL WrOK : std_logic;
   SIGNAL Read : std_logic;
   SIGNAL WrEn2_int : std_logic;
+  SIGNAL IdxWrActive : std_logic;
 BEGIN
   Addrs : PROCESS (ExpAddr) IS
     Variable Offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
@@ -53,7 +56,8 @@ BEGIN
        unsigned(ExpAddr) < unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0)) + 7 THEN
       BdEn <= '1';
       Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
-      IF Offset = 0 OR Offset = 1 OR Offset = 3 THEN
+      IF WrEn2_int = '0' AND
+         (Offset = 0 OR Offset = 1 OR Offset = 3) THEN
         WrOK <= '1';
       ELSE
         WrOK <= '0';
@@ -70,19 +74,26 @@ BEGIN
     IF clk'EVENT AND clk = '1' THEN
       IF rst = '1' THEN
         WrEn2_int <= '0';
+        IdxAck <= '0';
+        IdxWrActive <= '0';
       ELSE
         IF WrEn = '1' AND WrOK = '1' THEN
           Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
           ChanAddr2 <= std_logic_vector(Offset(1 DOWNTO 0));
-          WrEn2_int <= '1';
           wData2 <= wData;
+          WrEn2_int <= '1';
         ELSIF idxWr = '1' THEN
-          ChanAddr2 <= "11";
+          ChanAddr2 <= "10";
           WData2 <= idxData;
           WrEn2_int <= '1';
+          IdxWrActive <= '1';
         END IF;
         IF WrAck2 = '1' THEN
           WrEn2_int <= '0';
+          IF IdxWrActive = '1' AND IdxWrAck = '1' THEN
+            idxAck <= '1';
+            IdxWrActive <= '0';
+          END IF;
         END IF;
       END IF;
     END IF;
