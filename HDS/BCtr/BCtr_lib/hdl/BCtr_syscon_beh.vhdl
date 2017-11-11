@@ -17,7 +17,7 @@ ENTITY BCtr_syscon IS
       BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007"; -- Relative to HCHO
       INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 5;
+      N_BOARDS      : integer range 15 downto 0     := 6;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
@@ -63,6 +63,8 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL Switches      : std_logic_vector(SW_WIDTH-1 DOWNTO 0);
   SIGNAL Flt_CPU_Reset : std_logic;
   SIGNAL PPS           : std_logic;
+  SIGNAL IPS           : std_logic;
+  SIGNAL IPnum         : std_logic_vector(5 DOWNTO 0);
 
   COMPONENT syscon
     GENERIC (
@@ -200,6 +202,27 @@ ARCHITECTURE beh OF BCtr_syscon IS
       RData    : OUT    std_logic_vector(15 DOWNTO 0)
     );
   END COMPONENT pps_sbbd;
+
+  COMPONENT ips_sbbd
+    GENERIC (
+      ADDR_WIDTH : integer range 16 downto 8 := 8;
+      BASE_ADDR  : unsigned(15 downto 0)     := x"0070"
+    );
+    PORT (
+      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd    : IN     std_logic;
+      ExpReset : IN     std_logic;
+      ExpWr    : IN     std_logic;
+      PPS      : IN     std_logic;
+      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      clk      : IN     std_logic;
+      ExpAck   : OUT    std_logic;
+      IPS      : OUT    std_logic;
+      IPnum    : OUT    std_logic_vector(5 DOWNTO 0);
+      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+    );
+  END COMPONENT ips_sbbd;
+  FOR ALL : ips_sbbd USE ENTITY BCtr_lib.ips_sbbd;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -351,6 +374,25 @@ BEGIN
       ExpAck   => ExpAck(4),
       PPS      => PPS,
       RData    => RData(16*4+15 DOWNTO 16*4)
+    );
+
+  ips_gen : ips_sbbd
+    GENERIC MAP (
+      ADDR_WIDTH => ADDR_WIDTH,
+      BASE_ADDR  => x"0070"
+    )
+    PORT MAP (
+      ExpAddr  => ExpAddr,
+      ExpRd    => ExpRd,
+      ExpReset => ExpReset,
+      ExpWr    => ExpWr,
+      PPS      => PPS,
+      WData    => WData,
+      clk      => clk,
+      ExpAck   => ExpAck(5),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      RData    => RData(16*5+15 DOWNTO 16*5)
     );
     
   BdIntr <= (others => '0');
