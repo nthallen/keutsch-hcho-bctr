@@ -59,6 +59,7 @@ ARCHITECTURE beh OF ipsgen IS
   SIGNAL NCerr_povf : std_logic;
   SIGNAL NCerr_novf : std_logic;
   SIGNAL startup : std_logic;
+  SIGNAL evaluate_NCerr : std_logic;
   TYPE NCcorr_state IS ( NCc_idle, NCc_check, NCc_pos, NCc_neg, NCc_NC1 );
   SIGNAL NCc_state : NCcorr_state;
 BEGIN
@@ -107,36 +108,41 @@ BEGIN
         NCerr_novf <= '0';
         IPS <= '0';
         startup <= '1';
+        evaluate_NCerr <= '0';
         NCc_state <= NCc_idle;
       else
         if PPS = '1' then
           startup <= '0';
-          NCerr <= NCctr(15 downto 0);
-          NCerr_int <= NCctr(15 downto 0);
-          NCcorr <= NCcorr_int;
-          all_ones := '1';
-          all_zeros := '1';
-          for i in NCctr'length-1 downto 15 loop
-            if NCctr(i) = '1' then
-              all_zeros := '0';
+          if IPctr = to_unsigned(0,IPctr'length) then
+            NCerr <= NCctr(15 downto 0);
+            NCerr_int <= NCctr(15 downto 0) + NCcorr_int;
+            all_ones := '1';
+            all_zeros := '1';
+            for i in NCctr'length-1 downto 15 loop
+              if NCctr(i) = '1' then
+                all_zeros := '0';
+              else
+                all_ones := '0';
+              end if;
+            end loop;
+            if all_ones = '1' or all_zeros = '1' then
+              NCerr_povf <= '0';
+              NCerr_novf <= '0';
+              -- NCc_state <= NCc_check;
+              -- NCcorr_int <= NCcorr;
+            elsif NCctr(NCctr'length-1) = '1' then
+              NCerr_novf <= '1';
+              NCerr_povf <= '0';
             else
-              all_ones := '0';
+              NCerr_novf <= '0';
+              NCerr_povf <= '1';
             end if;
-          end loop;
-          if all_ones = '1' or all_zeros = '1' then
-            NCerr_povf <= '0';
-            NCerr_novf <= '0';
-            -- NCc_state <= NCc_check;
-            -- NCcorr_int <= NCcorr;
-          elsif NCctr(NCctr'length-1) = '1' then
-            NCerr_novf <= '1';
-            NCerr_povf <= '0';
+            evaluate_NCerr <= '1';
           else
-            NCerr_novf <= '0';
-            NCerr_povf <= '1';
+            evaluate_NCerr <= '0';
           end if;
+          NCcorr_int <= (others => '0');
           NCctr <= signed(resize(NC1,NCctr'length));
-          -- NC1 <= NC1_int;
           IPctr <= Nbps-1;
           IPnum_int <= (others => '0');
           IPS <= '1';
@@ -181,7 +187,8 @@ BEGIN
         
         case NCc_state is
           when NCc_idle =>
-            if PPS = '1' and (all_ones = '1' OR all_zeros = '1') then
+            if evaluate_NCerr = '1' then
+              evaluate_NCerr <= '0';
               NCc_state <= NCc_check;
             end if;
           when NCc_check =>
@@ -212,7 +219,8 @@ BEGIN
             end if;
           when NCc_NC1 =>
             NC1 <=
-              NC0 + unsigned(resize(NCcorr_int,NC0'length)) - 1;
+              NC0 + unsigned(resize(NCcorr+NCcorr_int,NC0'length)) - 1;
+            NCcorr <= NCcorr + NCcorr_int;
             NCc_state <= NCc_idle;
           when others =>
             NCc_state <= NCc_idle;

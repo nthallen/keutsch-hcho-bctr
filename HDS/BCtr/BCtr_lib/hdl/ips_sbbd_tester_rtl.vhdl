@@ -25,7 +25,8 @@ ENTITY ips_sbbd_tester IS
     ExpReset : OUT    std_logic;
     ExpWr    : OUT    std_logic;
     WData    : OUT    std_logic_vector (15 DOWNTO 0);
-    clk      : OUT    std_logic
+    clk      : OUT    std_logic;
+    PPS      : IN     std_logic
   );
 
 -- Declarations
@@ -98,6 +99,8 @@ BEGIN
       -- pragma synthesis_on
       return;
     end procedure sbrd;
+    
+    variable adjust : unsigned(31 downto 0);
   Begin
     SimDone <= '0';
     ReadData <= (others => '0');
@@ -116,7 +119,14 @@ BEGIN
     wait for 10 ms;
     --sbwr(x"0073", x"0100",'1');
     sbwr(x"0061", std_logic_vector(to_unsigned(300,16)),'1');
-    wait for 4000 ms;
+    wait for 3100 ms;
+    
+    adjust := to_unsigned((10**8)/2, adjust'length);
+    sbwr(x"0064", std_logic_vector(adjust(15 downto 0)),'1');
+    sbwr(x"0065", std_logic_vector(adjust(31 downto 16)),'1');
+    
+    wait until PPS = '1';
+    wait for 1100 ms;
 
     SimDone <= '1';
     wait;
