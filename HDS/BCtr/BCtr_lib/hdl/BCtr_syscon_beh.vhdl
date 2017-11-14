@@ -17,7 +17,7 @@ ENTITY BCtr_syscon IS
       BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007"; -- Relative to HCHO
       INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 6;
+      N_BOARDS      : integer range 15 downto 0     := 7;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
@@ -42,7 +42,8 @@ ENTITY BCtr_syscon IS
       htr1_cmd : OUT std_logic;
       htr2_cmd : OUT std_logic;
       SimTrig  : OUT std_logic;
-      SimPMT   : OUT std_logic
+      SimPMT   : OUT std_logic;
+      LDAC     : OUT std_logic
     );
 END ENTITY BCtr_syscon;
 
@@ -65,7 +66,10 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL PPS           : std_logic;
   SIGNAL IPS           : std_logic;
   SIGNAL IPnum         : std_logic_vector(5 DOWNTO 0);
-
+  SIGNAL idxData       : std_logic_vector (15 DOWNTO 0);
+  SIGNAL idxWr         : std_logic;
+  SIGNAL idxAck        : std_logic;
+  
   COMPONENT syscon
     GENERIC (
       BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007";
@@ -171,11 +175,14 @@ ARCHITECTURE beh OF BCtr_syscon IS
       ExpWr   : IN     std_logic;
       clk     : IN     std_logic;
       rst     : IN     std_logic;
+      idxData : IN     std_logic_vector (15 DOWNTO 0);
+      idxWr   : IN     std_logic;
       wData   : IN     std_logic_vector(15 DOWNTO 0);
       ExpAck  : OUT    std_logic;
       rData   : OUT    std_logic_vector(15 DOWNTO 0);
       scl     : INOUT  std_logic;
       sda     : INOUT  std_logic;
+      idxAck  : OUT    std_logic;
       scl_mon : OUT std_logic;
       sda_mon : OUT std_logic;
       htr1_cmd : OUT std_logic;
@@ -222,7 +229,29 @@ ARCHITECTURE beh OF BCtr_syscon IS
       RData    : OUT    std_logic_vector(15 DOWNTO 0)
     );
   END COMPONENT ips_sbbd;
+  COMPONENT dacscan_sbbd
+    GENERIC (
+      ADDR_WIDTH : integer range 16 downto 8      := 8;
+      BASE_ADDR  : std_logic_vector (15 downto 0) := x"0080"
+    );
+    PORT (
+      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd    : IN     std_logic;
+      ExpReset : IN     std_logic;
+      ExpWr    : IN     std_logic;
+      IPS      : IN     std_logic;
+      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      clk      : IN     std_logic;
+      idxAck   : IN     std_logic;
+      ExpAck   : OUT    std_logic;
+      LDAC     : OUT    std_logic;
+      RData    : OUT    std_logic_vector(15 DOWNTO 0);
+      idxData  : OUT    std_logic_vector(15 DOWNTO 0);
+      idxWr    : OUT    std_logic
+    );
+  END COMPONENT dacscan_sbbd;
   FOR ALL : ips_sbbd USE ENTITY BCtr_lib.ips_sbbd;
+  FOR ALL : dacscan_sbbd USE ENTITY BCtr_lib.dacscan_sbbd;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -333,6 +362,9 @@ BEGIN
       ExpWr   => ExpWr,
       clk     => clk,
       rst     => ExpReset,
+      idxData => idxData,
+      idxWr   => idxWr,
+      idxAck  => idxAck,
       wData   => WData,
       ExpAck  => ExpAck(3),
       rData   => RData(16*3+15 DOWNTO 16*3),
@@ -393,6 +425,27 @@ BEGIN
       IPS      => IPS,
       IPnum    => IPnum,
       RData    => RData(16*5+15 DOWNTO 16*5)
+    );
+
+  dacscan : dacscan_sbbd
+    GENERIC MAP (
+      ADDR_WIDTH => ADDR_WIDTH,
+      BASE_ADDR  => x"0080"
+    )
+    PORT MAP (
+      ExpAddr  => ExpAddr,
+      ExpRd    => ExpRd,
+      ExpReset => ExpReset,
+      ExpWr    => ExpWr,
+      IPS      => IPS,
+      WData    => WData,
+      clk      => clk,
+      idxAck   => idxAck,
+      ExpAck   => ExpAck(6),
+      LDAC     => LDAC,
+      RData    => RData(16*6+15 DOWNTO 16*6),
+      idxData  => idxData,
+      idxWr    => idxWr
     );
     
   BdIntr <= (others => '0');

@@ -21,7 +21,7 @@ elements [
 (GiElement
 name "USE_BD_WR_EN"
 type "std_logic"
-value "'0'"
+value "'1'"
 )
 ]
 mwi 0
@@ -104,19 +104,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/11/2017"
+value "11/13/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Mon"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Monday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "13"
 )
 (vvPair
 variable "entity_name"
@@ -144,7 +144,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/11/2017"
+value "11/13/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -156,7 +156,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "16:53:00"
+value "17:47:48"
 )
 (vvPair
 variable "group"
@@ -260,7 +260,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "16:53:00"
+value "17:47:48"
 )
 (vvPair
 variable "unit"
@@ -1131,7 +1131,7 @@ isHidden 1
 font "Courier New,8,0"
 )
 xt "19000,19200,39000,20000"
-st "USE_BD_WR_EN = '0'    ( std_logic )  "
+st "USE_BD_WR_EN = '1'    ( std_logic )  "
 )
 header ""
 )
@@ -1139,7 +1139,7 @@ elements [
 (GiElement
 name "USE_BD_WR_EN"
 type "std_logic"
-value "'0'"
+value "'1'"
 )
 ]
 )
@@ -2776,12 +2776,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "0,0,1017,690"
-viewArea "-1844,0,66010,46182"
+windowSize "0,0,1018,690"
+viewArea "-1800,0,66140,46182"
 cachedDiagramExtent "0,0,68000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 479,0
+lastUid 1009,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

@@ -1,0 +1,197 @@
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+NO_GRAPHIC 0
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 50,0 11 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 13,0 16 1 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 131,0 21 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 151,0 22 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 161,0 23 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 146,0 24 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 156,0 25 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 126,0 26 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 141,0 27 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 214,0 28 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 136,0 29 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 290,0 30 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 166,0 31 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 204,0 32 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 209,0 33 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 1,0 36 0 
+DESIGN dacscan_sbbd
+VIEW symbol.sb
+GRAPHIC 1,0 37 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 40
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 41,0 56 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 59
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 0,0 62 2 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 317,0 67 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 315,0 68 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 307,0 69 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 305,0 70 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 71
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 72
+LIBRARY BCtr_lib
+DESIGN dacscan
+VIEW beh
+GRAPHIC 199,0 74 0 
+DESIGN dacscan
+VIEW interface
+GRAPHIC 14,0 75 1 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 219,0 81 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 237,0 82 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 243,0 83 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 249,0 84 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 225,0 85 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 255,0 86 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 273,0 87 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 444,0 88 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 261,0 89 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 267,0 90 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 231,0 91 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 416,0 92 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 430,0 93 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 462,0 94 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 133,0 97 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 140,0 98 1 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 110
+LIBRARY BCtr_lib
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 112
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 199,0 115 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 133,0 116 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 119
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 121
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 199,0 123 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 206,0 124 1 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 133,0 145 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 140,0 146 1 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 281,0 150 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 285,0 151 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 215,0 152 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 289,0 153 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 249,0 154 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 255,0 155 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 261,0 156 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+GRAPHIC 267,0 157 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 160

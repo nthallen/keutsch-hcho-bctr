@@ -49,7 +49,7 @@ ARCHITECTURE beh OF aio_addr IS
   SIGNAL WrEn2_int : std_logic;
   SIGNAL IdxWrActive : std_logic;
 BEGIN
-  Addrs : PROCESS (ExpAddr) IS
+  Addrs : PROCESS (ExpAddr, WrEn2_int) IS
     Variable Offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
   BEGIN
     IF unsigned(ExpAddr) >= unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0)) AND
@@ -74,8 +74,10 @@ BEGIN
     IF clk'EVENT AND clk = '1' THEN
       IF rst = '1' THEN
         WrEn2_int <= '0';
-        IdxAck <= '0';
+        idxAck <= '0';
         IdxWrActive <= '0';
+        ChanAddr2 <= (others => '0');
+        wData2 <= (others => '0');
       ELSE
         IF WrEn = '1' AND WrOK = '1' THEN
           Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
@@ -90,23 +92,29 @@ BEGIN
         END IF;
         IF WrAck2 = '1' THEN
           WrEn2_int <= '0';
-          IF IdxWrActive = '1' AND IdxWrAck = '1' THEN
-            idxAck <= '1';
-            IdxWrActive <= '0';
-          END IF;
         END IF;
-      END IF;
+        IF IdxWrActive = '1' AND IdxWrAck = '1' THEN
+          idxAck <= '1';
+          IdxWrActive <= '0';
+        ELSE
+          idxAck <= '0';
+        END IF;
+    END IF;
     END IF;
   END PROCESS;
   
   Reading : PROCESS (clk) IS
   BEGIN
     IF clk'EVENT AND clk = '1' THEN
+      RdStat <= '0';
       IF RdEn = '1' AND Read = '0' THEN
         RdAddr <= std_logic_vector(
           unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0)));
         dpRdEn <= '1';
         Read <= '1';
+        IF ExpAddr = BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0) THEN
+          RdStat <= '1';
+        END IF;
       ELSIF RdEn = '1' AND Read = '1' THEN
         dpRdEn <= '0';
       ELSE

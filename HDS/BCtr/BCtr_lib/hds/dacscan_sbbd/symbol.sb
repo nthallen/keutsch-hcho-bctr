@@ -646,19 +646,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/11/2017"
+value "11/13/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Mon"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Monday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "13"
 )
 (vvPair
 variable "entity_name"
@@ -686,7 +686,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/11/2017"
+value "11/13/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -698,7 +698,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "16:53:00"
+value "17:47:48"
 )
 (vvPair
 variable "group"
@@ -802,7 +802,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "16:53:00"
+value "17:47:48"
 )
 (vvPair
 variable "unit"
@@ -2126,6 +2126,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 363,0
+lastUid 616,0
 activeModelName "Symbol:CDM"
 )

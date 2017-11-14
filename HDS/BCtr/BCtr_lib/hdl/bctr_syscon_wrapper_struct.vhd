@@ -85,7 +85,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0007";    -- Relative to HCHO
     INSTRUMENT_ID  : std_logic_vector(15 DOWNTO 0) := X"0008";    -- HCHO
     N_INTERRUPTS   : integer range 15 downto 0     := 1;
-    N_BOARDS       : integer range 15 downto 0     := 5;
+    N_BOARDS       : integer range 15 downto 0     := 7;
     ADDR_WIDTH     : integer range 16 downto 8     := 8;
     FAIL_WIDTH     : integer range 16 downto 1     := 1;
     SW_WIDTH       : integer range 16 DOWNTO 0     := 1;
@@ -110,7 +110,8 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     Fail     : OUT    std_logic;
     SimPMT   : OUT    std_logic;
     SimTrig  : OUT    std_logic;
-    Status   : OUT    std_logic_vector (3 DOWNTO 0)
+    Status   : OUT    std_logic_vector (3 DOWNTO 0);
+    LDAC     : OUT    std_logic
   );
   END COMPONENT BCtr_syscon;
 
@@ -150,10 +151,10 @@ BEGIN
       Data_o   => Data_o,
       Status   => Status,
       SimTrig  => SimTrig,
-      SimPMT   => SimPMT
+      SimPMT   => SimPMT,
+      LDAC     => dac_ldac
     );
 
   Fail <= Fail_int;
   dac_reset <= '1';
-  dac_ldac <= '1';
 END ARCHITECTURE struct;

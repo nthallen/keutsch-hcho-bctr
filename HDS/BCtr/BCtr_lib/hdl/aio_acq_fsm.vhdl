@@ -62,7 +62,7 @@ ARCHITECTURE fsm OF aio_acq IS
     S_DAC2_SET, S_DAC2_SET_1,
     S_ADC2_READ, S_ADC1_CFG,
     S_DAC_INIT, S_DAC_INIT_2, S_DAC_INIT_3, S_DAC_INIT_4,
-    S_DAC_UPDATE, S_DAC_UPDATE_1, S_DAC_UPDATE_2,
+    S_DAC_UPDATE, S_DAC_UPDATE_1, S_DAC_UPDATE_1A, S_DAC_UPDATE_2,
     S_TXN, S_TXN_1, S_TXN_ERR,
     S_RAM,
     S_DAC_WR, S_DAC_WR_1, S_DAC_WR_2, S_DAC_WR_3,
@@ -469,18 +469,20 @@ BEGIN
           WHEN S_ADC_RD_0 =>
             start_txn('1','0','0','0',ADC_CFG_PTR,S_ADC_RD_0,S_ADC_RD_1);
           WHEN S_ADC_RD_1 =>
-            if WrEn2 = '1' then
+            IF WrEn2 = '1' THEN
               case ChanAddr2 IS
               WHEN "00" =>
                 issue_cmds(wData2, S_ADC_RD_1);
               WHEN "01" =>
-                start_dac_update(DAC1_SETPOINT_RAM_ADDR, DAC1_I2C_ADDR, S_ADC_RD_1);
+                start_dac_update(DAC_WR_IO, DAC1_SETPOINT_RAM_ADDR, DAC1_I2C_ADDR, S_ADC_RD_1);
+              WHEN "10" =>
+                start_dac_update(DAC_WR_I, DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
               WHEN "11" =>
-                start_dac_update(DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
+                start_dac_update(DAC_WR_IO, DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
               WHEN others =>
                 write_ack(S_ADC_RD_1); -- should never happen
               end case;
-            else
+            ELSE
               start_txn('0','1','1','0',ADC_I2C_ADDR,S_ADC_RD_1,S_ADC_RD_2);
             end if;
           WHEN S_ADC_RD_2 =>

@@ -53,6 +53,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL rdreq     : std_logic;
   SIGNAL htr1_cmd  : std_logic;
   SIGNAL htr2_cmd  : std_logic;
+  SIGNAL dac_reset : std_logic;
+  SIGNAL dac_ldac  : std_logic;
 
   -- Component declarations
   COMPONENT BCtr_syscon_wrapper
@@ -75,7 +77,9 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
       SimTrig : OUT    std_logic;
-      Status  : OUT    std_logic_vector(3 DOWNTO 0)
+      Status  : OUT    std_logic_vector(3 DOWNTO 0);
+      dac_reset : OUT   std_logic;
+      dac_ldac  : OUT    std_logic
     );
   END COMPONENT BCtr_syscon_wrapper;
 
@@ -168,7 +172,9 @@ BEGIN
         Fail    => Fail,
         SimPMT  => SimPMT,
         SimTrig => SimTrig,
-        Status  => Status
+        Status  => Status,
+        dac_reset => dac_reset,
+        dac_ldac => dac_ldac
       );
 
     tester : BCtr_syscon_wrapper_tester

@@ -64,12 +64,13 @@ ARCHITECTURE beh OF dacscan IS
   SIGNAL next_Online : std_logic;
   SIGNAL Offline : std_logic;
   SIGNAL next_Offline : std_logic;
-  TYPE state_t IS (st_idle, st_wrdac_0, st_wrdac_1, st_wrdac_2);
+  TYPE state_t IS (st_idle, st_wrdac_0, st_wrdac_1, st_wrdac_2,
+      st_scan_0, st_scan_end);
   SIGNAL current_state : state_t;
   SIGNAL start_write : std_logic;
   SIGNAL loop_count : unsigned(5 DOWNTO 0); -- 0 to 63
 BEGIN
-  addr : PROCESS (ExpAddr) IS
+  addr : PROCESS (ExpAddr, current_state) IS
     VARIABLE offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
   BEGIN
     IF current_state = st_idle THEN
@@ -126,9 +127,10 @@ BEGIN
         idxData <= (others => '0');
         idxWr <= '0';
         LDAC <= '1';
+        loop_count <= (others => '0');
       ELSE
-        IF ExpRd = '1' THEN
-          IF Status_Cmd_en = '1' THEN
+        IF RdEn = '1' THEN
+          IF StatusCmd_en = '1' THEN
             RData <= (
               0 => Scanning,
               1 => Online,
@@ -141,7 +143,7 @@ BEGIN
           ELSIF ScanStop_en = '1' THEN
             RData <= std_logic_vector(ScanStop);
           ELSIF ScanStep_en = '1' THEN
-            RData <= std_logic_vector(ScanStep);
+            RData <= std_logic_vector(ScanStep(15 DOWNTO 0));
           ELSIF OnlinePos_en = '1' THEN
             RData <= std_logic_vector(OnlinePos);
           ELSIF OfflinePos_en = '1' THEN
@@ -149,8 +151,8 @@ BEGIN
           ELSIF Dither_en = '1' THEN
             RData <= std_logic_vector(Dither);
           END IF;
-        ELSIF ExpWr = '1' AND current_state = st_idle THEN
-          IF Status_Cmd_en = '1' THEN
+        ELSIF WrEn = '1' AND current_state = st_idle THEN
+          IF StatusCmd_en = '1' THEN
             CASE to_integer(unsigned(WData)) IS
             WHEN 0 => -- stop scan
               ScanningCmd <= '0';
@@ -181,21 +183,21 @@ BEGIN
               NULL;
             END CASE;
           ELSIF SetPoint_en = '1' THEN
-            nextSetPoint <= WData;
+            nextSetPoint <= unsigned(WData);
             start_write <= '1';
           ELSIF ScanStart_en = '1' THEN
-            ScanStart <= WData;
+            ScanStart <= unsigned(WData);
           ELSIF ScanStop_en = '1' THEN
-            ScanStop <= WData;
+            ScanStop <= unsigned(WData);
           ELSIF ScanStep_en = '1' THEN
-            ScanStep(15 DOWNTO 0) <= WData;
+            ScanStep(15 DOWNTO 0) <= unsigned(WData);
             ScanStep(15+STEP_RES DOWNTO 16) <= (others => '0');
           ELSIF OnlinePos_en = '1' THEN
-            OnlinePos <= WData;
+            OnlinePos <= unsigned(WData);
           ELSIF OfflinePos_en = '1' THEN
-            OfflinePos <= WData;
+            OfflinePos <= unsigned(WData);
           ELSIF Dither_en = '1' THEN
-            Dither <= WData;
+            Dither <= unsigned(WData);
           END IF;
         END IF;
         
@@ -203,11 +205,12 @@ BEGIN
         WHEN st_idle =>
           IF start_write = '1' THEN
             current_state <= st_wrdac_0;
+            start_write <= '0';
           ELSE
             current_state <= st_idle;
           END IF;
         WHEN st_wrdac_0 =>
-          idxData <= nextSetPoint;
+          idxData <= std_logic_vector(nextSetPoint);
           idxWr <= '1';
           IF idxAck = '1' THEN
             current_state <= st_wrdac_1;
