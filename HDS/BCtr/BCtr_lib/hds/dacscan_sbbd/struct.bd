@@ -104,19 +104,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/13/2017"
+value "11/16/2017"
 )
 (vvPair
 variable "day"
-value "Mon"
+value "Thu"
 )
 (vvPair
 variable "day_long"
-value "Monday"
+value "Thursday"
 )
 (vvPair
 variable "dd"
-value "13"
+value "16"
 )
 (vvPair
 variable "entity_name"
@@ -144,7 +144,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/13/2017"
+value "11/16/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -156,7 +156,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "17:47:48"
+value "15:50:01"
 )
 (vvPair
 variable "group"
@@ -260,7 +260,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "17:47:48"
+value "15:50:01"
 )
 (vvPair
 variable "unit"
@@ -2781,7 +2781,7 @@ viewArea "-1800,0,66140,46182"
 cachedDiagramExtent "0,0,68000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 1009,0
+lastUid 1115,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

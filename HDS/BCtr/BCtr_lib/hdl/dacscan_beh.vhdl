@@ -89,7 +89,7 @@ BEGIN
     Dither_en <= '0';
     offset := unsigned(ExpAddr) - resize(BASE_ADDR,ADDR_WIDTH);
     CASE to_integer(offset) IS
-      WHEN 0 => StatusCmd_en <= '1';
+      WHEN 0 => StatusCmd_en <= '1'; BdWrEn <= '1';
       WHEN 1 => SetPoint_en <= '1';
       WHEN 2 => ScanStart_en <= '1';
       WHEN 3 => ScanStop_en <= '1';
@@ -151,53 +151,57 @@ BEGIN
           ELSIF Dither_en = '1' THEN
             RData <= std_logic_vector(Dither);
           END IF;
-        ELSIF WrEn = '1' AND current_state = st_idle THEN
-          IF StatusCmd_en = '1' THEN
-            CASE to_integer(unsigned(WData)) IS
-            WHEN 0 => -- stop scan
-              ScanningCmd <= '0';
-            WHEN 1 => -- start scan
-              CurStep(15+STEP_RES DOWNTO STEP_RES) <= ScanStart;
-              CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
-              nextSetPoint <= ScanStart;
-              ScanningCmd <= '1';
-              next_Scanning <= '1';
+        ELSIF WrEn = '1' THEN
+          IF current_state = st_idle THEN
+            IF StatusCmd_en = '1' THEN
+              CASE to_integer(unsigned(WData)) IS
+              WHEN 0 => -- stop scan
+                ScanningCmd <= '0';
+              WHEN 1 => -- start scan
+                CurStep(15+STEP_RES DOWNTO STEP_RES) <= ScanStart;
+                CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
+                nextSetPoint <= ScanStart;
+                ScanningCmd <= '1';
+                next_Scanning <= '1';
+                start_write <= '1';
+              WHEN 2 => -- drive online
+                nextSetPoint <= OnlinePos;
+                next_Online <= '1';
+                start_write <= '1';
+              WHEN 3 => -- drive online+dither
+                nextSetPoint <= OnlinePos + Dither;
+                next_Online <= '1';
+                start_write <= '1';
+              WHEN 4 => -- drive online-dither
+                nextSetPoint <= OnlinePos - Dither;
+                next_Online <= '1';
+                start_write <= '1';
+              WHEN 5 => -- drive offline
+                nextSetPoint <= OfflinePos;
+                next_Offline <= '1';
+                start_write <= '1';
+              WHEN others =>
+                NULL;
+              END CASE;
+            ELSIF SetPoint_en = '1' THEN
+              nextSetPoint <= unsigned(WData);
               start_write <= '1';
-            WHEN 2 => -- drive online
-              nextSetPoint <= OnlinePos;
-              next_Online <= '1';
-              start_write <= '1';
-            WHEN 3 => -- drive online+dither
-              nextSetPoint <= OnlinePos + Dither;
-              next_Online <= '1';
-              start_write <= '1';
-            WHEN 4 => -- drive online-dither
-              nextSetPoint <= OnlinePos - Dither;
-              next_Online <= '1';
-              start_write <= '1';
-            WHEN 5 => -- drive offline
-              nextSetPoint <= OfflinePos;
-              next_Offline <= '1';
-              start_write <= '1';
-            WHEN others =>
-              NULL;
-            END CASE;
-          ELSIF SetPoint_en = '1' THEN
-            nextSetPoint <= unsigned(WData);
-            start_write <= '1';
-          ELSIF ScanStart_en = '1' THEN
-            ScanStart <= unsigned(WData);
-          ELSIF ScanStop_en = '1' THEN
-            ScanStop <= unsigned(WData);
-          ELSIF ScanStep_en = '1' THEN
-            ScanStep(15 DOWNTO 0) <= unsigned(WData);
-            ScanStep(15+STEP_RES DOWNTO 16) <= (others => '0');
-          ELSIF OnlinePos_en = '1' THEN
-            OnlinePos <= unsigned(WData);
-          ELSIF OfflinePos_en = '1' THEN
-            OfflinePos <= unsigned(WData);
-          ELSIF Dither_en = '1' THEN
-            Dither <= unsigned(WData);
+            ELSIF ScanStart_en = '1' THEN
+              ScanStart <= unsigned(WData);
+            ELSIF ScanStop_en = '1' THEN
+              ScanStop <= unsigned(WData);
+            ELSIF ScanStep_en = '1' THEN
+              ScanStep(15 DOWNTO 0) <= unsigned(WData);
+              ScanStep(15+STEP_RES DOWNTO 16) <= (others => '0');
+            ELSIF OnlinePos_en = '1' THEN
+              OnlinePos <= unsigned(WData);
+            ELSIF OfflinePos_en = '1' THEN
+              OfflinePos <= unsigned(WData);
+            ELSIF Dither_en = '1' THEN
+              Dither <= unsigned(WData);
+            END IF;
+          ELSIF StatusCmd_en = '1' AND WData = x"0000" THEN -- no st_idle
+            ScanningCmd <= '0';
           END IF;
         END IF;
         

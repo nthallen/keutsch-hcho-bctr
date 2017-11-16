@@ -383,7 +383,7 @@ BEGIN
     --dacscan tests
     sbwr(x"82", x"0100", '1'); -- scan start
     sbwr(x"83", x"0200", '1'); -- scan stop
-    sbwr(x"84", x"00A6", '1'); -- scan step * 8
+    sbwr(x"84", x"0155", '1'); -- scan step * 8
     sbwr(x"85", X"0173", '1'); -- online pos
     sbwr(x"86", x"0155", '1'); -- offline pos
     sbwr(x"87", x"0005", '1'); -- dither
@@ -438,9 +438,73 @@ BEGIN
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
           Prev_Step <= ReadResult;
+          if ReadResult > x"0170" then
+            sbwr(x"81", x"0000",'0'); -- Attempt write to setpoint: should NACK
+            sbwr(x"80", x"0000", '1'); -- Scan abort
+          end if;
         end if;
       else
         sp_updated <= '1';
+        wait until clk'event and clk = '1';
+      end if;
+    end loop;
+    write(my_line, now);
+    write(my_line, string'(": Scan Stopped"));
+    writeline(output, my_line);
+
+    sp_updated <= '0';
+    sbwr(x"80", x"0002",'1'); -- Drive online
+    while sp_updated = '0' loop
+      sbrd(x"81", '1');
+      if ReadResult /= Prev_Step then
+        sp_updated <= '1';
+        write(my_line, now);
+        write(my_line, string'(": readback now "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+        Prev_Step <= ReadResult;
+        wait until clk'event and clk = '1';
+      end if;
+    end loop;
+    sp_updated <= '0';
+    sbwr(x"80", x"0005",'1'); -- Drive offline
+    while sp_updated = '0' loop
+      sbrd(x"81", '1');
+      if ReadResult /= Prev_Step then
+        sp_updated <= '1';
+        write(my_line, now);
+        write(my_line, string'(": readback now "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+        Prev_Step <= ReadResult;
+        wait until clk'event and clk = '1';
+      end if;
+    end loop;
+    sp_updated <= '0';
+    sbwr(x"80", x"0003",'1'); -- Drive online + dither
+    while sp_updated = '0' loop
+      sbrd(x"81", '1');
+      if ReadResult /= Prev_Step then
+        sp_updated <= '1';
+        write(my_line, now);
+        write(my_line, string'(": readback now "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+        Prev_Step <= ReadResult;
+        wait until clk'event and clk = '1';
+      end if;
+    end loop;
+    sp_updated <= '0';
+    sbwr(x"80", x"0004",'1'); -- Drive online - dither
+    while sp_updated = '0' loop
+      sbrd(x"81", '1');
+      if ReadResult /= Prev_Step then
+        sp_updated <= '1';
+        write(my_line, now);
+        write(my_line, string'(": readback now "));
+        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+        writeline(output, my_line);
+        Prev_Step <= ReadResult;
         wait until clk'event and clk = '1';
       end if;
     end loop;
