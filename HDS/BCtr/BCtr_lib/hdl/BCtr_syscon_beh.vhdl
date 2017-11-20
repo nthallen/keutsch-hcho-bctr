@@ -69,6 +69,7 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL idxData       : std_logic_vector (15 DOWNTO 0);
   SIGNAL idxWr         : std_logic;
   SIGNAL idxAck        : std_logic;
+  SIGNAL LaserV        : std_logic_vector(15 DOWNTO 0);
   
   COMPONENT syscon
     GENERIC (
@@ -247,11 +248,10 @@ ARCHITECTURE beh OF BCtr_syscon IS
       LDAC     : OUT    std_logic;
       RData    : OUT    std_logic_vector(15 DOWNTO 0);
       idxData  : OUT    std_logic_vector(15 DOWNTO 0);
+      SetPoint : OUT    std_logic_vector(15 DOWNTO 0);
       idxWr    : OUT    std_logic
     );
   END COMPONENT dacscan_sbbd;
-  FOR ALL : ips_sbbd USE ENTITY BCtr_lib.ips_sbbd;
-  FOR ALL : dacscan_sbbd USE ENTITY BCtr_lib.dacscan_sbbd;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -445,7 +445,8 @@ BEGIN
       LDAC     => LDAC,
       RData    => RData(16*6+15 DOWNTO 16*6),
       idxData  => idxData,
-      idxWr    => idxWr
+      idxWr    => idxWr,
+      SetPoint => LaserV
     );
     
   BdIntr <= (others => '0');

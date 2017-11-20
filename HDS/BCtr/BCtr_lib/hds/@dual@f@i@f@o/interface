@@ -28,7 +28,7 @@ model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
 ordering 1
-suid 24,0
+suid 139,0
 usingSuid 1
 emptyRow *1 (LEmptyRow
 )
@@ -73,63 +73,63 @@ lang 11
 decl (Decl
 n "clk"
 t "std_logic"
-o 6
-suid 13,0
+o 1
+suid 127,0
 )
 )
-uid 279,0
+uid 1301,0
 )
 *15 (LogPort
-port (LogicalPort
-lang 11
-m 1
-decl (Decl
-n "CtrData0"
-t "std_logic_vector"
-b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 8
-suid 14,0
-)
-)
-uid 281,0
-)
-*16 (LogPort
-port (LogicalPort
-lang 11
-decl (Decl
-n "CtrData1"
-t "std_logic_vector"
-b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 1
-suid 15,0
-)
-)
-uid 283,0
-)
-*17 (LogPort
 port (LogicalPort
 lang 11
 decl (Decl
 n "EnA"
 t "std_logic"
 o 2
-suid 16,0
+suid 128,0
 )
 )
-uid 285,0
+uid 1303,0
 )
-*18 (LogPort
+*16 (LogPort
 port (LogicalPort
 lang 11
 m 1
 decl (Decl
 n "FBEmpty"
 t "std_logic"
-o 9
-suid 17,0
+o 5
+suid 129,0
 )
 )
-uid 287,0
+uid 1305,0
+)
+*17 (LogPort
+port (LogicalPort
+lang 11
+m 1
+decl (Decl
+n "FBFull"
+t "std_logic"
+o 6
+suid 130,0
+)
+)
+uid 1307,0
+)
+*18 (LogPort
+port (LogicalPort
+lang 11
+m 1
+decl (Decl
+n "FBRData"
+t "std_logic_vector"
+b "(FIFO_WIDTH-1 DOWNTO 0)"
+o 10
+suid 131,0
+)
+)
+uid 1309,0
 )
 *19 (LogPort
 port (LogicalPort
@@ -137,40 +137,52 @@ lang 11
 decl (Decl
 n "FBRE"
 t "std_logic"
-o 3
-suid 18,0
+o 7
+suid 132,0
 )
 )
-uid 289,0
+uid 1311,0
 )
 *20 (LogPort
 port (LogicalPort
 lang 11
-m 1
 decl (Decl
-n "Full"
-t "std_logic"
-o 10
-suid 19,0
+n "FBWData"
+t "std_logic_vector"
+b "(FIFO_WIDTH-1 DOWNTO 0)"
+o 9
+suid 133,0
 )
 )
-uid 291,0
+uid 1313,0
 )
 *21 (LogPort
 port (LogicalPort
 lang 11
-m 1
 decl (Decl
-n "RData"
-t "std_logic_vector"
-b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 11
-suid 20,0
+n "FBWE"
+t "std_logic"
+o 8
+suid 134,0
 )
 )
-uid 293,0
+uid 1315,0
 )
 *22 (LogPort
+port (LogicalPort
+lang 11
+m 1
+decl (Decl
+n "RptData"
+t "std_logic_vector"
+b "(FIFO_WIDTH-1 DOWNTO 0)"
+o 13
+suid 135,0
+)
+)
+uid 1317,0
+)
+*23 (LogPort
 port (LogicalPort
 lang 11
 m 1
@@ -178,46 +190,46 @@ decl (Decl
 n "RptEmpty"
 t "std_logic"
 o 12
-suid 21,0
+suid 136,0
 )
 )
-uid 295,0
-)
-*23 (LogPort
-port (LogicalPort
-lang 11
-decl (Decl
-n "RptRE"
-t "std_logic"
-o 4
-suid 22,0
-)
-)
-uid 297,0
+uid 1319,0
 )
 *24 (LogPort
 port (LogicalPort
 lang 11
 decl (Decl
-n "rst"
+n "RptRE"
 t "std_logic"
-o 7
-suid 23,0
+o 11
+suid 137,0
 )
 )
-uid 299,0
+uid 1321,0
 )
 *25 (LogPort
 port (LogicalPort
 lang 11
 decl (Decl
-n "WE"
+n "rstA"
 t "std_logic"
-o 5
-suid 24,0
+o 3
+suid 138,0
 )
 )
-uid 301,0
+uid 1323,0
+)
+*26 (LogPort
+port (LogicalPort
+lang 11
+decl (Decl
+n "rstB"
+t "std_logic"
+o 4
+suid 139,0
+)
+)
+uid 1325,0
 )
 ]
 )
@@ -226,7 +238,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 150,0
 optionalChildren [
-*26 (Sheet
+*27 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -243,103 +255,109 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *27 (MRCItem
+emptyMRCItem *28 (MRCItem
 litem &1
 pos 3
 dimension 20
 )
 uid 152,0
 optionalChildren [
-*28 (MRCItem
+*29 (MRCItem
 litem &2
 pos 0
 dimension 20
 uid 153,0
 )
-*29 (MRCItem
+*30 (MRCItem
 litem &3
 pos 1
 dimension 23
 uid 154,0
 )
-*30 (MRCItem
+*31 (MRCItem
 litem &4
 pos 2
 hidden 1
 dimension 20
 uid 155,0
 )
-*31 (MRCItem
+*32 (MRCItem
 litem &14
 pos 0
 dimension 20
-uid 280,0
+uid 1302,0
 )
-*32 (MRCItem
+*33 (MRCItem
 litem &15
 pos 1
 dimension 20
-uid 282,0
+uid 1304,0
 )
-*33 (MRCItem
+*34 (MRCItem
 litem &16
 pos 2
 dimension 20
-uid 284,0
+uid 1306,0
 )
-*34 (MRCItem
+*35 (MRCItem
 litem &17
 pos 3
 dimension 20
-uid 286,0
+uid 1308,0
 )
-*35 (MRCItem
+*36 (MRCItem
 litem &18
 pos 4
 dimension 20
-uid 288,0
+uid 1310,0
 )
-*36 (MRCItem
+*37 (MRCItem
 litem &19
 pos 5
 dimension 20
-uid 290,0
+uid 1312,0
 )
-*37 (MRCItem
+*38 (MRCItem
 litem &20
 pos 6
 dimension 20
-uid 292,0
+uid 1314,0
 )
-*38 (MRCItem
+*39 (MRCItem
 litem &21
 pos 7
 dimension 20
-uid 294,0
+uid 1316,0
 )
-*39 (MRCItem
+*40 (MRCItem
 litem &22
 pos 8
 dimension 20
-uid 296,0
+uid 1318,0
 )
-*40 (MRCItem
+*41 (MRCItem
 litem &23
 pos 9
 dimension 20
-uid 298,0
+uid 1320,0
 )
-*41 (MRCItem
+*42 (MRCItem
 litem &24
 pos 10
 dimension 20
-uid 300,0
+uid 1322,0
 )
-*42 (MRCItem
+*43 (MRCItem
 litem &25
 pos 11
 dimension 20
-uid 302,0
+uid 1324,0
+)
+*44 (MRCItem
+litem &26
+pos 12
+dimension 20
+uid 1326,0
 )
 ]
 )
@@ -352,49 +370,49 @@ textAngle 90
 )
 uid 156,0
 optionalChildren [
-*43 (MRCItem
+*45 (MRCItem
 litem &5
 pos 0
 dimension 20
 uid 157,0
 )
-*44 (MRCItem
+*46 (MRCItem
 litem &7
 pos 1
 dimension 50
 uid 158,0
 )
-*45 (MRCItem
+*47 (MRCItem
 litem &8
 pos 2
 dimension 100
 uid 159,0
 )
-*46 (MRCItem
+*48 (MRCItem
 litem &9
 pos 3
 dimension 50
 uid 160,0
 )
-*47 (MRCItem
+*49 (MRCItem
 litem &10
 pos 4
 dimension 100
 uid 161,0
 )
-*48 (MRCItem
+*50 (MRCItem
 litem &11
 pos 5
 dimension 100
 uid 162,0
 )
-*49 (MRCItem
+*51 (MRCItem
 litem &12
 pos 6
 dimension 50
 uid 163,0
 )
-*50 (MRCItem
+*52 (MRCItem
 litem &13
 pos 7
 dimension 80
@@ -415,55 +433,55 @@ uid 136,0
 )
 genericsCommonDM (CommonDM
 ldm (LogicalDM
-emptyRow *51 (LEmptyRow
+emptyRow *53 (LEmptyRow
 )
 uid 166,0
 optionalChildren [
-*52 (RefLabelRowHdr
+*54 (RefLabelRowHdr
 )
-*53 (TitleRowHdr
+*55 (TitleRowHdr
 )
-*54 (FilterRowHdr
+*56 (FilterRowHdr
 )
-*55 (RefLabelColHdr
+*57 (RefLabelColHdr
 tm "RefLabelColHdrMgr"
 )
-*56 (RowExpandColHdr
+*58 (RowExpandColHdr
 tm "RowExpandColHdrMgr"
 )
-*57 (GroupColHdr
+*59 (GroupColHdr
 tm "GroupColHdrMgr"
 )
-*58 (NameColHdr
+*60 (NameColHdr
 tm "GenericNameColHdrMgr"
 )
-*59 (TypeColHdr
+*61 (TypeColHdr
 tm "GenericTypeColHdrMgr"
 )
-*60 (InitColHdr
+*62 (InitColHdr
 tm "GenericValueColHdrMgr"
 )
-*61 (PragmaColHdr
+*63 (PragmaColHdr
 tm "GenericPragmaColHdrMgr"
 )
-*62 (EolColHdr
+*64 (EolColHdr
 tm "GenericEolColHdrMgr"
 )
-*63 (LogGeneric
+*65 (LogGeneric
 generic (GiElement
 name "FIFO_WIDTH"
 type "integer range 256 downto 1"
 value "1"
 )
-uid 215,0
+uid 1004,0
 )
-*64 (LogGeneric
+*66 (LogGeneric
 generic (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 1"
 value "8"
 )
-uid 217,0
+uid 1006,0
 )
 ]
 )
@@ -472,7 +490,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 178,0
 optionalChildren [
-*65 (Sheet
+*67 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -489,43 +507,43 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *66 (MRCItem
-litem &51
+emptyMRCItem *68 (MRCItem
+litem &53
 pos 3
 dimension 20
 )
 uid 180,0
 optionalChildren [
-*67 (MRCItem
-litem &52
+*69 (MRCItem
+litem &54
 pos 0
 dimension 20
 uid 181,0
 )
-*68 (MRCItem
-litem &53
+*70 (MRCItem
+litem &55
 pos 1
 dimension 23
 uid 182,0
 )
-*69 (MRCItem
-litem &54
+*71 (MRCItem
+litem &56
 pos 2
 hidden 1
 dimension 20
 uid 183,0
 )
-*70 (MRCItem
-litem &63
+*72 (MRCItem
+litem &65
 pos 0
 dimension 20
-uid 216,0
+uid 1005,0
 )
-*71 (MRCItem
-litem &64
+*73 (MRCItem
+litem &66
 pos 1
 dimension 20
-uid 218,0
+uid 1007,0
 )
 ]
 )
@@ -538,44 +556,44 @@ textAngle 90
 )
 uid 184,0
 optionalChildren [
-*72 (MRCItem
-litem &55
+*74 (MRCItem
+litem &57
 pos 0
 dimension 20
 uid 185,0
 )
-*73 (MRCItem
-litem &57
+*75 (MRCItem
+litem &59
 pos 1
 dimension 50
 uid 186,0
 )
-*74 (MRCItem
-litem &58
+*76 (MRCItem
+litem &60
 pos 2
 dimension 100
 uid 187,0
 )
-*75 (MRCItem
-litem &59
+*77 (MRCItem
+litem &61
 pos 3
 dimension 100
 uid 188,0
 )
-*76 (MRCItem
-litem &60
+*78 (MRCItem
+litem &62
 pos 4
 dimension 50
 uid 189,0
 )
-*77 (MRCItem
-litem &61
+*79 (MRCItem
+litem &63
 pos 5
 dimension 50
 uid 190,0
 )
-*78 (MRCItem
-litem &62
+*80 (MRCItem
+litem &64
 pos 6
 dimension 80
 uid 191,0
@@ -638,19 +656,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "10/13/2017"
+value "11/19/2017"
 )
 (vvPair
 variable "day"
-value "Fri"
+value "Sun"
 )
 (vvPair
 variable "day_long"
-value "Friday"
+value "Sunday"
 )
 (vvPair
 variable "dd"
-value "13"
+value "19"
 )
 (vvPair
 variable "entity_name"
@@ -678,7 +696,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "10/13/2017"
+value "11/19/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -690,7 +708,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "14:44:40"
+value "17:25:33"
 )
 (vvPair
 variable "group"
@@ -718,7 +736,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "10"
+value "11"
 )
 (vvPair
 variable "module_name"
@@ -726,11 +744,11 @@ value "DualFIFO"
 )
 (vvPair
 variable "month"
-value "Oct"
+value "Nov"
 )
 (vvPair
 variable "month_long"
-value "October"
+value "November"
 )
 (vvPair
 variable "p"
@@ -794,7 +812,7 @@ value "interface"
 )
 (vvPair
 variable "time"
-value "14:44:40"
+value "17:25:33"
 )
 (vvPair
 variable "unit"
@@ -825,144 +843,244 @@ value "17"
 LanguageMgr "Vhdl2008LangMgr"
 uid 135,0
 optionalChildren [
-*79 (SymbolBody
+*81 (SymbolBody
 uid 8,0
 optionalChildren [
-*80 (CptPort
-uid 219,0
+*82 (CptPort
+uid 1236,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 220,0
+uid 1237,0
 ro 90
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,12625,15000,13375"
+xt "14250,19625,15000,20375"
 )
 tg (CPTG
-uid 221,0
+uid 1238,0
 ps "CptPortTextPlaceStrategy"
 stg "VerticalLayoutStrategy"
 f (Text
-uid 222,0
+uid 1239,0
 va (VaSet
 )
-xt "16000,12500,17300,13500"
+xt "16000,19500,17300,20500"
 st "clk"
-blo "16000,13300"
+blo "16000,20300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 223,0
+uid 1240,0
 va (VaSet
 font "Courier New,8,0"
 )
+xt "44000,2000,60500,2800"
+st "clk      : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "clk"
 t "std_logic"
-o 6
-suid 13,0
+o 1
+suid 127,0
 )
 )
 )
-*81 (CptPort
-uid 224,0
+*83 (CptPort
+uid 1241,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 225,0
+uid 1242,0
 ro 90
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "23000,7625,23750,8375"
+xt "14250,16625,15000,17375"
 )
 tg (CPTG
-uid 226,0
+uid 1243,0
 ps "CptPortTextPlaceStrategy"
-stg "RightVerticalLayoutStrategy"
+stg "VerticalLayoutStrategy"
 f (Text
-uid 227,0
+uid 1244,0
 va (VaSet
 )
-xt "18500,7500,22000,8500"
-st "CtrData0"
-ju 2
-blo "22000,8300"
+xt "16000,16500,17800,17500"
+st "EnA"
+blo "16000,17300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 228,0
+uid 1245,0
 va (VaSet
 font "Courier New,8,0"
 )
+xt "44000,2800,60500,3600"
+st "EnA      : IN     std_logic  ;
+"
+)
+thePort (LogicalPort
+lang 11
+decl (Decl
+n "EnA"
+t "std_logic"
+o 2
+suid 128,0
+)
+)
+)
+*84 (CptPort
+uid 1246,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1247,0
+ro 270
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,13625,15000,14375"
+)
+tg (CPTG
+uid 1248,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1249,0
+va (VaSet
+)
+xt "16000,13500,19400,14500"
+st "FBEmpty"
+blo "16000,14300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1250,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,5200,60500,6000"
+st "FBEmpty  : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 m 1
 decl (Decl
-n "CtrData0"
-t "std_logic_vector"
-b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 8
-suid 14,0
+n "FBEmpty"
+t "std_logic"
+o 5
+suid 129,0
 )
 )
 )
-*82 (CptPort
-uid 229,0
+*85 (CptPort
+uid 1251,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 230,0
+uid 1252,0
+ro 270
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,14625,15000,15375"
+)
+tg (CPTG
+uid 1253,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1254,0
+va (VaSet
+)
+xt "16000,14500,18700,15500"
+st "FBFull"
+blo "16000,15300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1255,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,6000,60500,6800"
+st "FBFull   : OUT    std_logic  ;
+"
+)
+thePort (LogicalPort
+lang 11
+m 1
+decl (Decl
+n "FBFull"
+t "std_logic"
+o 6
+suid 130,0
+)
+)
+)
+*86 (CptPort
+uid 1256,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1257,0
 ro 90
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,6625,15000,7375"
+xt "23000,6625,23750,7375"
 )
 tg (CPTG
-uid 231,0
+uid 1258,0
 ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
+stg "RightVerticalLayoutStrategy"
 f (Text
-uid 232,0
+uid 1259,0
 va (VaSet
 )
-xt "16000,6500,19500,7500"
-st "CtrData1"
-blo "16000,7300"
+xt "18400,6500,22000,7500"
+st "FBRData"
+ju 2
+blo "22000,7300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 233,0
+uid 1260,0
 va (VaSet
 font "Courier New,8,0"
 )
+xt "44000,9200,76000,10000"
+st "FBRData  : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
+m 1
 decl (Decl
-n "CtrData1"
+n "FBRData"
 t "std_logic_vector"
 b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 1
-suid 15,0
+o 10
+suid 131,0
 )
 )
 )
-*83 (CptPort
-uid 234,0
+*87 (CptPort
+uid 1261,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 235,0
+uid 1262,0
 ro 90
 va (VaSet
 vasetType 1
@@ -971,240 +1089,211 @@ fg "0,65535,0"
 xt "14250,11625,15000,12375"
 )
 tg (CPTG
-uid 236,0
+uid 1263,0
 ps "CptPortTextPlaceStrategy"
 stg "VerticalLayoutStrategy"
 f (Text
-uid 237,0
+uid 1264,0
 va (VaSet
 )
-xt "16000,11500,17800,12500"
-st "EnA"
+xt "16000,11500,18500,12500"
+st "FBRE"
 blo "16000,12300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 238,0
+uid 1265,0
 va (VaSet
 font "Courier New,8,0"
 )
-)
-thePort (LogicalPort
-lang 11
-decl (Decl
-n "EnA"
-t "std_logic"
-o 2
-suid 16,0
-)
-)
-)
-*84 (CptPort
-uid 239,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 240,0
-ro 270
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "14250,9625,15000,10375"
-)
-tg (CPTG
-uid 241,0
-ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
-f (Text
-uid 242,0
-va (VaSet
-)
-xt "16000,9500,19400,10500"
-st "FBEmpty"
-blo "16000,10300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 243,0
-va (VaSet
-font "Courier New,8,0"
-)
-)
-thePort (LogicalPort
-lang 11
-m 1
-decl (Decl
-n "FBEmpty"
-t "std_logic"
-o 9
-suid 17,0
-)
-)
-)
-*85 (CptPort
-uid 244,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 245,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "14250,7625,15000,8375"
-)
-tg (CPTG
-uid 246,0
-ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
-f (Text
-uid 247,0
-va (VaSet
-)
-xt "16000,7500,18500,8500"
-st "FBRE"
-blo "16000,8300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 248,0
-va (VaSet
-font "Courier New,8,0"
-)
+xt "44000,6800,60500,7600"
+st "FBRE     : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "FBRE"
 t "std_logic"
-o 3
-suid 18,0
+o 7
+suid 132,0
 )
 )
 )
-*86 (CptPort
-uid 249,0
+*88 (CptPort
+uid 1266,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 250,0
+uid 1267,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,6625,15000,7375"
+)
+tg (CPTG
+uid 1268,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1269,0
+va (VaSet
+)
+xt "16000,6500,19700,7500"
+st "FBWData"
+blo "16000,7300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1270,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,8400,76000,9200"
+st "FBWData  : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0) ;
+"
+)
+thePort (LogicalPort
+lang 11
+decl (Decl
+n "FBWData"
+t "std_logic_vector"
+b "(FIFO_WIDTH-1 DOWNTO 0)"
+o 9
+suid 133,0
+)
+)
+)
+*89 (CptPort
+uid 1271,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1272,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,12625,15000,13375"
+)
+tg (CPTG
+uid 1273,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1274,0
+va (VaSet
+)
+xt "16000,12500,18600,13500"
+st "FBWE"
+blo "16000,13300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1275,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,7600,60500,8400"
+st "FBWE     : IN     std_logic  ;
+"
+)
+thePort (LogicalPort
+lang 11
+decl (Decl
+n "FBWE"
+t "std_logic"
+o 8
+suid 134,0
+)
+)
+)
+*90 (CptPort
+uid 1276,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1277,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "23000,14625,23750,15375"
+)
+tg (CPTG
+uid 1278,0
+ps "CptPortTextPlaceStrategy"
+stg "RightVerticalLayoutStrategy"
+f (Text
+uid 1279,0
+va (VaSet
+)
+xt "18800,14500,22000,15500"
+st "RptData"
+ju 2
+blo "22000,15300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1280,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,11600,75000,12400"
+st "RptData  : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0)
+"
+)
+thePort (LogicalPort
+lang 11
+m 1
+decl (Decl
+n "RptData"
+t "std_logic_vector"
+b "(FIFO_WIDTH-1 DOWNTO 0)"
+o 13
+suid 135,0
+)
+)
+)
+*91 (CptPort
+uid 1281,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1282,0
 ro 270
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,10625,15000,11375"
+xt "14250,15625,15000,16375"
 )
 tg (CPTG
-uid 251,0
+uid 1283,0
 ps "CptPortTextPlaceStrategy"
 stg "VerticalLayoutStrategy"
 f (Text
-uid 252,0
+uid 1284,0
 va (VaSet
 )
-xt "16000,10500,17700,11500"
-st "Full"
-blo "16000,11300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 253,0
-va (VaSet
-font "Courier New,8,0"
-)
-)
-thePort (LogicalPort
-lang 11
-m 1
-decl (Decl
-n "Full"
-t "std_logic"
-o 10
-suid 19,0
-)
-)
-)
-*87 (CptPort
-uid 254,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 255,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "23000,8625,23750,9375"
-)
-tg (CPTG
-uid 256,0
-ps "CptPortTextPlaceStrategy"
-stg "RightVerticalLayoutStrategy"
-f (Text
-uid 257,0
-va (VaSet
-)
-xt "19400,8500,22000,9500"
-st "RData"
-ju 2
-blo "22000,9300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 258,0
-va (VaSet
-font "Courier New,8,0"
-)
-)
-thePort (LogicalPort
-lang 11
-m 1
-decl (Decl
-n "RData"
-t "std_logic_vector"
-b "(FIFO_WIDTH-1 DOWNTO 0)"
-o 11
-suid 20,0
-)
-)
-)
-*88 (CptPort
-uid 259,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 260,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "23000,10625,23750,11375"
-)
-tg (CPTG
-uid 261,0
-ps "CptPortTextPlaceStrategy"
-stg "RightVerticalLayoutStrategy"
-f (Text
-uid 262,0
-va (VaSet
-)
-xt "18400,10500,22000,11500"
+xt "16000,15500,19600,16500"
 st "RptEmpty"
-ju 2
-blo "22000,11300"
+blo "16000,16300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 263,0
+uid 1285,0
 va (VaSet
 font "Courier New,8,0"
 )
+xt "44000,10800,60500,11600"
+st "RptEmpty : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1213,134 +1302,143 @@ decl (Decl
 n "RptEmpty"
 t "std_logic"
 o 12
-suid 21,0
+suid 136,0
 )
 )
 )
-*89 (CptPort
-uid 264,0
+*92 (CptPort
+uid 1286,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 265,0
+uid 1287,0
 ro 270
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "23000,11625,23750,12375"
+xt "23000,15625,23750,16375"
 )
 tg (CPTG
-uid 266,0
+uid 1288,0
 ps "CptPortTextPlaceStrategy"
 stg "RightVerticalLayoutStrategy"
 f (Text
-uid 267,0
+uid 1289,0
 va (VaSet
 )
-xt "19300,11500,22000,12500"
+xt "19300,15500,22000,16500"
 st "RptRE"
 ju 2
-blo "22000,12300"
+blo "22000,16300"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 268,0
+uid 1290,0
 va (VaSet
 font "Courier New,8,0"
 )
+xt "44000,10000,60500,10800"
+st "RptRE    : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "RptRE"
 t "std_logic"
+o 11
+suid 137,0
+)
+)
+)
+*93 (CptPort
+uid 1291,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1292,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,17625,15000,18375"
+)
+tg (CPTG
+uid 1293,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1294,0
+va (VaSet
+)
+xt "16000,17500,17800,18500"
+st "rstA"
+blo "16000,18300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1295,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,3600,60500,4400"
+st "rstA     : IN     std_logic  ;
+"
+)
+thePort (LogicalPort
+lang 11
+decl (Decl
+n "rstA"
+t "std_logic"
+o 3
+suid 138,0
+)
+)
+)
+*94 (CptPort
+uid 1296,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 1297,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,18625,15000,19375"
+)
+tg (CPTG
+uid 1298,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 1299,0
+va (VaSet
+)
+xt "16000,18500,17800,19500"
+st "rstB"
+blo "16000,19300"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 1300,0
+va (VaSet
+font "Courier New,8,0"
+)
+xt "44000,4400,60500,5200"
+st "rstB     : IN     std_logic  ;
+"
+)
+thePort (LogicalPort
+lang 11
+decl (Decl
+n "rstB"
+t "std_logic"
 o 4
-suid 22,0
-)
-)
-)
-*90 (CptPort
-uid 269,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 270,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "14250,13625,15000,14375"
-)
-tg (CPTG
-uid 271,0
-ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
-f (Text
-uid 272,0
-va (VaSet
-)
-xt "16000,13500,17300,14500"
-st "rst"
-blo "16000,14300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 273,0
-va (VaSet
-font "Courier New,8,0"
-)
-)
-thePort (LogicalPort
-lang 11
-decl (Decl
-n "rst"
-t "std_logic"
-o 7
-suid 23,0
-)
-)
-)
-*91 (CptPort
-uid 274,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 275,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "14250,8625,15000,9375"
-)
-tg (CPTG
-uid 276,0
-ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
-f (Text
-uid 277,0
-va (VaSet
-)
-xt "16000,8500,17600,9500"
-st "WE"
-blo "16000,9300"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 278,0
-va (VaSet
-font "Courier New,8,0"
-)
-)
-thePort (LogicalPort
-lang 11
-decl (Decl
-n "WE"
-t "std_logic"
-o 5
-suid 24,0
+suid 139,0
 )
 )
 )
@@ -1353,8 +1451,9 @@ fg "0,65535,0"
 lineColor "0,32896,0"
 lineWidth 2
 )
-xt "15000,6000,23000,16000"
+xt "15000,6000,23000,22000"
 )
+oxt "15000,6000,23000,16000"
 biTextGroup (BiTextGroup
 uid 10,0
 ps "CenterOffsetStrategy"
@@ -1364,21 +1463,21 @@ uid 11,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "17050,10000,20550,11000"
+xt "17050,13000,20550,14000"
 st "BCtr_lib"
-blo "17050,10800"
+blo "17050,13800"
 )
 second (Text
 uid 12,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "17050,11000,20950,12000"
+xt "17050,14000,20950,15000"
 st "DualFIFO"
-blo "17050,11800"
+blo "17050,14800"
 )
 )
-gi *92 (GenericInterface
+gi *95 (GenericInterface
 uid 13,0
 ps "CenterOffsetStrategy"
 matrix (Matrix
@@ -1388,12 +1487,11 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "-5000,7000,20000,10200"
+xt "-5000,10000,20000,13200"
 st "Generic Declarations
 
 FIFO_WIDTH      integer range 256 downto 1 1  
-FIFO_ADDR_WIDTH integer range 10 downto 1  8  
-"
+FIFO_ADDR_WIDTH integer range 10 downto 1  8  "
 )
 header "Generic Declarations"
 showHdrWhenContentsEmpty 1
@@ -1421,10 +1519,10 @@ sTC 0
 sF 0
 )
 )
-*93 (Grouping
+*96 (Grouping
 uid 16,0
 optionalChildren [
-*94 (CommentText
+*97 (CommentText
 uid 18,0
 shape (Rectangle
 uid 19,0
@@ -1442,7 +1540,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "31200,50000,39800,51000"
+xt "31200,50000,39900,51000"
 st "
 by %user on %dd %month %year
 "
@@ -1455,7 +1553,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*95 (CommentText
+*98 (CommentText
 uid 21,0
 shape (Rectangle
 uid 22,0
@@ -1486,7 +1584,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*96 (CommentText
+*99 (CommentText
 uid 24,0
 shape (Rectangle
 uid 25,0
@@ -1517,7 +1615,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*97 (CommentText
+*100 (CommentText
 uid 27,0
 shape (Rectangle
 uid 28,0
@@ -1548,7 +1646,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*98 (CommentText
+*101 (CommentText
 uid 30,0
 shape (Rectangle
 uid 31,0
@@ -1578,7 +1676,7 @@ visibleWidth 20000
 ignorePrefs 1
 titleBlock 1
 )
-*99 (CommentText
+*102 (CommentText
 uid 33,0
 shape (Rectangle
 uid 34,0
@@ -1609,7 +1707,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*100 (CommentText
+*103 (CommentText
 uid 36,0
 shape (Rectangle
 uid 37,0
@@ -1640,7 +1738,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*101 (CommentText
+*104 (CommentText
 uid 39,0
 shape (Rectangle
 uid 40,0
@@ -1671,7 +1769,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*102 (CommentText
+*105 (CommentText
 uid 42,0
 shape (Rectangle
 uid 43,0
@@ -1702,7 +1800,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*103 (CommentText
+*106 (CommentText
 uid 45,0
 shape (Rectangle
 uid 46,0
@@ -1758,11 +1856,11 @@ xShown 1
 yShown 1
 color "26368,26368,26368"
 )
-packageList *104 (PackageList
+packageList *107 (PackageList
 uid 48,0
 stg "VerticalLayoutStrategy"
 textVec [
-*105 (Text
+*108 (Text
 uid 49,0
 va (VaSet
 font "arial,8,1"
@@ -1771,7 +1869,7 @@ xt "0,0,5400,1000"
 st "Package List"
 blo "0,800"
 )
-*106 (MLText
+*109 (MLText
 uid 50,0
 va (VaSet
 )
@@ -1899,7 +1997,7 @@ st "<cell>"
 blo "22200,16800"
 )
 )
-gi *107 (GenericInterface
+gi *110 (GenericInterface
 ps "CenterOffsetStrategy"
 matrix (Matrix
 text (MLText
@@ -1998,7 +2096,7 @@ o 0
 )
 )
 )
-DeclarativeBlock *108 (SymDeclBlock
+DeclarativeBlock *111 (SymDeclBlock
 uid 1,0
 stg "SymDeclLayoutStrategy"
 declLabel (Text
@@ -2024,9 +2122,9 @@ uid 4,0
 va (VaSet
 font "Arial,8,1"
 )
-xt "42000,11600,44400,12600"
+xt "42000,12400,44400,13400"
 st "User:"
-blo "42000,12400"
+blo "42000,13200"
 )
 internalLabel (Text
 uid 6,0
@@ -2043,7 +2141,7 @@ uid 5,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,12600,44000,12600"
+xt "44000,13400,44000,13400"
 tm "SyDeclarativeTextMgr"
 )
 internalText (MLText
@@ -2056,6 +2154,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 302,0
+lastUid 1326,0
 activeModelName "Symbol:CDM"
 )

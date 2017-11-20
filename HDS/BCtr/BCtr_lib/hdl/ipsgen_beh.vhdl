@@ -104,6 +104,7 @@ BEGIN
         RData <= (others => '0');
         IPctr <= (others => '0');
         IPnum_int <= (others => '0');
+        IPnum <= (others => '0');
         NCerr_povf <= '0';
         NCerr_novf <= '0';
         IPS <= '0';
@@ -111,6 +112,7 @@ BEGIN
         evaluate_NCerr <= '0';
         NCc_state <= NCc_idle;
       else
+        IPnum <= std_logic_vector(IPnum_int);
         if PPS = '1' then
           startup <= '0';
           if IPctr = to_unsigned(0,IPctr'length) then
@@ -229,7 +231,6 @@ BEGIN
     end if;
   END PROCESS;
   
-  IPnum <= std_logic_vector(IPnum_int);
   
 END ARCHITECTURE beh;
 

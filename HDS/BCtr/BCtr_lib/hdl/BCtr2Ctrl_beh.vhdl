@@ -29,6 +29,7 @@ ENTITY BCtr2Ctrl IS
   PORT( 
     En         : IN     std_logic;
     NA         : IN     unsigned (15 DOWNTO 0);
+    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
     TrigSeen   : IN     std_logic;
     clk        : IN     std_logic;
     rst        : IN     std_logic;
@@ -40,20 +41,22 @@ ENTITY BCtr2Ctrl IS
     TrigOE     : OUT    std_logic;
     first_col  : OUT    std_logic;
     first_row  : OUT    std_logic;
-    NSkipped   : OUT    unsigned (15 DOWNTO 0);
-    FBEmpty    : IN     std_logic;
-    Full       : IN     std_logic;
-    WE         : OUT    std_logic;
     FBRE       : OUT    std_logic;
-    RptEmpty   : IN     std_logic;
     EnA        : OUT    std_logic;
-    ToffsetOut : OUT    std_logic_vector (15 DOWNTO 0);
-    ToffsetIn  : IN     std_logic_vector (15 DOWNTO 0);
-    IntBndry   : IN     std_logic;
-    NTriggered : OUT    std_logic_vector (15 DOWNTO 0);
-    LaserV     : IN     std_logic_vector (15 DOWNTO 0);
+    NTriggered : OUT    std_logic_vector (31 DOWNTO 0);
     LaserVOut  : OUT    std_logic_vector (15 DOWNTO 0);
-    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0)
+    IPnumOut   : OUT    std_logic_vector (5 DOWNTO 0);
+    LaserV     : IN     std_logic_vector (15 DOWNTO 0);
+    IPnum      : IN     std_logic_vector (5 DOWNTO 0);
+    IPS        : IN     std_logic;
+    FBEmpty    : IN     std_logic;
+    RptEmpty   : IN     std_logic;
+    rstA       : OUT    std_logic;
+    rstB       : OUT    std_logic;
+    FBFull     : IN     std_logic;
+    FBWE       : OUT    std_logic;
+    Expired    : OUT    std_logic;
+    txing      : IN     std_logic
   );
 
 -- Declarations
@@ -76,22 +79,26 @@ ARCHITECTURE fsm OF BCtr2Ctrl IS
    SIGNAL next_state : STATE_TYPE;
 
    SIGNAL NBcnt : unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-   SIGNAL NCcnt : unsigned (23 DOWNTO 0);
+   SIGNAL Ntrig_cnt : unsigned (23 DOWNTO 0);
+   SIGNAL exp_Ntrig : unsigned (23 DOWNTO 0);
    SIGNAL NAcnt : unsigned (15 DOWNTO 0);
 
    -- Declare any pre-registered internal signals
    SIGNAL first_row_cld : std_logic;
    SIGNAL first_col_cld : std_logic;
    SIGNAL CntEn_cld : std_logic;
-   SIGNAL WE1_cld : std_logic;
-   SIGNAL WE2_cld : std_logic;
-   SIGNAL RE1_cld : std_logic;
+   SIGNAL WE_cld : std_logic;
+   SIGNAL RE_cld : std_logic;
    SIGNAL DRdy_cld : std_logic;
    SIGNAL TrigClr_cld : std_logic;
    SIGNAL TrigOE_cld : std_logic;
    SIGNAL TrigArm_cld : std_logic;
-   SIGNAL Skipping : std_logic;
-   SIGNAL NSkip : unsigned (15 DOWNTO 0);
+   SIGNAL cur_LaserV : std_logic_vector(15 DOWNTO 0);
+   SIGNAL cur_IPnum : std_logic_vector(5 DOWNTO 0);
+   SIGNAL exp_LaserV : std_logic_vector(15 DOWNTO 0);
+   SIGNAL exp_IPnum : std_logic_vector(5 DOWNTO 0);
+   SIGNAL expired_2 : std_logic; -- expired while reading
+   SIGNAL IPSseen : std_logic;
 BEGIN
 
   -----------------------------------------------------------------
@@ -105,157 +112,174 @@ BEGIN
         first_row_cld <= '1';
         first_col_cld <= '1';
         CntEn_cld <= '0';
-        WE1_cld <= '0';
-        WE2_cld <= '0';
-        RE1_cld <= '0';
+        WE_cld <= '0';
+        RE_cld <= '0';
         DRdy_cld <= '0';
         TrigClr_cld <= '0';
         TrigOE_cld <= '1';
         TrigArm_cld <= '0';
         NAcnt <= (others => '0');
         NBcnt <= (others => '0');
-        NCcnt <= (others => '0');
+        Ntrig_cnt <= (others => '0');
         NArd <= '0';
-        Skipping <= '0';
-        NSkip <= (others => '0');
-        NSkipped <= (others => '0');
+        behind <= '0';
+        expired_2 <= '0';
+        Expired <= '0';
+        rstA <= '1';
+        rstB <= '1';
+        EnA <= '1'; -- Start with A on Feedback
+        IPSseen <= '0';
+        NTriggered <= (others => '0');
+        LaserVOut <= (others => '0');
+        IPnumOut <= (others => '0');
+        exp_Ntrig <= (others => '0');
+        exp_LaserV <= (others => '0');
+        exp_IPnum <= (others => '0');
       ELSE
         current_state <= next_state;
 
         -- Combined Actions
-        CASE current_state IS -- Disabled.
+        CASE current_state IS
           WHEN Startup => 
             first_row_cld <= '1';
             first_col_cld <= '1';
             CntEn_cld <= '0';
-            WE1_cld <= '0';
-            WE2_cld <= '0';
-            RE1_cld <= '1';
+            WE_cld <= '0';
+            RE_cld <= '0';
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
-            Skipping <= '0';
             NArd <= '0';
           WHEN ReportArmed => 
+            IPSseen <= '0';
+            -- Reset the FIFO we're going to write to:
+            IF EnA = '1' THEN
+              rstA <= '1';
+            ELSE
+              rstB <= '1';
+            END IF;
             first_row_cld <= '1';
             CntEn_cld <= '0';
-            WE1_cld <= '0';
-            WE2_cld <= '0';
-            RE1_cld <= '0';
-            NCcnt <= (others => '0');
+            WE_cld <= '0';
+            RE_cld <= '0';
+            Ntrig_cnt <= (others => '0');
             TrigClr_cld <= '1';
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
             NArd <= '0';
-            NSkip <= (others => '0');
-            if Empty2 = '1' then
-              DRdy_cld <= '0';
-            end if;
           WHEN TriggerArmed =>
+            rstA <= '0';
+            rstB <= '0';
             first_col_cld <= '1';
             CntEn_cld <= '0';
-            WE1_cld <= '0';
-            WE2_cld <= '0';
-            RE1_cld <= '0';
+            WE_cld <= '0';
+            RE_cld <= '0';
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
             NArd <= '0';
-            IF En = '1' AND TrigSeen = '1' THEN
-              IF ( NC = 0 OR NCcnt = 1 ) AND Empty2 = '0' THEN
-                Skipping <= '1';
+            IF IPS = '1' OR IPSseen = '1' THEN
+              IF RptEmpty = '1' AND txing = '0' THEN
+                EnA <= not(EnA);
+                LaserVOut <= cur_LaserV;
+                IPnumOut <= cur_IPnum;
+                NTriggered <= std_logic_vector(
+                  resize(Ntrig_cnt,NTriggered'length));
+                Expired <= '0';
+                DRdy_cld <= '1';
+              ELSIF txing = '0' THEN
+                EnA <= not(EnA);
+                Expired <= '1';
+                exp_LaserV <= cur_LaserV;
+                exp_IPnum <= cur_IPnum;
+                NTriggered <= std_logic_vector(
+                  resize(Ntrig_cnt,NTriggered'length));
               ELSE
-                Skipping <= '0';
-                IF NCcnt = 0 THEN
-                  NCcnt <= NC;
-                ELSE
-                  NCcnt <= NCcnt - 1;
-                END IF;
+                expired_2 <= '1';
+                exp_LaserV <= cur_LaserV;
+                exp_IPnum <= cur_IPnum;
+                exp_Ntrig <= Ntrig_cnt;
               END IF;
             END IF;
+            IF En = '1' AND TrigSeen = '1' THEN
+              Ntrig_cnt <= Ntrig_cnt + 1;
+            END IF;
           WHEN Triggered =>
-            IF Skipping = '1' THEN
-              NSkip <= NSkip + 1;
-            ELSE
-              CntEn_cld <= '1';
-              if first_row_cld = '0' then
-                RE1_cld <= '1';
-              end if;
-              if NA = 0 AND NB = 0 then
-                if NCcnt = 0 then
-                  WE2_cld <= '1';
-                else
-                  WE1_cld <= '1';
-                end if;
-              end if;
+            CntEn_cld <= '1';
+            IF first_row_cld = '0' THEN
+              RE_cld <= '1';
+            END IF;
+            IF NA = 0 AND NBtot = 0 THEN
+              WE_cld <= '1';
             END IF;
             TrigArm_cld <= '0';
-            NBcnt <= NB;
+            NBcnt <= NBtot;
             NAcnt <= NA;
             NArd <= '1';
           WHEN Scanning =>
             TrigClr_cld <= '1';
             TrigArm_cld <= '0';
             NArd <= '0';
-            if Empty2 = '1' then
-              DRdy_cld <= '0';
-            end if;
             if NAcnt = 0 then -- last sample in a bin
               NAcnt <= NA;
               NArd <= '1';
               first_col_cld <= '1';
-              if Skipping = '0' then
-                if first_row_cld = '0' then
-                  RE1_cld <= '1';
-                end if;
-                if NCcnt = 0 then
-                  WE2_cld <= '1';
-                else
-                  WE1_cld <= '1';
-                end if;
+              if first_row_cld = '0' then
+                RE_cld <= '1';
               end if;
+              WE_cld <= '1';
               if NBcnt = 0 then -- last sample in a trigger
-                NBcnt <= NB;
+                NBcnt <= NBtot;
                 CntEn_cld <= '0';
-                RE1_cld <= '0';
-                if NCcnt = 0 AND Skipping = '0' then -- last sample in a report
-                  -- NCcnt <= NC;
-                  DRdy_cld <= '1';
-                  NSkipped <= NSkip;
-                  first_row_cld <= '1';
-                else
-                  if Skipping = '0' then
-                    first_row_cld <= '0';
-                  end if;
-                end if;
+                RE_cld <= '0';
+                first_row_cld <= '0';
               else
                 NBcnt <= NBcnt - 1;
               end if;
             else
               NAcnt <= NAcnt - 1;
               first_col_cld <= '0';
-              WE1_cld <= '0';
-              WE2_cld <= '0';
-              RE1_cld <= '0';
+              WE_cld <= '0';
+              RE_cld <= '0';
             end if;
           WHEN OTHERS =>
             NULL;
         END CASE;
+        
+        IF IPS = '1' THEN
+          IPSseen <= '1';
+          cur_LaserV <= LaserV;
+          cur_IPnum <= IPnum;
+        END IF;
+        
+        IF txing = '1' THEN
+          DRdy_cld <= '0';
+        ELSIF DRdy_cld = '0' AND RptEmpty = '1' THEN
+          IF expired_2 = '1' OR Expired = '1' THEN
+            DRdy_cld <= '1';
+            Expired <= expired_2;
+            expired_2 <= '0';
+            IPnumOut <= exp_IPnum;
+            LaserVOut <= exp_LaserV;
+            NTriggered <= std_logic_vector(
+                  resize(exp_Ntrig,NTriggered'length));
+          END IF;
+        END IF;
       END IF;
     END IF;
   END PROCESS clocked_proc;
 
   -----------------------------------------------------------------
    nextstate_proc : PROCESS ( 
-      En,
-      TrigSeen, Empty1,
-      NAcnt, NBcnt, NCcnt,
-      current_state, Skipping
+      En, IPS, IPSseen,
+      TrigSeen, FBEmpty,
+      NAcnt, NBcnt,
+      current_state
    )
    -----------------------------------------------------------------
   BEGIN
     CASE current_state IS
       WHEN Startup => 
-        IF (En = '1' AND Empty1 = '1') THEN 
+        IF (En = '1' AND FBEmpty = '1' AND IPS = '1') THEN 
           next_state <= ReportArmed;
         ELSE
           next_state <= Startup;
@@ -269,6 +293,8 @@ BEGIN
       WHEN TriggerArmed =>
         IF En /= '1' THEN 
           next_state <= Startup;
+        ELSIF IPS = '1' OR IPSseen = '1' THEN
+          next_state <= ReportArmed;
         ELSIF TrigSeen = '1' THEN
           next_state <= Triggered;
         ELSE
@@ -284,10 +310,8 @@ BEGIN
         if En /= '1' then
           next_state <= Startup;
         elsif NAcnt = 0 AND NBcnt = 0 then
-          IF NCcnt = 0 AND Skipping = '0' THEN
+          IF IPS = '1' OR IPSseen = '1' THEN
             next_state <= ReportArmed;
---          ELSIF NCcnt = 1 AND Empty2 = '0' THEN
---            next_state <= TriggerDelayed;
           ELSE
             next_state <= TriggerArmed;
           end if;
@@ -299,25 +323,15 @@ BEGIN
     END CASE;
   END PROCESS nextstate_proc;
   
-  DRdy_qual : PROCESS (clk) IS
-  BEGIN
-    IF clk'Event AND clk = '1' THEN
-      IF DRdy_cld = '1' AND Empty2 = '0' THEN
-        DRdy <= '1';
-      ELSE
-        DRdy <= '0';
-      END IF;
-    END IF;
-  END PROCESS DRdy_qual;
+  DRdy <= DRdy_cld;
  
   -- Concurrent Statements
   -- Clocked output assignments
   first_row <= first_row_cld;
   first_col <= first_col_cld;
   CntEn <= CntEn_cld;
-  WE1 <= WE1_cld;
-  WE2 <= WE2_cld;
-  RE1 <= RE1_cld;
+  FBWE <= WE_cld;
+  FBRE <= RE_cld;
   TrigClr <= TrigClr_cld;
   TrigOE <= TrigOE_cld;
   TrigArm <= TrigArm_cld;

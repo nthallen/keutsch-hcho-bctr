@@ -16,22 +16,20 @@ ENTITY BCtr2_cfg IS
     FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
   );
   PORT( 
-    CfgAddr  : IN     unsigned (3 DOWNTO 0);
-    ExpReset : IN     std_logic;
-    NArd     : IN     std_logic;
-    RdEn     : IN     std_logic;
-    TrigArm  : IN     std_logic;
-    WData    : IN     std_logic_vector (15 DOWNTO 0);
-    WrEn     : IN     std_logic;
-    clk      : IN     std_logic;
-    CData    : OUT    std_logic_vector (15 DOWNTO 0);
-    En       : OUT    std_logic;
-    NA       : OUT    unsigned (15 DOWNTO 0);
-    NBtot    : OUT    unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-    NC       : OUT    unsigned (23 DOWNTO 0);
-    rst      : OUT    std_logic;
-    Status   : OUT    std_logic_vector (5 DOWNTO 0);
-    NCf      : OUT    unsigned (15 DOWNTO 0)
+    CfgAddr   : IN     unsigned (3 DOWNTO 0);
+    ExpReset  : IN     std_logic;
+    WData     : IN     std_logic_vector (15 DOWNTO 0);
+    clk       : IN     std_logic;
+    CData     : OUT    std_logic_vector (15 DOWNTO 0);
+    En        : OUT    std_logic;
+    NA        : OUT    unsigned (15 DOWNTO 0);
+    NBtot     : OUT    unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    rst       : OUT    std_logic;
+    WrEn      : IN     std_logic;
+    RdEn      : IN     std_logic;
+    NArd      : IN     std_logic;
+    TrigArm   : IN     std_logic;
+    CfgStatus : OUT    std_logic_vector (5 DOWNTO 0)
   );
 
 -- Declarations
@@ -41,7 +39,7 @@ END ENTITY BCtr2_cfg ;
 --
 ARCHITECTURE beh OF BCtr2_cfg IS
   TYPE State_t IS (
-    S_INIT, S_CHK_NAB, S_CHK_NAB2, S_CHK_NC,
+    S_INIT, S_CHK_NAB, S_CHK_NAB2,
     S_RESET, S_RESET2,
     S_EN
   );
@@ -56,8 +54,6 @@ ARCHITECTURE beh OF BCtr2_cfg IS
   SIGNAL NB_in1 : UNSIGNED(15 DOWNTO 0);
   SIGNAL NBtotal : UNSIGNED(FIFO_ADDR_WIDTH DOWNTO 0);
   SIGNAL NBcnt   : UNSIGNED(FIFO_ADDR_WIDTH-1 DOWNTO 0);
-  SIGNAL NC_int : unsigned(23 DOWNTO 0);
-  SIGNAL NC_out : unsigned(23 DOWNTO 0);
   SIGNAL IntReset : std_logic;
   SIGNAL N_NAB : integer range 4 DOWNTO 0;
   SIGNAL NAB : integer range 4 DOWNTO 0;
@@ -67,8 +63,6 @@ ARCHITECTURE beh OF BCtr2_cfg IS
   SIGNAL config_err_ovf : std_logic;
   SIGNAL config_reg_addr : std_logic;
   SIGNAL nab_regs_addr : std_logic;
-  SIGNAL nc_lsb_addr : std_logic;
-  SIGNAL nc_msb_addr : std_logic;
   SIGNAL offset : unsigned(3 DOWNTO 0);
     SIGNAL tr_index : integer range 3 downto 0;
     SIGNAL tr_index4 : integer range 4 downto 0;
@@ -114,18 +108,6 @@ BEGIN
         nab_regs_addr <= '0';
       END CASE;
 
-      IF (CfgAddr = "1011") THEN
-        nc_lsb_addr <= '1';
-      ELSE
-        nc_lsb_addr <= '0';
-      END IF;
-
-      IF (CfgAddr = "1100") THEN
-        nc_msb_addr <= '1';
-      ELSE
-        nc_msb_addr <= '0';
-      END IF;
-
       offset <= CfgAddr - 3;
     END IF;
   END PROCESS;
@@ -142,7 +124,6 @@ BEGIN
       NB_in <= (others => '0');
       NBtotal <= (others => '0');
       NBtot <= (others => '0');
-      NC_int <= (others => '0');
       En_int <= '0';
       N_NAB <= 0;
       NAB <= 0;
@@ -204,23 +185,6 @@ BEGIN
               END IF;
               current_state <= S_INIT;
             END IF;
-          ELSIF (nc_lsb_addr = '1') THEN
-            IF (WrEn = '1') THEN
-              NC_int(15 DOWNTO 0) <= unsigned(WData);
-              current_state <= S_CHK_NC;
-            ELSIF (RdEn = '1') THEN
-              CData <= std_logic_vector(NC_int(15 DOWNTO 0));
-              current_state <= S_INIT;
-            END IF;
-          ELSIF (nc_msb_addr = '1') THEN
-            IF (WrEn = '1') THEN
-              NC_int(23 DOWNTO 16) <= unsigned(WData(23-16 DOWNTO 0));
-              current_state <= S_CHK_NC;
-            ELSIF (RdEn = '1') THEN
-              CData(15 DOWNTO 24-16) <= (others => '0');
-              CData(23-16 DOWNTO 0) <= std_logic_vector(NC_int(23 DOWNTO 16));
-              current_state <= S_INIT;
-            END IF;
           END IF;
         WHEN S_CHK_NAB =>
           -- Check for legality
@@ -246,21 +210,9 @@ BEGIN
             NBtot <= NBtotal1(FIFO_ADDR_WIDTH-1 DOWNTO 0);
             NA_in <= (others => '0');
             NB_in <= (others => '0');
-            IF (NC_int > 0) THEN
-              Ready <= '1';
-            ELSE
-              Ready <= '0';
-            END IF;
-          ELSE
-            config_err_ovf <= '1';
-            Ready <= '0';
-          END IF;
-          current_state <= S_INIT;
-        WHEN S_CHK_NC =>
-          IF (NC_int > 0 AND NBtotal > 0 AND config_err_ovf = '0') THEN
-            NC_out <= NC_int-1;
             Ready <= '1';
           ELSE
+            config_err_ovf <= '1';
             Ready <= '0';
           END IF;
           current_state <= S_INIT;
@@ -294,6 +246,7 @@ BEGIN
           END IF;
         WHEN S_RESET =>
           En <= '0';
+          En_int <= '0';
           ResetRegs;
           current_state <= S_RESET2;
         WHEN S_RESET2 =>
@@ -306,6 +259,8 @@ BEGIN
     END IF;
   END PROCESS;
   
+  -- This process seems to duplicate some of the computations above, but
+  -- it is necessary to get the NA value out while NArd is asserted.
   PROCESS (current_state, TrigArm, NAv, NAB, N_NAB, NArd, NA_int, NBcnt) IS
     VARIABLE index : integer range 3 downto 0;
   BEGIN
@@ -328,7 +283,6 @@ BEGIN
     END CASE;
   END PROCESS;
   
-  NC <= NC_out;
   Status <= std_logic_vector(to_unsigned(N_NAB,3)) & Ready & config_err_nab & config_err_ovf;
 END ARCHITECTURE beh;
 

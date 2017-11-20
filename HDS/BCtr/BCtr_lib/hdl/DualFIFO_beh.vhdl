@@ -7,6 +7,18 @@
 --
 -- using Mentor Graphics HDL Designer(TM) 2016.1 (Build 8)
 --
+-- DualFIFO is controlled by the 'EnA' input. When EnA is high,
+-- FIFO 'A' is presented on the counter/feedback side, through the
+--   Control pins: FBRE, WE
+--   Status pins: FBEmpty, FBFull
+--   Write data: FBWData
+--   Read data:  FBRData
+-- And FIFO 'B' is presented on the reporting side, through:
+--   Control pin: RptRE (no writing on the report side)
+--   Status pin:  RptEmpty
+--   Read data:   RData (no write data)
+-- When EnA is low, the roles are reversed
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
@@ -14,23 +26,24 @@ LIBRARY BCtr_lib;
 USE BCtr_lib.ALL;
 
 ENTITY DualFIFO IS
-   GENERIC( 
-      FIFO_WIDTH  : integer range 256 downto 1  := 1;
-      FIFO_ADDR_WIDTH : integer range 10 downto 1 := 8
-   );
+  GENERIC( 
+    FIFO_WIDTH      : integer range 256 downto 1 := 1;
+    FIFO_ADDR_WIDTH : integer range 10 downto 1  := 8
+  );
   PORT( 
-    CtrData1 : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
-    EnA      : IN     std_logic;
-    FBRE     : IN     std_logic;
-    RptRE    : IN     std_logic;
-    WE       : IN     std_logic;
     clk      : IN     std_logic;
-    rst      : IN     std_logic;
-    CtrData0 : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+    EnA      : IN     std_logic;
+    rstA     : IN     std_logic;
+    rstB     : IN     std_logic;
     FBEmpty  : OUT    std_logic;
-    Full     : OUT    std_logic;
-    RData    : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
-    RptEmpty : OUT    std_logic
+    FBFull   : OUT    std_logic;
+    FBRE     : IN     std_logic;
+    FBWE     : IN     std_logic;
+    FBWData  : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+    FBRData  : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+    RptRE    : IN     std_logic;
+    RptEmpty : OUT    std_logic;
+    RptData  : OUT    std_logic_vector (FIFO_WIDTH-1 DOWNTO 0)
   );
 
 -- Declarations
@@ -74,11 +87,11 @@ BEGIN
       FIFO_ADDR_WIDTH => FIFO_ADDR_WIDTH
     )
     PORT MAP (
-      WData => WData,
+      WData => FBWData,
       WE    => WEA,
       RE    => REA,
       Clk   => clk,
-      Rst   => rst,
+      Rst   => rstA,
       RData => RDataA,
       Empty => EmptyA,
       Full  => FullA
@@ -90,11 +103,11 @@ BEGIN
       FIFO_ADDR_WIDTH => FIFO_ADDR_WIDTH
     )
     PORT MAP (
-      WData => WData,
+      WData => FBWData,
       WE    => WEB,
       RE    => REB,
       Clk   => clk,
-      Rst   => rst,
+      Rst   => rstB,
       RData => RDataB,
       Empty => EmptyB,
       Full  => FullB
@@ -107,21 +120,21 @@ BEGIN
       WEB <= '0';
       REA <= FBRE;
       REB <= RptRE;
-      CtrData0 <= RDataA;
-      RData <= RDataB;
+      FBRData <= RDataA;
+      RptData <= RDataB;
       FBEmpty <= EmptyA;
       RptEmpty <= EmptyB;
-      Full <= FullA;
+      FBFull <= FullA;
     ELSE
       WEA <= '0';
       WEB <= WE;
       REA <= RptRE;
       REB <= FBRE;
-      CtrData0 <= RDataB;
-      RData <= RDataA;
+      FBRData <= RDataB;
+      RptData <= RDataA;
       FBEmpty <= EmptyB;
+      FBFull <= FullB;
       RptEmpty <= EmptyA;
-      Full <= FullB;
     END IF;
   END PROCESS;
     

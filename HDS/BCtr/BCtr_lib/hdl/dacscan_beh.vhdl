@@ -14,8 +14,8 @@ USE ieee.numeric_std.all;
 ENTITY dacscan IS
   GENERIC( 
     ADDR_WIDTH : integer range 16 downto 8 := 8;
-    BASE_ADDR  : unsigned(15 DOWNTO 0) := x"0080";
-    STEP_RES   : integer range 8 downto 0 := 3
+    BASE_ADDR  : unsigned(15 DOWNTO 0)     := x"0080";
+    STEP_RES   : integer range 8 downto 0  := 3
   );
   PORT( 
     ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
@@ -31,7 +31,8 @@ ENTITY dacscan IS
     RData    : OUT    std_logic_vector (15 DOWNTO 0);
     idxData  : OUT    std_logic_vector (15 DOWNTO 0);
     idxWr    : OUT    std_logic;
-    LDAC     : OUT    std_logic -- Negative logic
+    LDAC     : OUT    std_logic;
+    SetPoint : OUT    std_logic_vector (15 DOWNTO 0)
   );
 
 -- Declarations
@@ -48,7 +49,7 @@ ARCHITECTURE beh OF dacscan IS
   SIGNAL OnlinePos_en : std_logic;
   SIGNAL OfflinePos_en : std_logic;
   SIGNAL Dither_en : std_logic;
-  SIGNAL SetPoint : unsigned(15 downto 0);
+  SIGNAL SetPoint_int : unsigned(15 downto 0);
   SIGNAL nextSetPoint : unsigned(15 downto 0);
   SIGNAL ScanStart : unsigned(15 downto 0);
   SIGNAL ScanStop : unsigned(15 downto 0);
@@ -69,6 +70,11 @@ ARCHITECTURE beh OF dacscan IS
   SIGNAL current_state : state_t;
   SIGNAL start_write : std_logic;
   SIGNAL loop_count : unsigned(5 DOWNTO 0); -- 0 to 63
+  SIGNAL cmd_start_scan : std_logic;
+  SIGNAL cmd_online : std_logic;
+  SIGNAL cmd_online_plus : std_logic;
+  SIGNAL cmd_online_minus : std_logic;
+  SIGNAL cmd_offline : std_logic;
 BEGIN
   addr : PROCESS (ExpAddr, current_state) IS
     VARIABLE offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
@@ -105,7 +111,7 @@ BEGIN
   BEGIN
     IF clk'event AND clk = '1' THEN
       IF ExpReset = '1' THEN
-        SetPoint   <= (others => '0');
+        SetPoint_int   <= (others => '0');
         nextSetPoint <= (others => '0');
         ScanStart  <= (others => '0');
         ScanStop   <= (others => '0');
@@ -128,6 +134,11 @@ BEGIN
         idxWr <= '0';
         LDAC <= '1';
         loop_count <= (others => '0');
+        cmd_start_scan <= '0';
+        cmd_online <= '0';
+        cmd_online_plus <= '0';
+        cmd_online_minus <= '0';
+        cmd_offline <= '0';
       ELSE
         IF RdEn = '1' THEN
           IF StatusCmd_en = '1' THEN
@@ -137,7 +148,7 @@ BEGIN
               2 => Offline,
               others => '0');
           ELSIF SetPoint_en = '1' THEN
-            RData <= std_logic_vector(SetPoint);
+            RData <= std_logic_vector(SetPoint_int);
           ELSIF ScanStart_en = '1' THEN
             RData <= std_logic_vector(ScanStart);
           ELSIF ScanStop_en = '1' THEN
@@ -152,38 +163,25 @@ BEGIN
             RData <= std_logic_vector(Dither);
           END IF;
         ELSIF WrEn = '1' THEN
-          IF current_state = st_idle THEN
-            IF StatusCmd_en = '1' THEN
-              CASE to_integer(unsigned(WData)) IS
-              WHEN 0 => -- stop scan
-                ScanningCmd <= '0';
-              WHEN 1 => -- start scan
-                CurStep(15+STEP_RES DOWNTO STEP_RES) <= ScanStart;
-                CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
-                nextSetPoint <= ScanStart;
-                ScanningCmd <= '1';
-                next_Scanning <= '1';
-                start_write <= '1';
-              WHEN 2 => -- drive online
-                nextSetPoint <= OnlinePos;
-                next_Online <= '1';
-                start_write <= '1';
-              WHEN 3 => -- drive online+dither
-                nextSetPoint <= OnlinePos + Dither;
-                next_Online <= '1';
-                start_write <= '1';
-              WHEN 4 => -- drive online-dither
-                nextSetPoint <= OnlinePos - Dither;
-                next_Online <= '1';
-                start_write <= '1';
-              WHEN 5 => -- drive offline
-                nextSetPoint <= OfflinePos;
-                next_Offline <= '1';
-                start_write <= '1';
-              WHEN others =>
-                NULL;
-              END CASE;
-            ELSIF SetPoint_en = '1' THEN
+          IF StatusCmd_en = '1' THEN
+            CASE to_integer(unsigned(WData)) IS
+            WHEN 0 => -- stop scan
+              ScanningCmd <= '0';
+            WHEN 1 => -- start scan
+              cmd_start_scan <= '1';
+            WHEN 2 => -- drive online
+              cmd_online <= '1';
+            WHEN 3 => -- drive online+dither
+              cmd_online_plus <= '1';
+            WHEN 4 => -- drive online-dither
+              cmd_online_minus <= '1';
+            WHEN 5 => -- drive offline
+              cmd_offline <= '1';
+            WHEN others =>
+              NULL;
+            END CASE;
+          ELSIF current_state = st_idle THEN
+            IF SetPoint_en = '1' THEN
               nextSetPoint <= unsigned(WData);
               start_write <= '1';
             ELSIF ScanStart_en = '1' THEN
@@ -200,14 +198,40 @@ BEGIN
             ELSIF Dither_en = '1' THEN
               Dither <= unsigned(WData);
             END IF;
-          ELSIF StatusCmd_en = '1' AND WData = x"0000" THEN -- no st_idle
-            ScanningCmd <= '0';
           END IF;
         END IF;
         
         CASE current_state IS
         WHEN st_idle =>
-          IF start_write = '1' THEN
+          IF cmd_start_scan = '1' THEN
+            CurStep(15+STEP_RES DOWNTO STEP_RES) <= ScanStart;
+            CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
+            nextSetPoint <= ScanStart;
+            ScanningCmd <= '1';
+            next_Scanning <= '1';
+            start_write <= '1';
+            cmd_start_scan <= '0';
+          ELSIF cmd_online = '1' THEN
+            nextSetPoint <= OnlinePos;
+            next_Online <= '1';
+            start_write <= '1';
+            cmd_online <= '0';
+          ELSIF cmd_online_plus = '1' THEN
+            nextSetPoint <= OnlinePos + Dither;
+            next_Online <= '1';
+            start_write <= '1';
+            cmd_online_plus <= '0';
+          ELSIF cmd_online_minus = '1' THEN
+            nextSetPoint <= OnlinePos - Dither;
+            next_Online <= '1';
+            start_write <= '1';
+            cmd_online_minus <= '0';
+          ELSIF cmd_offline = '1' THEN
+            nextSetPoint <= OfflinePos;
+            next_Offline <= '1';
+            start_write <= '1';
+            cmd_offline <= '0';
+          ELSIF start_write = '1' THEN
             current_state <= st_wrdac_0;
             start_write <= '0';
           ELSE
@@ -225,7 +249,7 @@ BEGIN
           idxWr <= '0';
           IF IPS = '1' THEN
             LDAC <= '0'; -- negative logic
-            SetPoint <= nextSetPoint;
+            SetPoint_int <= nextSetPoint;
             Scanning <= next_Scanning;
             Online <= next_Online;
             Offline <= next_Offline;
@@ -273,5 +297,7 @@ BEGIN
       END IF;
     END IF;
   END PROCESS;
+  
+  SetPoint <= std_logic_vector(SetPoint_int);
 END ARCHITECTURE beh;
 
