@@ -7,6 +7,10 @@
 --
 -- using Mentor Graphics HDL Designer(TM) 2016.1 (Build 8)
 --
+-- NOTES:
+--   NBtot is actually the sum of NB parameters minus 1 for convenience in
+--   the looping structures
+--
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
@@ -283,6 +287,6 @@ BEGIN
     END CASE;
   END PROCESS;
   
-  Status <= std_logic_vector(to_unsigned(N_NAB,3)) & Ready & config_err_nab & config_err_ovf;
+  CfgStatus <= std_logic_vector(to_unsigned(N_NAB,3)) & Ready & config_err_nab & config_err_ovf;
 END ARCHITECTURE beh;
 

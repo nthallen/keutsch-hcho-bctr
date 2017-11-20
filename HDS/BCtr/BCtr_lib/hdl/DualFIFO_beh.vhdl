@@ -113,10 +113,10 @@ BEGIN
       Full  => FullB
     );
     
-  Mux : PROCESS (ENA,WE,FBRE,RptRE,RDataA,RDataB,EmptyA,EmptyB,FullA,FullB) IS
+  Mux : PROCESS (ENA,FBWE,FBRE,RptRE,RDataA,RDataB,EmptyA,EmptyB,FullA,FullB) IS
   BEGIN
     IF ENA = '1' THEN
-      WEA <= WE;
+      WEA <= FBWE;
       WEB <= '0';
       REA <= FBRE;
       REB <= RptRE;
@@ -127,7 +127,7 @@ BEGIN
       FBFull <= FullA;
     ELSE
       WEA <= '0';
-      WEB <= WE;
+      WEB <= FBWE;
       REA <= RptRE;
       REB <= FBRE;
       FBRData <= RDataB;

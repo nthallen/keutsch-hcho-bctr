@@ -29,7 +29,6 @@ ENTITY BCtr2Ctrl IS
   PORT( 
     En         : IN     std_logic;
     NA         : IN     unsigned (15 DOWNTO 0);
-    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
     TrigSeen   : IN     std_logic;
     clk        : IN     std_logic;
     rst        : IN     std_logic;
@@ -45,6 +44,7 @@ ENTITY BCtr2Ctrl IS
     EnA        : OUT    std_logic;
     NTriggered : OUT    std_logic_vector (31 DOWNTO 0);
     LaserVOut  : OUT    std_logic_vector (15 DOWNTO 0);
+    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
     IPnumOut   : OUT    std_logic_vector (5 DOWNTO 0);
     LaserV     : IN     std_logic_vector (15 DOWNTO 0);
     IPnum      : IN     std_logic_vector (5 DOWNTO 0);
@@ -104,6 +104,7 @@ BEGIN
   -----------------------------------------------------------------
   clocked_proc : PROCESS (clk)
   -----------------------------------------------------------------
+    variable nxtEnA : std_logic;
   BEGIN
     IF (clk'EVENT AND clk = '1') THEN
       IF (rst = '1') THEN
@@ -122,7 +123,6 @@ BEGIN
         NBcnt <= (others => '0');
         Ntrig_cnt <= (others => '0');
         NArd <= '0';
-        behind <= '0';
         expired_2 <= '0';
         Expired <= '0';
         rstA <= '1';
@@ -150,14 +150,24 @@ BEGIN
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
             NArd <= '0';
-          WHEN ReportArmed => 
+            -- The following is to clear up any trailing data from the previous run
+            IF En /= '1' AND txing = '0' AND FBEmpty = '0' AND IPS = '1' THEN
+              nxtEnA := not(EnA);
+              DRdy_cld <= '1';
+              LaserVOut <= cur_LaserV;
+              IPnumOut <= cur_IPnum;
+              NTriggered <= std_logic_vector(
+                resize(Ntrig_cnt,NTriggered'length));
+              IF nxtEnA = '1' THEN
+                rstA <= '1';
+              ELSE
+                rstB <= '1';
+              END IF;
+              EnA <= nxtEnA;
+            END IF;
+          WHEN ReportArmed => -- We are only here for one clock
             IPSseen <= '0';
             -- Reset the FIFO we're going to write to:
-            IF EnA = '1' THEN
-              rstA <= '1';
-            ELSE
-              rstB <= '1';
-            END IF;
             first_row_cld <= '1';
             CntEn_cld <= '0';
             WE_cld <= '0';
@@ -167,6 +177,34 @@ BEGIN
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
             NArd <= '0';
+            IF RptEmpty = '1' AND txing = '0' THEN
+              nxtEnA := not(EnA);
+              LaserVOut <= cur_LaserV;
+              IPnumOut <= cur_IPnum;
+              NTriggered <= std_logic_vector(
+                resize(Ntrig_cnt,NTriggered'length));
+              Expired <= '0';
+              DRdy_cld <= not(FBEmpty); -- Only declare DRdy if there is data
+            ELSIF txing = '0' THEN
+              nxtEnA := not(EnA);
+              Expired <= '1';
+              exp_LaserV <= cur_LaserV;
+              exp_IPnum <= cur_IPnum;
+              NTriggered <= std_logic_vector(
+                resize(Ntrig_cnt,NTriggered'length));
+            ELSE
+              nxtEnA := EnA;
+              expired_2 <= '1';
+              exp_LaserV <= cur_LaserV;
+              exp_IPnum <= cur_IPnum;
+              exp_Ntrig <= Ntrig_cnt;
+            END IF;
+            IF nxtEnA = '1' THEN
+              rstA <= '1';
+            ELSE
+              rstB <= '1';
+            END IF;
+            EnA <= nxtEnA;
           WHEN TriggerArmed =>
             rstA <= '0';
             rstB <= '0';
@@ -177,30 +215,7 @@ BEGIN
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
             NArd <= '0';
-            IF IPS = '1' OR IPSseen = '1' THEN
-              IF RptEmpty = '1' AND txing = '0' THEN
-                EnA <= not(EnA);
-                LaserVOut <= cur_LaserV;
-                IPnumOut <= cur_IPnum;
-                NTriggered <= std_logic_vector(
-                  resize(Ntrig_cnt,NTriggered'length));
-                Expired <= '0';
-                DRdy_cld <= '1';
-              ELSIF txing = '0' THEN
-                EnA <= not(EnA);
-                Expired <= '1';
-                exp_LaserV <= cur_LaserV;
-                exp_IPnum <= cur_IPnum;
-                NTriggered <= std_logic_vector(
-                  resize(Ntrig_cnt,NTriggered'length));
-              ELSE
-                expired_2 <= '1';
-                exp_LaserV <= cur_LaserV;
-                exp_IPnum <= cur_IPnum;
-                exp_Ntrig <= Ntrig_cnt;
-              END IF;
-            END IF;
-            IF En = '1' AND TrigSeen = '1' THEN
+            IF En = '1' AND TrigSeen = '1' AND IPS = '0' AND IPSseen = '0' THEN
               Ntrig_cnt <= Ntrig_cnt + 1;
             END IF;
           WHEN Triggered =>
@@ -271,7 +286,7 @@ BEGIN
   -----------------------------------------------------------------
    nextstate_proc : PROCESS ( 
       En, IPS, IPSseen,
-      TrigSeen, FBEmpty,
+      TrigSeen,
       NAcnt, NBcnt,
       current_state
    )
@@ -279,7 +294,7 @@ BEGIN
   BEGIN
     CASE current_state IS
       WHEN Startup => 
-        IF (En = '1' AND FBEmpty = '1' AND IPS = '1') THEN 
+        IF (En = '1' AND IPS = '1') THEN 
           next_state <= ReportArmed;
         ELSE
           next_state <= Startup;
@@ -307,11 +322,11 @@ BEGIN
           next_state <= Scanning;
         END IF;
       WHEN Scanning =>
-        if En /= '1' then
-          next_state <= Startup;
-        elsif NAcnt = 0 AND NBcnt = 0 then
+        if NAcnt = 0 AND NBcnt = 0 then
           IF IPS = '1' OR IPSseen = '1' THEN
             next_state <= ReportArmed;
+          ELSIF En /= '1' THEN
+            next_state <= Startup;
           ELSE
             next_state <= TriggerArmed;
           end if;

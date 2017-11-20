@@ -12,8 +12,12 @@ USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
 ENTITY BCtr2_Addr IS
+  GENERIC( 
+    ADDR_WIDTH : integer range 16 downto 8 := 8;
+    BASE_ADDR  : unsigned(15 DOWNTO 0)     := X"0010"
+  );
   PORT( 
-    ExpAddr  : IN     std_logic_vector (15 DOWNTO 0);
+    ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
     BdEn     : OUT    std_logic;
     BdWrEn   : OUT    std_logic;
     C_Dbar   : OUT    std_logic;
@@ -41,7 +45,7 @@ BEGIN
       BdEn <= '1';
       offset := unsigned(ExpAddr) - resize(BASE_ADDR,ADDR_WIDTH);
       CfgAddr <= offset(3 DOWNTO 0);
-      DataAddr <= unsigned(offset(1 DOWNTO 0));
+      DataAddr <= std_logic_vector(offset(1 DOWNTO 0));
       IF (offset < 3) THEN
         C_Dbar <= '0';
       ELSE

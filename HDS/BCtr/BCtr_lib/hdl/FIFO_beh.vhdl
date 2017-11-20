@@ -81,12 +81,16 @@ BEGIN
     end if;
   End Process;
   
-  RData_proc: Process (FIFOdata, Tail) IS
+  RData_proc: Process (FIFOdata, Tail, Empty_int) IS
     VARIABLE raddr : integer range 2**FIFO_ADDR_WIDTH-1 DOWNTO 0;
   Begin
     raddr := conv_integer(Tail);
-    RData <= FIFOdata(raddr);
-End Process;
+    IF Empty_int = '1' THEN
+      RData <= (others => '0');
+    ELSE
+      RData <= FIFOdata(raddr);
+    END IF;
+  End Process;
   
   Full <= Full_int;
   Empty <= Empty_int;

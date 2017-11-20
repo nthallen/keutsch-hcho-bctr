@@ -13,6 +13,12 @@ USE ieee.numeric_std.all;
 
 
 ENTITY BCtr2_tb IS
+  GENERIC( 
+    FIFO_ADDR_WIDTH : integer range 10 downto 4  := 8;
+    N_CHANNELS      : integer range 4 downto 1   := 1;
+    CTR_WIDTH       : integer range 32 downto 1  := 16;
+    FIFO_WIDTH      : integer range 128 downto 1 := 16
+  );
 END ENTITY BCtr2_tb;
 
 
@@ -23,6 +29,9 @@ USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 LIBRARY BCtr_lib;
 USE BCtr_lib.ALL;
+LIBRARY std;
+USE std.textio.all;
+USE ieee.std_logic_textio.all;
 
 
 ARCHITECTURE rtl OF BCtr2_tb IS
@@ -51,10 +60,18 @@ ARCHITECTURE rtl OF BCtr2_tb IS
   SIGNAL TrigArm    : std_logic;
   SIGNAL Trigger    : std_logic;
   SIGNAL txing      : std_logic;
+  SIGNAL PMT        : std_logic;
+  SIGNAL SimDone    : std_logic;
 
 
   -- Component declarations
   COMPONENT BCtr2
+    GENERIC( 
+      FIFO_ADDR_WIDTH : integer range 10 downto 4  := 8;
+      N_CHANNELS      : integer range 4 downto 1   := 1;
+      CTR_WIDTH       : integer range 32 downto 1  := 16;
+      FIFO_WIDTH      : integer range 128 downto 1 := 16
+    );
     PORT (
       clk        : IN     std_logic;
       DRdy       : OUT    std_logic;
@@ -87,6 +104,13 @@ ARCHITECTURE rtl OF BCtr2_tb IS
 BEGIN
 
     U_0 : BCtr2
+      GENERIC MAP (
+        FIFO_ADDR_WIDTH => FIFO_ADDR_WIDTH,
+        N_CHANNELS => N_CHANNELS,
+        CTR_WIDTH => CTR_WIDTH,
+        FIFO_WIDTH => FIFO_WIDTH
+      )
+       
       PORT MAP (
         clk        => clk,
         DRdy       => DRdy,
@@ -139,7 +163,7 @@ BEGIN
       Trigger <= '1';
       wait for 5 ns;
       Trigger <= '0';
-      for i in 1 to (to_integer(NA)+1)*(to_integer(NB)+1)+3 loop
+      for i in 1 to (to_integer(NA)+1)*(to_integer(NBtot)+1)+3 loop
         wait until clk'Event AND clk = '1';
       end loop;
     end loop;
@@ -158,7 +182,11 @@ BEGIN
       IPS <= '1';
       wait until clk'Event AND clk = '1';
       IPS <= '0';
-      IPnumu <= IPnumu + 1;
+      IF IPnumu = to_unsigned(9,IPnumu'length) THEN
+        IPnumu <= (others => '0');
+      ELSE
+        IPnumu <= IPnumu + 1;
+      END IF;
       wait for 9975 ns;
     end loop;
     wait;
@@ -167,7 +195,7 @@ BEGIN
 
   test_proc: Process is
     procedure wait_for_triggers(N : integer) is
-      variable delay : integer := (to_integer(NA)+1)*(to_integer(NB)+1)+7;
+      variable delay : integer := (to_integer(NA)+1)*(to_integer(NBtot)+1)+7;
     begin
       for i in 1 to N loop
         -- pragma synthesis_off
@@ -180,59 +208,102 @@ BEGIN
       return;
     end procedure wait_for_triggers;
     
+    procedure wait_for_ips is
+    begin
+      -- pragma synthesis_off
+      wait until IPS = '1';
+      wait until IPS = '0';
+      wait for 200 ns;
+      -- pragma synthesis_on
+    end procedure wait_for_ips;
+    
     procedure test1(
        A : std_logic_vector(15 downto 0);
        B : std_logic_vector(FIFO_ADDR_WIDTH-1 downto 0)
        ) is
+      variable my_line : line;
     begin
+      write(my_line, now);
+      write(my_line, string'(": test1("));
+      hwrite(my_line, A);
+      write(my_line, string'(", "));
+      hwrite(my_line, B);
+      write(my_line, string'(")"));
+      writeline(output, my_line);
+      
       NA <= unsigned(A);
       NBtot <= unsigned(B);
       -- pragma synthesis_off
       wait until clk'Event and clk = '1';
       En <= '1';
       
-      wait until IPS = '1';
-      wait until IPS = '0';
-      wait until IPS = '1';
+      wait_for_ips;
+      assert DRdy = '0' report "Unexpected DRdy" severity error;
+      wait_for_ips;
       assert DRdy = '1' report "Expected DRdy" severity error;
-      wait_for_triggers(to_integer(NC)+1);
-      wait until clk'Event and clk = '1';
-      wait until clk'Event and clk = '1';
-      wait until clk'Event and clk = '1';
-      RE <= '1';
-      for i in 1 to to_integer(NB)+1 loop
-        assert to_integer(unsigned(RData)) = (to_integer(NA)+1)*(to_integer(NC)+1)
-        report "Invalid RData" severity error;
+      wait until clk'event and clk = '1';
+      txing <= '1';
+      wait until clk'event and clk = '1';
+      RptRE <= '1';
+      for i in 1 to to_integer(NBtot)+1 loop
+        assert to_integer(unsigned(RptData)) = (to_integer(NA)+1)*to_integer(unsigned(NTriggered))
+        report "Invalid RptData" severity error;
         wait until clk'Event and clk = '1';
       end loop;
-      RE <= '0';
+      RptRE <= '0';
+      txing <= '0';
       wait until clk'Event and clk = '1';
       wait for 2 ns;
       assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
-      wait_for_triggers(to_integer(NC)+2);
+      wait_for_ips;
       En <= '0';
       wait for 200 ns;
       assert DRdy = '1' report "Expected DRdy" severity error;
-      RE <= '1';
-      for i in 1 to to_integer(NB)+1 loop
-        assert to_integer(unsigned(RData)) = (to_integer(NA)+1)*(to_integer(NC)+1)
-        report "Invalid RData" severity error;
+      wait until clk'event and clk = '1';
+      txing <= '1';
+      wait until clk'event and clk = '1';
+      RptRE <= '1';
+      for i in 1 to to_integer(NBtot)+1 loop
+        assert to_integer(unsigned(RptData)) = (to_integer(NA)+1)*to_integer(unsigned(NTriggered))
+        report "Invalid RptData" severity error;
         wait until clk'Event and clk = '1';
       end loop;
-      RE <= '0';
+      RptRE <= '0';
+      txing <= '0';
       wait until clk'Event and clk = '1';
       wait for 2 ns;
-      -- pragma synthesis_on
+
       assert DRdy = '0' report "Expected DRdy=0 after read" severity error;
+      wait_for_ips;
+      assert DRdy = '1' report "Expected trailing DRdy=1" severity error;
+      wait until clk'event and clk = '1';
+      txing <= '1';
+      wait until clk'event and clk = '1';
+      RptRE <= '1';
+      for i in 1 to to_integer(NBtot)+1 loop
+        assert to_integer(unsigned(RptData)) = (to_integer(NA)+1)*to_integer(unsigned(NTriggered))
+        report "Invalid RptData" severity error;
+        wait until clk'Event and clk = '1';
+      end loop;
+      RptRE <= '0';
+      txing <= '0';
+      wait until clk'Event and clk = '1';
+      wait for 2 ns;
+
+      assert DRdy = '0' report "Expected DRdy=0 after ips after disable" severity error;
+      
+      wait_for_ips;
+      assert DRdy = '0' report "Expected DRdy=0 after ips after disable" severity error;
+      -- pragma synthesis_on
       return;
     end procedure test1;
   Begin
     SimDone <= '0';
-    NA <= X"0004";
-    NB <= X"02";
-    NC <= X"000001";
+    NA <= X"0004"; -- i.e. '5'
+    NBtot <= X"02"; -- i.e. '3'
     En <= '0';
-    RE <= '0';
+    RptRE <= '0';
+    txing <= '0';
     
     rst <= '1';
     -- pragma synthesis_off
@@ -240,9 +311,9 @@ BEGIN
     rst <= '0';
     wait until clk'Event and clk = '1';
     
-    Test1(X"0004", X"02", X"0001");
-    Test1(X"0000", X"07", X"0005");
-    Test1(X"0004", X"02", X"0000");
+    Test1(X"0004", X"02");
+    Test1(X"0000", X"07");
+    Test1(X"0004", X"02");
 
     SimDone <= '1';
     wait;

@@ -50,7 +50,7 @@ value "N_CHANNELS"
 (GiElement
 name "CTR_WIDTH"
 type "integer range 32 DOWNTO 1"
-value "CTR_WIDTH"
+value "CTR_WIDTH*N_CHANNELS"
 )
 ]
 mwi 0
@@ -64,7 +64,7 @@ elements [
 (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 1"
-value "8"
+value "FIFO_ADDR_WIDTH"
 )
 ]
 mwi 0
@@ -78,12 +78,12 @@ elements [
 (GiElement
 name "FIFO_WIDTH"
 type "integer range 256 downto 1"
-value "1"
+value "FIFO_WIDTH"
 )
 (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 1"
-value "8"
+value "FIFO_ADDR_WIDTH"
 )
 ]
 mwi 0
@@ -143,19 +143,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/19/2017"
+value "11/20/2017"
 )
 (vvPair
 variable "day"
-value "Sun"
+value "Mon"
 )
 (vvPair
 variable "day_long"
-value "Sunday"
+value "Monday"
 )
 (vvPair
 variable "dd"
-value "19"
+value "20"
 )
 (vvPair
 variable "entity_name"
@@ -183,7 +183,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/19/2017"
+value "11/20/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -195,7 +195,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "18:24:15"
+value "09:50:09"
 )
 (vvPair
 variable "group"
@@ -299,7 +299,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "18:24:15"
+value "09:50:09"
 )
 (vvPair
 variable "unit"
@@ -1255,9 +1255,9 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "28500,37000,59500,38600"
-st "N_CHANNELS = N_CHANNELS    ( integer range 4 DOWNTO 1  )  
-CTR_WIDTH  = CTR_WIDTH     ( integer range 32 DOWNTO 1 )  "
+xt "28500,37000,64500,38600"
+st "N_CHANNELS = N_CHANNELS              ( integer range 4 DOWNTO 1  )  
+CTR_WIDTH  = CTR_WIDTH*N_CHANNELS    ( integer range 32 DOWNTO 1 )  "
 )
 header ""
 )
@@ -1270,7 +1270,7 @@ value "N_CHANNELS"
 (GiElement
 name "CTR_WIDTH"
 type "integer range 32 DOWNTO 1"
-value "CTR_WIDTH"
+value "CTR_WIDTH*N_CHANNELS"
 )
 ]
 )
@@ -1354,8 +1354,8 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "36250,52500,65250,53300"
-st "FIFO_ADDR_WIDTH = 8    ( integer range 10 downto 1 )  "
+xt "36250,52500,72250,53300"
+st "FIFO_ADDR_WIDTH = FIFO_ADDR_WIDTH    ( integer range 10 downto 1 )  "
 )
 header ""
 )
@@ -1363,7 +1363,7 @@ elements [
 (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 1"
-value "8"
+value "FIFO_ADDR_WIDTH"
 )
 ]
 )
@@ -1475,9 +1475,10 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "69250,58500,98750,60100"
-st "FIFO_WIDTH      = 1    ( integer range 256 downto 1 )  
-FIFO_ADDR_WIDTH = 8    ( integer range 10 downto 1  )  "
+xt "69250,58500,105750,60100"
+st "FIFO_WIDTH      = FIFO_WIDTH         ( integer range 256 downto 1 )  
+FIFO_ADDR_WIDTH = FIFO_ADDR_WIDTH    ( integer range 10 downto 1  )  
+"
 )
 header ""
 )
@@ -1485,12 +1486,12 @@ elements [
 (GiElement
 name "FIFO_WIDTH"
 type "integer range 256 downto 1"
-value "1"
+value "FIFO_WIDTH"
 )
 (GiElement
 name "FIFO_ADDR_WIDTH"
 type "integer range 10 downto 1"
-value "8"
+value "FIFO_ADDR_WIDTH"
 )
 ]
 )
@@ -3091,7 +3092,7 @@ lang 11
 decl (Decl
 n "txing"
 t "std_logic"
-o 36
+o 12
 suid 80,0
 )
 declText (MLText
@@ -4730,9 +4731,9 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "-8,-8,1928,1058"
-viewArea "-4102,12981,115469,73151"
-cachedDiagramExtent "0,0,98750,73000"
+windowSize "0,0,1281,1024"
+viewArea "-4100,13000,100147,99229"
+cachedDiagramExtent "0,0,105750,73000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
 toPrinter 1
@@ -4755,7 +4756,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 1523,0
+lastUid 1761,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -6290,7 +6291,7 @@ lang 11
 decl (Decl
 n "txing"
 t "std_logic"
-o 36
+o 12
 suid 80,0
 )
 )
@@ -6670,6 +6671,38 @@ tm "GenericPragmaColHdrMgr"
 *278 (EolColHdr
 tm "GenericEolColHdrMgr"
 )
+*279 (LogGeneric
+generic (GiElement
+name "FIFO_ADDR_WIDTH"
+type "integer range 10 downto 4"
+value "9"
+)
+uid 1639,0
+)
+*280 (LogGeneric
+generic (GiElement
+name "N_CHANNELS"
+type "integer range 4 downto 1"
+value "1"
+)
+uid 1641,0
+)
+*281 (LogGeneric
+generic (GiElement
+name "CTR_WIDTH"
+type "integer range 32 downto 1"
+value "16"
+)
+uid 1643,0
+)
+*282 (LogGeneric
+generic (GiElement
+name "FIFO_WIDTH"
+type "integer range 128 downto 1"
+value "16"
+)
+uid 1760,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -6677,7 +6710,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 95,0
 optionalChildren [
-*279 (Sheet
+*283 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -6694,31 +6727,55 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *280 (MRCItem
+emptyMRCItem *284 (MRCItem
 litem &267
-pos 0
+pos 4
 dimension 20
 )
 uid 97,0
 optionalChildren [
-*281 (MRCItem
+*285 (MRCItem
 litem &268
 pos 0
 dimension 20
 uid 98,0
 )
-*282 (MRCItem
+*286 (MRCItem
 litem &269
 pos 1
 dimension 23
 uid 99,0
 )
-*283 (MRCItem
+*287 (MRCItem
 litem &270
 pos 2
 hidden 1
 dimension 20
 uid 100,0
+)
+*288 (MRCItem
+litem &279
+pos 0
+dimension 20
+uid 1640,0
+)
+*289 (MRCItem
+litem &280
+pos 1
+dimension 20
+uid 1642,0
+)
+*290 (MRCItem
+litem &281
+pos 2
+dimension 20
+uid 1644,0
+)
+*291 (MRCItem
+litem &282
+pos 3
+dimension 20
+uid 1761,0
 )
 ]
 )
@@ -6731,43 +6788,43 @@ textAngle 90
 )
 uid 101,0
 optionalChildren [
-*284 (MRCItem
+*292 (MRCItem
 litem &271
 pos 0
 dimension 20
 uid 102,0
 )
-*285 (MRCItem
+*293 (MRCItem
 litem &273
 pos 1
 dimension 50
 uid 103,0
 )
-*286 (MRCItem
+*294 (MRCItem
 litem &274
 pos 2
 dimension 100
 uid 104,0
 )
-*287 (MRCItem
+*295 (MRCItem
 litem &275
 pos 3
 dimension 100
 uid 105,0
 )
-*288 (MRCItem
+*296 (MRCItem
 litem &276
 pos 4
 dimension 50
 uid 106,0
 )
-*289 (MRCItem
+*297 (MRCItem
 litem &277
 pos 5
 dimension 50
 uid 107,0
 )
-*290 (MRCItem
+*298 (MRCItem
 litem &278
 pos 6
 dimension 80
