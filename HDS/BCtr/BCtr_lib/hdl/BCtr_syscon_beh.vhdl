@@ -14,8 +14,8 @@ LIBRARY BCtr_lib;
 
 ENTITY BCtr_syscon IS
     GENERIC (
-      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007"; -- Relative to HCHO
-      INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
+      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0008"; -- Relative to HCHO
+      INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO BCtr
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
       N_BOARDS      : integer range 15 downto 0     := 7;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
@@ -111,27 +111,53 @@ ARCHITECTURE beh OF BCtr_syscon IS
     );
   END COMPONENT syscon;
   
-  COMPONENT BCtr_sbbd
-    GENERIC (
-      ADDR_WIDTH      : integer range 16 downto 8 := 8;
-      BASE_ADDR       : unsigned(15 DOWNTO 0)     := to_unsigned(16,16);
-      N_CHANNELS      : integer range 4 downto 1  := 1;
-      CTR_WIDTH       : integer range 32 downto 1 := 16;
-      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
+--  COMPONENT BCtr_sbbd
+--    GENERIC (
+--      ADDR_WIDTH      : integer range 16 downto 8 := 8;
+--      BASE_ADDR       : unsigned(15 DOWNTO 0)     := to_unsigned(16,16);
+--      N_CHANNELS      : integer range 4 downto 1  := 1;
+--      CTR_WIDTH       : integer range 32 downto 1 := 16;
+--      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
+--    );
+--    PORT (
+--      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+--      ExpRd    : IN     std_logic;
+--      ExpReset : IN     std_logic;
+--      ExpWr    : IN     std_logic;
+--      PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
+--      Trigger  : IN     std_logic;
+--      WData    : IN     std_logic_vector(15 DOWNTO 0);
+--      clk      : IN     std_logic;
+--      ExpAck   : OUT    std_logic;
+--      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+--    );
+--  END COMPONENT BCtr_sbbd;
+  
+  COMPONENT BCtr2_sbbd IS
+    GENERIC( 
+      ADDR_WIDTH      : integer range 16 downto 8  := 8;
+      BASE_ADDR       : unsigned(15 downto 0)      := X"0010";
+      FIFO_ADDR_WIDTH : integer range 10 downto 4  := 9;
+      N_CHANNELS      : integer range 4 downto 1   := 1;
+      CTR_WIDTH       : integer range 32 downto 1  := 16;
+      FIFO_WIDTH      : integer range 128 downto 1 := 16
     );
-    PORT (
-      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+    PORT( 
+      ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       ExpRd    : IN     std_logic;
       ExpReset : IN     std_logic;
       ExpWr    : IN     std_logic;
-      PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
+      PMTs     : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
       Trigger  : IN     std_logic;
-      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      WData    : IN     std_logic_vector (15 DOWNTO 0);
       clk      : IN     std_logic;
       ExpAck   : OUT    std_logic;
-      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+      RData    : OUT    std_logic_vector (15 DOWNTO 0);
+      IPS      : IN     std_logic;
+      IPnum    : IN     std_logic_vector (5 DOWNTO 0);
+      LaserV   : IN     std_logic_vector (15 DOWNTO 0)
     );
-  END COMPONENT BCtr_sbbd;
+  END COMPONENT BCtr2_sbbd ;
 
   COMPONENT simfluor IS
     GENERIC (
@@ -292,13 +318,14 @@ BEGIN
       Flt_CPU_Reset => Flt_CPU_Reset
     );
 
-  adjgatectr : BCtr_sbbd
+  adjgatectr : BCtr2_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
       BASE_ADDR       => to_unsigned(16#10#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
-      FIFO_ADDR_WIDTH => 4
+      FIFO_ADDR_WIDTH => 4,
+      FIFO_WIDTH      => 16 * N_CTR_CHANNELS
     )
     PORT MAP (
       ExpAddr  => ExpAddr,
@@ -310,16 +337,20 @@ BEGIN
       WData    => WData,
       clk      => clk,
       ExpAck   => ExpAck(0),
-      RData    => RData(15 DOWNTO 0)
+      RData    => RData(15 DOWNTO 0),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      LaserV   => LaserV
     );
 
-  binctr : BCtr_sbbd
+  binctr : BCtr2_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
       BASE_ADDR       => to_unsigned(16#20#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
-      FIFO_ADDR_WIDTH => 9
+      FIFO_ADDR_WIDTH => 9,
+      FIFO_WIDTH      => 16 * N_CTR_CHANNELS
     )
     PORT MAP (
       ExpAddr  => ExpAddr,
@@ -331,7 +362,10 @@ BEGIN
       WData    => WData,
       clk      => clk,
       ExpAck   => ExpAck(1),
-      RData    => RData(31 DOWNTO 16)
+      RData    => RData(31 DOWNTO 16),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      LaserV   => LaserV
     );
 
   temps : temp_top

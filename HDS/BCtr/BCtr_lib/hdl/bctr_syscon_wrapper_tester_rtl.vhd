@@ -19,9 +19,10 @@ ENTITY BCtr_syscon_wrapper_tester IS
   GENERIC( 
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
-    BIN_OPT    : integer range 10 downto 0      := 0; -- 0 to disable, 1,2,3 currently supported
+    BIN_OPT    : integer range 10 downto 0      := 3; -- 0 to disable, 1,2,3 currently supported
     TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
     AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
+    DACSCAN_OPT : std_logic := '0'; -- Set true to run DACSCAN tests
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -230,29 +231,30 @@ BEGIN
         sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
         -- Check the status again: should be 'Ready' but not enabled
         sbrd(ctr_base, '1');
-        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+        assert ReadResult = X"0060" report "Expected N_NAB=1/Ready status" severity error;
       WHEN OTHERS =>
         -- Configure for 45 bins of 1
         sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
         sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
         -- Check the status again: should be 'Ready' but not enabled
         sbrd(ctr_base, '1');
-        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+        assert ReadResult = X"0060" report "Expected N_NAB=1 status" severity error;
         -- 40 bins of 5
         sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
         sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
         sbrd(ctr_base, '1');
-        assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
+        assert ReadResult = X"00A0" report "Expected N_NAB=2 status" severity error;
       END CASE;
-      sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
-      sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
+      -- sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
+      -- sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
       sbrd(ctr_base, '1');
       assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
   
       -- Enable and check status
       sbwr(ctr_base, X"0001", '1');
       sbrd(ctr_base, '1');
-      assert ReadResult(5 DOWNTO 0) = "100001" report "Expected Ready|En status" severity error;
+      assert ReadResult(5 DOWNTO 0) = "100001"
+        report "Expected Ready|En status" severity error;
       
       for i in 1 to SIM_LOOPS loop
         sbrd(ctr_base,'1');
@@ -380,134 +382,136 @@ BEGIN
       end loop;
     end if;
     
-    --dacscan tests
-    sbwr(x"82", x"0100", '1'); -- scan start
-    sbwr(x"83", x"0200", '1'); -- scan stop
-    sbwr(x"84", x"0155", '1'); -- scan step * 8
-    sbwr(x"85", X"0173", '1'); -- online pos
-    sbwr(x"86", x"0155", '1'); -- offline pos
-    sbwr(x"87", x"0005", '1'); -- dither
-    sbrd(x"81",'1');
-    check_read(x"81", x"0000");
-    
-    -- Let's try writing a synchronized output
-    sp_updated <= '0';
-    sbwr(x"81", x"00FF", '1');
-    sbrd(x"81",'1');
-    check_read(x"81", x"0000"); -- should still be zero
-    sbwr(x"81", x"00FE", '0'); --  Should get no ack now
-    while sp_updated = '0' loop
-      sbrd(x"81", '1');
-      if ReadResult /= x"0000" then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": readback now "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    wait for 500 ns;
-    sbrd(x"50",'1');
-    sbrd(x"80",'1');
-    check_read(x"80", x"0000"); -- zero status, not online, offline or scanning
-    sp_updated <= '0';
-    sbwr(x"80",x"0001",'1'); -- start scan
-    while sp_updated = '0' loop
-      sbrd(x"80", '1');
-      if ReadResult /= x"0000" then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": scan started"));
-        writeline(output, my_line);
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    
-    -- now monitor the loop, reporting steps
-    sp_updated <= '0';
-    Prev_Step <= (others => '0');
-    wait until clk'event and clk = '1';
-    while sp_updated = '0' loop
+    IF DACSCAN_OPT = '1' THEN
+      --dacscan tests
+      sbwr(x"82", x"0100", '1'); -- scan start
+      sbwr(x"83", x"0200", '1'); -- scan stop
+      sbwr(x"84", x"0155", '1'); -- scan step * 8
+      sbwr(x"85", X"0173", '1'); -- online pos
+      sbwr(x"86", x"0155", '1'); -- offline pos
+      sbwr(x"87", x"0005", '1'); -- dither
+      sbrd(x"81",'1');
+      check_read(x"81", x"0000");
+      
+      -- Let's try writing a synchronized output
+      sp_updated <= '0';
+      sbwr(x"81", x"00FF", '1');
+      sbrd(x"81",'1');
+      check_read(x"81", x"0000"); -- should still be zero
+      sbwr(x"81", x"00FE", '0'); --  Should get no ack now
+      while sp_updated = '0' loop
+        sbrd(x"81", '1');
+        if ReadResult /= x"0000" then
+          sp_updated <= '1';
+          write(my_line, now);
+          write(my_line, string'(": readback now "));
+          hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+          writeline(output, my_line);
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+      wait for 500 ns;
+      sbrd(x"50",'1');
       sbrd(x"80",'1');
-      if ReadResult = x"0001" then
+      check_read(x"80", x"0000"); -- zero status, not online, offline or scanning
+      sp_updated <= '0';
+      sbwr(x"80",x"0001",'1'); -- start scan
+      while sp_updated = '0' loop
+        sbrd(x"80", '1');
+        if ReadResult /= x"0000" then
+          sp_updated <= '1';
+          write(my_line, now);
+          write(my_line, string'(": scan started"));
+          writeline(output, my_line);
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+      
+      -- now monitor the loop, reporting steps
+      sp_updated <= '0';
+      Prev_Step <= (others => '0');
+      wait until clk'event and clk = '1';
+      while sp_updated = '0' loop
+        sbrd(x"80",'1');
+        if ReadResult = x"0001" then
+          sbrd(x"81", '1');
+          if ReadResult /= Prev_Step then
+            write(my_line, now);
+            write(my_line, string'(": cur step "));
+            hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+            writeline(output, my_line);
+            Prev_Step <= ReadResult;
+            if ReadResult > x"0170" then
+              sbwr(x"81", x"0000",'0'); -- Attempt write to setpoint: should NACK
+              sbwr(x"80", x"0000", '1'); -- Scan abort
+            end if;
+          end if;
+        else
+          sp_updated <= '1';
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+      write(my_line, now);
+      write(my_line, string'(": Scan Stopped"));
+      writeline(output, my_line);
+  
+      sp_updated <= '0';
+      sbwr(x"80", x"0002",'1'); -- Drive online
+      while sp_updated = '0' loop
         sbrd(x"81", '1');
         if ReadResult /= Prev_Step then
+          sp_updated <= '1';
           write(my_line, now);
-          write(my_line, string'(": cur step "));
+          write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
           Prev_Step <= ReadResult;
-          if ReadResult > x"0170" then
-            sbwr(x"81", x"0000",'0'); -- Attempt write to setpoint: should NACK
-            sbwr(x"80", x"0000", '1'); -- Scan abort
-          end if;
+          wait until clk'event and clk = '1';
         end if;
-      else
-        sp_updated <= '1';
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    write(my_line, now);
-    write(my_line, string'(": Scan Stopped"));
-    writeline(output, my_line);
-
-    sp_updated <= '0';
-    sbwr(x"80", x"0002",'1'); -- Drive online
-    while sp_updated = '0' loop
-      sbrd(x"81", '1');
-      if ReadResult /= Prev_Step then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": readback now "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
-        Prev_Step <= ReadResult;
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    sp_updated <= '0';
-    sbwr(x"80", x"0005",'1'); -- Drive offline
-    while sp_updated = '0' loop
-      sbrd(x"81", '1');
-      if ReadResult /= Prev_Step then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": readback now "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
-        Prev_Step <= ReadResult;
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    sp_updated <= '0';
-    sbwr(x"80", x"0003",'1'); -- Drive online + dither
-    while sp_updated = '0' loop
-      sbrd(x"81", '1');
-      if ReadResult /= Prev_Step then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": readback now "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
-        Prev_Step <= ReadResult;
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
-    sp_updated <= '0';
-    sbwr(x"80", x"0004",'1'); -- Drive online - dither
-    while sp_updated = '0' loop
-      sbrd(x"81", '1');
-      if ReadResult /= Prev_Step then
-        sp_updated <= '1';
-        write(my_line, now);
-        write(my_line, string'(": readback now "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
-        Prev_Step <= ReadResult;
-        wait until clk'event and clk = '1';
-      end if;
-    end loop;
+      end loop;
+      sp_updated <= '0';
+      sbwr(x"80", x"0005",'1'); -- Drive offline
+      while sp_updated = '0' loop
+        sbrd(x"81", '1');
+        if ReadResult /= Prev_Step then
+          sp_updated <= '1';
+          write(my_line, now);
+          write(my_line, string'(": readback now "));
+          hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+          writeline(output, my_line);
+          Prev_Step <= ReadResult;
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+      sp_updated <= '0';
+      sbwr(x"80", x"0003",'1'); -- Drive online + dither
+      while sp_updated = '0' loop
+        sbrd(x"81", '1');
+        if ReadResult /= Prev_Step then
+          sp_updated <= '1';
+          write(my_line, now);
+          write(my_line, string'(": readback now "));
+          hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+          writeline(output, my_line);
+          Prev_Step <= ReadResult;
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+      sp_updated <= '0';
+      sbwr(x"80", x"0004",'1'); -- Drive online - dither
+      while sp_updated = '0' loop
+        sbrd(x"81", '1');
+        if ReadResult /= Prev_Step then
+          sp_updated <= '1';
+          write(my_line, now);
+          write(my_line, string'(": readback now "));
+          hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+          writeline(output, my_line);
+          Prev_Step <= ReadResult;
+          wait until clk'event and clk = '1';
+        end if;
+      end loop;
+    END IF;
     
     SimDone <= '1';
     wait;

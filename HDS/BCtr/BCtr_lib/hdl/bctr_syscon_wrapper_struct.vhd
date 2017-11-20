@@ -130,7 +130,8 @@ BEGIN
       INSTRUMENT_ID  => X"0008",      -- HCHO
       N_INTERRUPTS   => 0,
       FAIL_WIDTH     => 1,
-      SW_WIDTH       => 0
+      SW_WIDTH       => 0,
+      N_CTR_CHANNELS => 2
     )
     PORT MAP (
       clk      => clk,

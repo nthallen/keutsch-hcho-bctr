@@ -38,6 +38,7 @@ BEGIN
     IF (resize(unsigned(ExpAddr),16) < BASE_ADDR OR
         resize(unsigned(ExpAddr),16) > BASE_ADDR+10) THEN
       BdEn <= '0';
+      BdWrEn <= '0';
       C_Dbar <= '0';
       CfgAddr <= (others => '0');
       DataAddr <= (others => '0');
@@ -51,9 +52,12 @@ BEGIN
       ELSE
         C_Dbar <= '1';
       END IF;
+      IF offset = 1 OR offset = 2 THEN
+        BdWrEn <= '0';
+      ELSE
+        BdWrEn <= '1';
+      END IF;
     END IF;
   END PROCESS;
-
-  BdWrEn <= '0';
 END ARCHITECTURE beh;
 
