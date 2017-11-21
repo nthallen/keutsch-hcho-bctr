@@ -252,12 +252,20 @@ end
 while bitand(status,1024) == 0
   status = read_subbus(s,ctr);
 end
+fprintf(1,'Reporting expired status:\n');
 report_status(status);
 [values,ack] = read_multi(s,rm_obj2);
-report_status(values(1));
+% report_status(values(1));
+IPnum = bitand(values(3),63);
+ExpBit = bitand(values(3),32768) > 0;
+NW = values(2);
+fprintf(1,'Late     Expired:%d IPnum:%d NW:%d\n', ExpBit, IPnum, NW);
 [values2,ack2] = read_multi(s,rm_obj2);
-report_status(values2(1));
-write_subbus(s, ctr, 1); % Enable
+IPnum = bitand(values2(3),63);
+ExpBit = bitand(values2(3),32768) > 0;
+NW = values2(2);
+fprintf(1,'Followup Expired:%d IPnum:%d NW:%d\n', ExpBit, IPnum, NW);
+write_subbus(s, ctr, 0); % Disable
 %% BCtr HCHO Data Requirements
 NChannels = 2;
 NBins = 101;
