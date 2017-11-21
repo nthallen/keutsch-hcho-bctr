@@ -19,7 +19,7 @@ END ENTITY BCtr_syscon_wrapper_tb;
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
--- LIBRARY BCtr_lib;
+LIBRARY BCtr_lib;
 USE BCtr_lib.ALL;
 
 
@@ -158,8 +158,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
   FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
   FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
--- FOR ALL : ads1115 USE ENTITY BCtr_lib.ads1115;
--- FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
+  FOR ALL : ads1115 USE ENTITY BCtr_lib.ads1115;
+  FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
   -- pragma synthesis_on
 
 BEGIN
@@ -189,7 +189,9 @@ BEGIN
 
     tester : BCtr_syscon_wrapper_tester
       GENERIC MAP (
-        BIN_OPT => 3
+        BIN_OPT => 3,
+        DACSCAN_OPT => '0',
+        SIM_LOOPS => 2
       )
       PORT MAP (
         Addr    => Addr,

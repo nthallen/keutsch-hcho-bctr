@@ -2,11 +2,11 @@
 # For Build 7, uart will be mapped to pads
 
 # FAIL to led[0]
-# Trigger to PIO.46  W7
-# PMTS[0] to PIO.43  W6
-# PMTS[1] to PIO.40  W4
-# SimTrig to PIO.1   M3
-# SimPMT  to PIO.3   A16
+# Trigger to PIO.46  W7  J6
+# PMTS[0] to PIO.43  W6  J7
+# PMTS[1] to PIO.40  W4  J8
+# SimTrig to PIO.1   M3  E22
+# SimPMT  to PIO.3   A16 E24
 #
 # temp_scl to SCL1 at PIO.35 V3
 # temp_sda to SDA1 at PIO.34 W3

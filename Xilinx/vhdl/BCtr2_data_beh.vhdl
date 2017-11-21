@@ -110,6 +110,8 @@ BEGIN
                 IF DRdy = '1' OR Expired = '1' THEN
                   tx_active <= '1';
                   -- DData will be set in the setup_state machine below
+                ELSE
+                  DData <= (others => '0');
                 END IF;
               ELSE
                 DData <= std_logic_vector(NWremaining);
@@ -206,7 +208,14 @@ BEGIN
         CASE setup_state IS
         WHEN SU_IDLE =>
           IF tx_active = '1' THEN
-            IF (DRdy = '1') THEN
+            IF Expired = '1' THEN
+              NW := to_unsigned(4,NW'length);
+              NWremaining <= NW;
+              DData <= std_logic_vector(NW);
+              Expired_int <= '1';
+              current_tx <= TX_IPNUM;
+              setup_state <= SU_LATCH;
+            ELSIF (DRdy = '1') THEN
               NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 4,16);
               NWremaining <= NW;
               DData <= std_logic_vector(NW);
@@ -218,14 +227,7 @@ BEGIN
               IData <= RptData;
               RptRE <= '1';
               setup_state <= SU_LATCH;
-            ELSIF Expired = '1' THEN
-              NW := to_unsigned(4,NW'length);
-              NWremaining <= NW;
-              DData <= std_logic_vector(NW);
-              Expired_int <= '1';
-              current_tx <= TX_IPNUM;
-              setup_state <= SU_LATCH;
-            ELSE
+            ELSE -- should not actually get here
               NWremaining <= to_unsigned(0,16);
               DData <= X"0000";
               tx_active <= '0';

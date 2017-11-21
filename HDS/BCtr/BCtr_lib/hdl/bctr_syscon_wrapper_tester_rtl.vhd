@@ -19,10 +19,10 @@ ENTITY BCtr_syscon_wrapper_tester IS
   GENERIC( 
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
-    BIN_OPT    : integer range 10 downto 0      := 3; -- 0 to disable, 1,2,3 currently supported
+    BIN_OPT    : integer range 10 downto 0      := 0; -- 0 to disable, 1,2,3 currently supported
     TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
     AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
-    DACSCAN_OPT : std_logic := '0'; -- Set true to run DACSCAN tests
+    DACSCAN_OPT : std_logic := '1'; -- Set true to run DACSCAN tests
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -209,6 +209,10 @@ BEGIN
     assert ReadResult = X"0000" report "Invalid startup status" severity error;
 
     IF BIN_OPT > 0 THEN
+      write(my_line, now);
+      write(my_line, string'(": Starting BCtr2 tests"));
+      writeline(output, my_line);
+      
       CASE BIN_OPT IS
       WHEN 1 =>
         -- Configure for 1 bins of 10
@@ -255,6 +259,9 @@ BEGIN
       sbrd(ctr_base, '1');
       assert ReadResult(5 DOWNTO 0) = "100001"
         report "Expected Ready|En status" severity error;
+      sbrd(ctr_base+1,'1');
+      assert ReadResult = x"0000"
+        report "Expected zero FIFO length" severity error;
       
       for i in 1 to SIM_LOOPS loop
         sbrd(ctr_base,'1');
@@ -277,7 +284,49 @@ BEGIN
         end loop;
         writeline(output, my_line);
       end loop;
+
+      -- wait for expired status
+      write(my_line, now);
+      write(my_line, string'(": Testing expired: waiting for two IPS"));
+      writeline(output, my_line);
+      sbrd(ctr_base,'1');
+      while ReadResult(10) = '0' loop
+        sbrd(ctr_base,'1');
+      end loop;
+      write(my_line, now);
+      write(my_line, string'(": Testing expired: NW:"));
+      sbrd(ctr_base+1,'1'); -- NWords
+      NWords <= unsigned(ReadResult);
+      wait for 10 ns;
+      write(my_line, to_integer(NWords));
+      assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
+      while NWords > 0 loop
+        sbrd(ctr_base+2,'1');
+        write(my_line, string'(" "));
+        write(my_line, to_integer(unsigned(ReadResult)));
+        NWords <= NWords - 1;
+        wait for 10 ns;
+      end loop;
+      writeline(output, my_line);
       
+      -- now ready the data afterwards
+      sbrd(ctr_base,'1');
+      assert ReadResult(2) = '1' AND ReadResult(10) = '0'
+        report "Expected DRdy and not Expired" severity error;
+      sbrd(ctr_base+1,'1'); -- NWords
+      NWords <= unsigned(ReadResult);
+      wait for 10 ns;
+      write(my_line, to_integer(NWords));
+      -- assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
+      while NWords > 0 loop
+        sbrd(ctr_base+2,'1');
+        write(my_line, string'(" "));
+        write(my_line, to_integer(unsigned(ReadResult)));
+        NWords <= NWords - 1;
+        wait for 10 ns;
+      end loop;
+      writeline(output, my_line);
+    
       sbrd(ctr_base,'1');
       while ReadResult(1) = '0' loop
         sbrd(ctr_base,'1');
@@ -384,6 +433,9 @@ BEGIN
     
     IF DACSCAN_OPT = '1' THEN
       --dacscan tests
+      write(my_line, now);
+      write(my_line, string'(": starting dacscan tests"));
+      writeline(output, my_line);
       sbwr(x"82", x"0100", '1'); -- scan start
       sbwr(x"83", x"0200", '1'); -- scan stop
       sbwr(x"84", x"0155", '1'); -- scan step * 8

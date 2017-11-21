@@ -189,7 +189,9 @@ BEGIN
 
     tester : BCtr_syscon_wrapper_tester
       GENERIC MAP (
-        BIN_OPT => 3
+        BIN_OPT => 3,
+        DACSCAN_OPT => '0',
+        SIM_LOOPS => 2
       )
       PORT MAP (
         Addr    => Addr,
