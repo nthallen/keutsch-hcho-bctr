@@ -21,6 +21,9 @@ USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
 ENTITY BCtr_syscon_wrapper IS
+  GENERIC(
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0008"    -- Relative to HCHO
+  );
   PORT( 
     Addr     : IN     std_logic_vector (7 DOWNTO 0);
     Ctrl     : IN     std_logic_vector (6 DOWNTO 0);
@@ -82,7 +85,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
   -- Component Declarations
   COMPONENT BCtr_syscon
   GENERIC (
-    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0007";    -- Relative to HCHO
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0008";    -- Relative to HCHO
     INSTRUMENT_ID  : std_logic_vector(15 DOWNTO 0) := X"0008";    -- HCHO
     N_INTERRUPTS   : integer range 15 downto 0     := 1;
     N_BOARDS       : integer range 15 downto 0     := 7;
@@ -126,7 +129,7 @@ BEGIN
   -- Instance port mappings.
   top : BCtr_syscon
     GENERIC MAP (
-      BUILD_NUMBER   => X"0006",      -- Relative to HCHO
+      BUILD_NUMBER   => BUILD_NUMBER,      -- Relative to HCHO
       INSTRUMENT_ID  => X"0008",      -- HCHO
       N_INTERRUPTS   => 0,
       FAIL_WIDTH     => 1,
