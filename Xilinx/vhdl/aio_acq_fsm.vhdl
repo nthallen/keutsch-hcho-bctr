@@ -22,7 +22,7 @@ ENTITY aio_acq IS
     ADDR_WIDTH : integer range 16 downto 8 := 16
   );
   PORT( 
-    ChanAddr2 : IN     std_logic_vector(1 DOWNTO 0);
+    ChanAddr2 : IN     std_logic_vector (1 DOWNTO 0);
     Done      : IN     std_logic;
     Err       : IN     std_logic;
     WrEn2     : IN     std_logic;
@@ -43,7 +43,8 @@ ENTITY aio_acq IS
     htr1_cmd  : OUT    std_logic;
     htr2_cmd  : OUT    std_logic;
     RdStat    : IN     std_logic;
-    Timeout   : IN     std_logic
+    Timeout   : IN     std_logic;
+    IdxWrAck  : OUT    std_logic
   );
 
 -- Declarations
@@ -61,7 +62,7 @@ ARCHITECTURE fsm OF aio_acq IS
     S_DAC2_SET, S_DAC2_SET_1,
     S_ADC2_READ, S_ADC1_CFG,
     S_DAC_INIT, S_DAC_INIT_2, S_DAC_INIT_3, S_DAC_INIT_4,
-    S_DAC_UPDATE, S_DAC_UPDATE_1, S_DAC_UPDATE_2,
+    S_DAC_UPDATE, S_DAC_UPDATE_1, S_DAC_UPDATE_1A, S_DAC_UPDATE_2,
     S_TXN, S_TXN_1, S_TXN_ERR,
     S_RAM,
     S_DAC_WR, S_DAC_WR_1, S_DAC_WR_2, S_DAC_WR_3,
@@ -115,11 +116,13 @@ ARCHITECTURE fsm OF aio_acq IS
   SIGNAL dac_i2c_addr : std_logic_vector(7 DOWNTO 0);
   SIGNAL dac_ram_addr : integer range 6 DOWNTO 0; -- use for both setpoint and readback
   SIGNAL dac_reg_data : std_logic_vector(7 DOWNTO 0);
+  SIGNAL dac_wr_mode : std_logic_vector(7 DOWNTO 0);
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
   constant ADC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10010000";
   constant DAC1_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011000";
   constant DAC2_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011100";
   constant DAC_WR_IO : std_logic_vector(7 DOWNTO 0) := "00110000";
+  constant DAC_WR_I  : std_logic_vector(7 DOWNTO 0) := "00010000";
   constant DAC_WR_CTRL : std_logic_vector(7 DOWNTO 0) := "01000000";
   -- constant LO_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000010";
   -- constant HI_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000011";
@@ -217,10 +220,12 @@ BEGIN
     END PROCEDURE start_dac_wr;
     
     PROCEDURE start_dac_update(
+      wr_mode : std_logic_vector(7 DOWNTO 0);
       ram_addr : integer;
       i2c_addr : std_logic_vector(7 DOWNTO 0);
       nxt : IN State_t ) IS
     BEGIN
+      dac_wr_mode <= wr_mode;
       dac_wr_data <= wData2;
       dac_ram_addr <= ram_addr;
       dac_i2c_addr <= i2c_addr;
@@ -294,6 +299,7 @@ BEGIN
         crnt_state <= S_INIT;
         nack_bit <= 0;
         adc_cfgd <= '0';
+        IdxWrAck <= '0';
       ELSE
         IF RdStat = '1' THEN
           Status(ADC_ACK_BIT) <= '0';
@@ -373,11 +379,20 @@ BEGIN
           WHEN S_DAC_INIT_4 =>
             start_ram(STATUS_RAM_ADDR,Status,dac_nxt);
 
+          -- start_dac_update()
           WHEN S_DAC_UPDATE =>
             write_ack(S_DAC_UPDATE_1);
           WHEN S_DAC_UPDATE_1 =>
-            start_dac_wr(DAC_WR_IO, dac_wr_data, S_DAC_UPDATE_2);
+            IF dac_wr_mode = DAC_WR_I THEN
+              start_dac_wr(dac_wr_mode, dac_wr_data, S_DAC_UPDATE_1A);
+            ELSE
+              start_dac_wr(dac_wr_mode, dac_wr_data, S_DAC_UPDATE_2);
+            END IF;
+          WHEN S_DAC_UPDATE_1A =>
+            IdxWrAck <= '1';
+            crnt_state <= S_DAC_UPDATE_2;
           when S_DAC_UPDATE_2 =>
+            IdxWrAck <= '0';
             start_ram(dac_ram_addr, dac_wr_data, dacu_nxt);
 
           -- start_txn(): byte-level interface to HVPS_txn
@@ -454,18 +469,20 @@ BEGIN
           WHEN S_ADC_RD_0 =>
             start_txn('1','0','0','0',ADC_CFG_PTR,S_ADC_RD_0,S_ADC_RD_1);
           WHEN S_ADC_RD_1 =>
-            if WrEn2 = '1' then
+            IF WrEn2 = '1' THEN
               case ChanAddr2 IS
               WHEN "00" =>
                 issue_cmds(wData2, S_ADC_RD_1);
               WHEN "01" =>
-                start_dac_update(DAC1_SETPOINT_RAM_ADDR, DAC1_I2C_ADDR, S_ADC_RD_1);
+                start_dac_update(DAC_WR_IO, DAC1_SETPOINT_RAM_ADDR, DAC1_I2C_ADDR, S_ADC_RD_1);
+              WHEN "10" =>
+                start_dac_update(DAC_WR_I, DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
               WHEN "11" =>
-                start_dac_update(DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
+                start_dac_update(DAC_WR_IO, DAC2_SETPOINT_RAM_ADDR, DAC2_I2C_ADDR, S_ADC_RD_1);
               WHEN others =>
                 write_ack(S_ADC_RD_1); -- should never happen
               end case;
-            else
+            ELSE
               start_txn('0','1','1','0',ADC_I2C_ADDR,S_ADC_RD_1,S_ADC_RD_2);
             end if;
           WHEN S_ADC_RD_2 =>

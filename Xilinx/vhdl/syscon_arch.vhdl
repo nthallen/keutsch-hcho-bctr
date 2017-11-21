@@ -214,6 +214,7 @@ BEGIN
         ExpRd <= '0';
         ExpWr <= '0';
         INTA_int <= '0';
+        DataIn <= (others => '0');
       else
         CASE current_state IS
           WHEN sc0 =>

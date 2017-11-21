@@ -53,6 +53,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL rdreq     : std_logic;
   SIGNAL htr1_cmd  : std_logic;
   SIGNAL htr2_cmd  : std_logic;
+  SIGNAL dac_reset : std_logic;
+  SIGNAL dac_ldac  : std_logic;
 
   -- Component declarations
   COMPONENT BCtr_syscon_wrapper
@@ -75,11 +77,23 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
       SimTrig : OUT    std_logic;
-      Status  : OUT    std_logic_vector(3 DOWNTO 0)
+      Status  : OUT    std_logic_vector(3 DOWNTO 0);
+      dac_reset : OUT   std_logic;
+      dac_ldac  : OUT    std_logic
     );
   END COMPONENT BCtr_syscon_wrapper;
 
   COMPONENT BCtr_syscon_wrapper_tester
+    GENERIC( 
+      N_CHANNELS : integer range 4 downto 1       := 2;
+      CTR_WIDTH  : integer range 32 downto 1      := 16;
+      BIN_OPT    : integer range 10 downto 0      := 0; -- 0 to disable, 1,2,3 currently supported
+      TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
+      AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
+      DACSCAN_OPT : std_logic := '0'; -- Set true to run DACSCAN tests
+      SIM_LOOPS  : integer range 50 downto 0      := 10;
+      NC         : integer range 2**24-1 downto 0 := 30000
+    );
     PORT (
       Addr    : OUT    std_logic_vector(7 DOWNTO 0);
       Ctrl    : OUT    std_logic_vector(6 DOWNTO 0);
@@ -168,10 +182,15 @@ BEGIN
         Fail    => Fail,
         SimPMT  => SimPMT,
         SimTrig => SimTrig,
-        Status  => Status
+        Status  => Status,
+        dac_reset => dac_reset,
+        dac_ldac => dac_ldac
       );
 
     tester : BCtr_syscon_wrapper_tester
+      GENERIC MAP (
+        BIN_OPT => 3
+      )
       PORT MAP (
         Addr    => Addr,
         Ctrl    => Ctrl,

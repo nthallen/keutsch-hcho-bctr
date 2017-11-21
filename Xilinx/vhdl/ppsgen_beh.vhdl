@@ -72,23 +72,7 @@ BEGIN
       when others => BdEn <= '0';
     end case;
   END PROCESS;
---  
---  pps_count : PROCESS (clk) is
---  BEGIN
---    if clk'event AND clk = '1' then
---      if ExpReset = '1' then
---        PPS_cnt <= PPS_period_adj;
---        PPS <= '0';
---      elsif PPS_cnt >= PPS_period_adj then
---        PPS <= '1';
---        PPS_cnt <= to_signed(0,32);
---      else
---        PPS <= '0';
---        PPS_cnt <= PPS_cnt + 1;
---      end if;
---    end if;
---  END PROCESS;
---  
+
   rw_proc : PROCESS (clk) is
   BEGIN
     if clk'event AND clk = '1' then
@@ -100,17 +84,17 @@ BEGIN
         UpdateTime <= '0';
         UpdatePeriod <= '0';
         PPS_cnt <= CLK_FREQ-1;
-        PPS <= '0';
+        pps <= '0';
         RData <= (others => '0');
       else
         if PPS_cnt >= PPS_period_adj then
-          PPS <= '1';
+          pps <= '1';
           PPS_cnt <= PPS_cnt - PPS_period_adj;
         elsif UpdateTime = '1' then
           PPS_cnt <= PPS_cnt + ToffsetAdj + 1;
           UpdateTime <= '0';
         else
-          PPS <= '0';
+          pps <= '0';
           PPS_cnt <= PPS_cnt + 1;
         end if;
 

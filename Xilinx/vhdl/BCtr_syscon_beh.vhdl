@@ -11,14 +11,13 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
 
 ENTITY BCtr_syscon IS
     GENERIC (
-      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007"; -- Relative to HCHO
-      INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO
+      BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0008"; -- Relative to HCHO
+      INSTRUMENT_ID : std_logic_vector(15 DOWNTO 0) := X"0008"; -- HCHO BCtr
       N_INTERRUPTS  : integer range 15 downto 0     := 1;
-      N_BOARDS      : integer range 15 downto 0     := 5;
+      N_BOARDS      : integer range 15 downto 0     := 7;
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
@@ -43,7 +42,8 @@ ENTITY BCtr_syscon IS
       htr1_cmd : OUT std_logic;
       htr2_cmd : OUT std_logic;
       SimTrig  : OUT std_logic;
-      SimPMT   : OUT std_logic
+      SimPMT   : OUT std_logic;
+      LDAC     : OUT std_logic
     );
 END ENTITY BCtr_syscon;
 
@@ -64,7 +64,13 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL Switches      : std_logic_vector(SW_WIDTH-1 DOWNTO 0);
   SIGNAL Flt_CPU_Reset : std_logic;
   SIGNAL PPS           : std_logic;
-
+  SIGNAL IPS           : std_logic;
+  SIGNAL IPnum         : std_logic_vector(5 DOWNTO 0);
+  SIGNAL idxData       : std_logic_vector (15 DOWNTO 0);
+  SIGNAL idxWr         : std_logic;
+  SIGNAL idxAck        : std_logic;
+  SIGNAL LaserV        : std_logic_vector(15 DOWNTO 0);
+  
   COMPONENT syscon
     GENERIC (
       BUILD_NUMBER  : std_logic_vector(15 DOWNTO 0) := X"0007";
@@ -105,27 +111,53 @@ ARCHITECTURE beh OF BCtr_syscon IS
     );
   END COMPONENT syscon;
   
-  COMPONENT BCtr_sbbd
-    GENERIC (
-      ADDR_WIDTH      : integer range 16 downto 8 := 8;
-      BASE_ADDR       : unsigned(15 DOWNTO 0)     := to_unsigned(16,16);
-      N_CHANNELS      : integer range 4 downto 1  := 1;
-      CTR_WIDTH       : integer range 32 downto 1 := 16;
-      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
+--  COMPONENT BCtr_sbbd
+--    GENERIC (
+--      ADDR_WIDTH      : integer range 16 downto 8 := 8;
+--      BASE_ADDR       : unsigned(15 DOWNTO 0)     := to_unsigned(16,16);
+--      N_CHANNELS      : integer range 4 downto 1  := 1;
+--      CTR_WIDTH       : integer range 32 downto 1 := 16;
+--      FIFO_ADDR_WIDTH : integer range 10 downto 4 := 9
+--    );
+--    PORT (
+--      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+--      ExpRd    : IN     std_logic;
+--      ExpReset : IN     std_logic;
+--      ExpWr    : IN     std_logic;
+--      PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
+--      Trigger  : IN     std_logic;
+--      WData    : IN     std_logic_vector(15 DOWNTO 0);
+--      clk      : IN     std_logic;
+--      ExpAck   : OUT    std_logic;
+--      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+--    );
+--  END COMPONENT BCtr_sbbd;
+  
+  COMPONENT BCtr2_sbbd IS
+    GENERIC( 
+      ADDR_WIDTH      : integer range 16 downto 8  := 8;
+      BASE_ADDR       : unsigned(15 downto 0)      := X"0010";
+      FIFO_ADDR_WIDTH : integer range 10 downto 4  := 9;
+      N_CHANNELS      : integer range 4 downto 1   := 1;
+      CTR_WIDTH       : integer range 32 downto 1  := 16;
+      FIFO_WIDTH      : integer range 128 downto 1 := 16
     );
-    PORT (
-      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+    PORT( 
+      ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       ExpRd    : IN     std_logic;
       ExpReset : IN     std_logic;
       ExpWr    : IN     std_logic;
-      PMTs     : IN     std_logic_vector(N_CHANNELS-1 DOWNTO 0);
+      PMTs     : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
       Trigger  : IN     std_logic;
-      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      WData    : IN     std_logic_vector (15 DOWNTO 0);
       clk      : IN     std_logic;
       ExpAck   : OUT    std_logic;
-      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+      RData    : OUT    std_logic_vector (15 DOWNTO 0);
+      IPS      : IN     std_logic;
+      IPnum    : IN     std_logic_vector (5 DOWNTO 0);
+      LaserV   : IN     std_logic_vector (15 DOWNTO 0)
     );
-  END COMPONENT BCtr_sbbd;
+  END COMPONENT BCtr2_sbbd ;
 
   COMPONENT simfluor IS
     GENERIC (
@@ -170,11 +202,14 @@ ARCHITECTURE beh OF BCtr_syscon IS
       ExpWr   : IN     std_logic;
       clk     : IN     std_logic;
       rst     : IN     std_logic;
+      idxData : IN     std_logic_vector (15 DOWNTO 0);
+      idxWr   : IN     std_logic;
       wData   : IN     std_logic_vector(15 DOWNTO 0);
       ExpAck  : OUT    std_logic;
       rData   : OUT    std_logic_vector(15 DOWNTO 0);
       scl     : INOUT  std_logic;
       sda     : INOUT  std_logic;
+      idxAck  : OUT    std_logic;
       scl_mon : OUT std_logic;
       sda_mon : OUT std_logic;
       htr1_cmd : OUT std_logic;
@@ -201,6 +236,48 @@ ARCHITECTURE beh OF BCtr_syscon IS
       RData    : OUT    std_logic_vector(15 DOWNTO 0)
     );
   END COMPONENT pps_sbbd;
+
+  COMPONENT ips_sbbd
+    GENERIC (
+      ADDR_WIDTH : integer range 16 downto 8 := 8;
+      BASE_ADDR  : unsigned(15 downto 0)     := x"0070"
+    );
+    PORT (
+      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd    : IN     std_logic;
+      ExpReset : IN     std_logic;
+      ExpWr    : IN     std_logic;
+      PPS      : IN     std_logic;
+      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      clk      : IN     std_logic;
+      ExpAck   : OUT    std_logic;
+      IPS      : OUT    std_logic;
+      IPnum    : OUT    std_logic_vector(5 DOWNTO 0);
+      RData    : OUT    std_logic_vector(15 DOWNTO 0)
+    );
+  END COMPONENT ips_sbbd;
+  COMPONENT dacscan_sbbd
+    GENERIC (
+      ADDR_WIDTH : integer range 16 downto 8      := 8;
+      BASE_ADDR  : std_logic_vector (15 downto 0) := x"0080"
+    );
+    PORT (
+      ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd    : IN     std_logic;
+      ExpReset : IN     std_logic;
+      ExpWr    : IN     std_logic;
+      IPS      : IN     std_logic;
+      WData    : IN     std_logic_vector(15 DOWNTO 0);
+      clk      : IN     std_logic;
+      idxAck   : IN     std_logic;
+      ExpAck   : OUT    std_logic;
+      LDAC     : OUT    std_logic;
+      RData    : OUT    std_logic_vector(15 DOWNTO 0);
+      idxData  : OUT    std_logic_vector(15 DOWNTO 0);
+      SetPoint : OUT    std_logic_vector(15 DOWNTO 0);
+      idxWr    : OUT    std_logic
+    );
+  END COMPONENT dacscan_sbbd;
 BEGIN
   sys : syscon
     GENERIC MAP (
@@ -241,13 +318,14 @@ BEGIN
       Flt_CPU_Reset => Flt_CPU_Reset
     );
 
-  adjgatectr : BCtr_sbbd
+  adjgatectr : BCtr2_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
       BASE_ADDR       => to_unsigned(16#10#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
-      FIFO_ADDR_WIDTH => 4
+      FIFO_ADDR_WIDTH => 4,
+      FIFO_WIDTH      => 16 * N_CTR_CHANNELS
     )
     PORT MAP (
       ExpAddr  => ExpAddr,
@@ -259,16 +337,20 @@ BEGIN
       WData    => WData,
       clk      => clk,
       ExpAck   => ExpAck(0),
-      RData    => RData(15 DOWNTO 0)
+      RData    => RData(15 DOWNTO 0),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      LaserV   => LaserV
     );
 
-  binctr : BCtr_sbbd
+  binctr : BCtr2_sbbd
     GENERIC MAP (
       ADDR_WIDTH      => ADDR_WIDTH,
       BASE_ADDR       => to_unsigned(16#20#,16),
       N_CHANNELS      => N_CTR_CHANNELS,
       CTR_WIDTH       => 16,
-      FIFO_ADDR_WIDTH => 9
+      FIFO_ADDR_WIDTH => 9,
+      FIFO_WIDTH      => 16 * N_CTR_CHANNELS
     )
     PORT MAP (
       ExpAddr  => ExpAddr,
@@ -280,7 +362,10 @@ BEGIN
       WData    => WData,
       clk      => clk,
       ExpAck   => ExpAck(1),
-      RData    => RData(31 DOWNTO 16)
+      RData    => RData(31 DOWNTO 16),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      LaserV   => LaserV
     );
 
   temps : temp_top
@@ -311,6 +396,9 @@ BEGIN
       ExpWr   => ExpWr,
       clk     => clk,
       rst     => ExpReset,
+      idxData => idxData,
+      idxWr   => idxWr,
+      idxAck  => idxAck,
       wData   => WData,
       ExpAck  => ExpAck(3),
       rData   => RData(16*3+15 DOWNTO 16*3),
@@ -352,6 +440,47 @@ BEGIN
       ExpAck   => ExpAck(4),
       PPS      => PPS,
       RData    => RData(16*4+15 DOWNTO 16*4)
+    );
+
+  ips_gen : ips_sbbd
+    GENERIC MAP (
+      ADDR_WIDTH => ADDR_WIDTH,
+      BASE_ADDR  => x"0070"
+    )
+    PORT MAP (
+      ExpAddr  => ExpAddr,
+      ExpRd    => ExpRd,
+      ExpReset => ExpReset,
+      ExpWr    => ExpWr,
+      PPS      => PPS,
+      WData    => WData,
+      clk      => clk,
+      ExpAck   => ExpAck(5),
+      IPS      => IPS,
+      IPnum    => IPnum,
+      RData    => RData(16*5+15 DOWNTO 16*5)
+    );
+
+  dacscan : dacscan_sbbd
+    GENERIC MAP (
+      ADDR_WIDTH => ADDR_WIDTH,
+      BASE_ADDR  => x"0080"
+    )
+    PORT MAP (
+      ExpAddr  => ExpAddr,
+      ExpRd    => ExpRd,
+      ExpReset => ExpReset,
+      ExpWr    => ExpWr,
+      IPS      => IPS,
+      WData    => WData,
+      clk      => clk,
+      idxAck   => idxAck,
+      ExpAck   => ExpAck(6),
+      LDAC     => LDAC,
+      RData    => RData(16*6+15 DOWNTO 16*6),
+      idxData  => idxData,
+      idxWr    => idxWr,
+      SetPoint => LaserV
     );
     
   BdIntr <= (others => '0');
