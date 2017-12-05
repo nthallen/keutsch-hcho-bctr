@@ -209,6 +209,10 @@ BEGIN
     assert ReadResult = X"0000" report "Invalid startup status" severity error;
 
     IF BIN_OPT > 0 THEN
+      write(my_line, now);
+      write(my_line, string'(": Starting BCtr2 tests"));
+      writeline(output, my_line);
+      
       CASE BIN_OPT IS
       WHEN 1 =>
         -- Configure for 1 bins of 10
@@ -282,6 +286,9 @@ BEGIN
       end loop;
 
       -- wait for expired status
+      write(my_line, now);
+      write(my_line, string'(": Testing expired: waiting for two IPS"));
+      writeline(output, my_line);
       sbrd(ctr_base,'1');
       while ReadResult(10) = '0' loop
         sbrd(ctr_base,'1');
@@ -290,6 +297,7 @@ BEGIN
       write(my_line, string'(": Testing expired: NW:"));
       sbrd(ctr_base+1,'1'); -- NWords
       NWords <= unsigned(ReadResult);
+      wait for 10 ns;
       write(my_line, to_integer(NWords));
       assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
       while NWords > 0 loop
@@ -307,6 +315,7 @@ BEGIN
         report "Expected DRdy and not Expired" severity error;
       sbrd(ctr_base+1,'1'); -- NWords
       NWords <= unsigned(ReadResult);
+      wait for 10 ns;
       write(my_line, to_integer(NWords));
       -- assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
       while NWords > 0 loop

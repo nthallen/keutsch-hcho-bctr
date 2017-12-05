@@ -85,7 +85,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
   -- Component Declarations
   COMPONENT BCtr_syscon
   GENERIC (
-    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0008";    -- Relative to HCHO
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0009";    -- Relative to HCHO
     INSTRUMENT_ID  : std_logic_vector(15 DOWNTO 0) := X"0008";    -- HCHO
     N_INTERRUPTS   : integer range 15 downto 0     := 1;
     N_BOARDS       : integer range 15 downto 0     := 7;

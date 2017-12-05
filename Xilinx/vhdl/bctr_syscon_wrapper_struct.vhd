@@ -72,7 +72,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
--- LIBRARY BCtr_lib;
+LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
@@ -85,7 +85,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
   -- Component Declarations
   COMPONENT BCtr_syscon
   GENERIC (
-    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0008";    -- Relative to HCHO
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"0009";    -- Relative to HCHO
     INSTRUMENT_ID  : std_logic_vector(15 DOWNTO 0) := X"0008";    -- HCHO
     N_INTERRUPTS   : integer range 15 downto 0     := 1;
     N_BOARDS       : integer range 15 downto 0     := 7;
@@ -120,7 +120,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
--- FOR ALL : BCtr_syscon USE ENTITY BCtr_lib.BCtr_syscon;
+  FOR ALL : BCtr_syscon USE ENTITY BCtr_lib.BCtr_syscon;
   -- pragma synthesis_on
 
 

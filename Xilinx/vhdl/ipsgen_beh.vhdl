@@ -54,7 +54,7 @@ ARCHITECTURE beh OF ipsgen IS
   SIGNAL NCcorr : signed(15 downto 0);
   SIGNAL NCcorr_int : signed(15 downto 0);
   SIGNAL NCerr : signed(15 downto 0);
-  SIGNAL NCerr_int : signed(15 downto 0);
+  SIGNAL NCerr_int : signed(28 downto 0);
   SIGNAL NCctr : signed(28 downto 0);
   SIGNAL NCerr_povf : std_logic;
   SIGNAL NCerr_novf : std_logic;
@@ -87,8 +87,6 @@ BEGIN
   END PROCESS;
   
   rw_proc : PROCESS (clk) is
-    variable all_ones : std_logic;
-    variable all_zeros : std_logic;
   BEGIN
     if clk'event AND clk = '1' then
       if ExpReset = '1' then
@@ -116,29 +114,7 @@ BEGIN
         if PPS = '1' then
           startup <= '0';
           if IPctr = to_unsigned(0,IPctr'length) then
-            NCerr <= NCctr(15 downto 0);
-            NCerr_int <= NCctr(15 downto 0) + NCcorr_int;
-            all_ones := '1';
-            all_zeros := '1';
-            for i in NCctr'length-1 downto 15 loop
-              if NCctr(i) = '1' then
-                all_zeros := '0';
-              else
-                all_ones := '0';
-              end if;
-            end loop;
-            if all_ones = '1' or all_zeros = '1' then
-              NCerr_povf <= '0';
-              NCerr_novf <= '0';
-              -- NCc_state <= NCc_check;
-              -- NCcorr_int <= NCcorr;
-            elsif NCctr(NCctr'length-1) = '1' then
-              NCerr_novf <= '1';
-              NCerr_povf <= '0';
-            else
-              NCerr_novf <= '0';
-              NCerr_povf <= '1';
-            end if;
+            NCerr_int <= NCctr + resize(NCcorr_int,NCerr_int'length);
             evaluate_NCerr <= '1';
           else
             evaluate_NCerr <= '0';
@@ -191,6 +167,19 @@ BEGIN
           when NCc_idle =>
             if evaluate_NCerr = '1' then
               evaluate_NCerr <= '0';
+              IF NCerr_int > to_signed(32767,NCerr_int'length) THEN
+                NCerr <= to_signed(32767,16);
+                NCerr_povf <= '1';
+                NCerr_novf <= '0';
+              ELSIF NCerr_int < to_signed(-32768,NCerr_int'length) THEN
+                NCerr <= to_signed(-32768,NCerr'length);
+                NCerr_povf <= '0';
+                NCerr_novf <= '1';
+              ELSE
+                NCerr <= NCerr_int(15 DOWNTO 0);
+                NCerr_povf <= '0';
+                NCerr_novf <= '0';
+              END IF;
               NCc_state <= NCc_check;
             end if;
           when NCc_check =>
