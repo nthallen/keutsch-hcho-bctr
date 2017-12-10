@@ -28,8 +28,10 @@ ENTITY BCtr2_data IS
     LaserVOut  : IN     std_logic_vector (15 DOWNTO 0);
     NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
     NTriggered : IN     std_logic_vector (31 DOWNTO 0);
+    NoData     : IN     std_logic;
     RdEn       : IN     std_logic;
     RptData    : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+    ScanStat   : IN     std_logic_vector (4 DOWNTO 0);
     clk        : IN     std_logic;
     rst        : IN     std_logic;
     DData      : OUT    std_logic_vector (15 DOWNTO 0);
@@ -41,14 +43,13 @@ ENTITY BCtr2_data IS
 
 END ENTITY BCtr2_data ;
 
---
 ARCHITECTURE beh OF BCtr2_data IS
   TYPE State_t IS (
     S_INIT, S_RD
   );
   SIGNAL current_state : State_t;
   TYPE TX_t IS (
-    TX_IDLE, TX_IPNUM, TX_NTLSB, TX_NTMSB, TX_LASERV, TX_DATA
+    TX_IPNUM, TX_NTLSB, TX_NTMSB, TX_LASERV, TX_DATA
   );
   SIGNAL current_tx : TX_t;
   TYPE setup_t IS (
@@ -66,9 +67,11 @@ ARCHITECTURE beh OF BCtr2_data IS
   SIGNAL bin_cnt : unsigned(FIFO_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL tx_err_ovf : std_logic;
   SIGNAL IPnum_int  : std_logic_vector (5 DOWNTO 0);
+  SIGNAL ScanStat_int : std_logic_vector(4 DOWNTO 0);
   SIGNAL LaserV_int  : std_logic_vector (15 DOWNTO 0);
   SIGNAL NTrig_int : std_logic_vector (31 DOWNTO 0);
   SIGNAL Expired_int : std_logic;
+  SIGNAL NoData_int : std_logic;
 BEGIN
   PROCESS (clk) IS
     VARIABLE NW : unsigned(15 DOWNTO 0);
@@ -80,7 +83,7 @@ BEGIN
         tx_err_ovf <= '0';
         DData <= (others => '0');
         current_state <= S_INIT;
-        current_tx <= TX_IDLE;
+        current_tx <= TX_IPNUM;
         setup_state <= SU_IDLE;
         NWremaining <= to_unsigned(0,16);
         IPnum_int <= (others => '0');
@@ -92,6 +95,7 @@ BEGIN
         chan_cnt <= 0;
         bin_cnt <= (others => '0');
         Expired_int <= '0';
+        NoData_int <= '0';
       ELSE
         IF DRdy = '1' OR NWremaining > 0 THEN
           DRdy_int <= '1';
@@ -105,27 +109,62 @@ BEGIN
               DData(10 DOWNTO 0) <=
                 Expired & tx_err_ovf & CfgStatus & tx_active & DRdy_int & En;
               DData(15 DOWNTO 11) <= (others => '0');
+              current_state <= S_RD;
             ELSIF DataAddr = "01" THEN -- Reading NWremaining
-              IF current_tx = TX_IDLE THEN
-                IF DRdy = '1' OR Expired = '1' THEN
+              IF current_tx = TX_IPNUM THEN
+                IF tx_active = '1' THEN
+                  IF Expired_int = '1' OR NoData_int = '1' THEN
+                    NW := to_unsigned(4,NW'length);
+                    NWremaining <= NW;
+                    DData <= std_logic_vector(NW);
+                    -- Expired_int <= Expired;
+                    -- setup_state <= SU_LATCH;
+                  ELSIF DRdy = '1' THEN
+                    NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 4,16);
+                    NWremaining <= NW;
+                    DData <= std_logic_vector(NW);
+                    bin_cnt <= NBtot;
+                    chan_cnt <= N_CHANNELS-1;
+                    word_cnt <= CTR_WORDS-1;
+                    Expired_int <= '0';
+                    IData <= RptData;
+                    RptRE <= '1';
+                    -- setup_state <= SU_LATCH;
+                  ELSE -- should not actually get here
+                    NWremaining <= to_unsigned(0,16);
+                    DData <= X"0000";
+                    tx_active <= '0';
+                    -- setup_state <= SU_IDLE;
+                  END IF;
+                  current_state <= S_RD;
+                ELSIF DRdy = '1' OR Expired = '1' THEN
                   tx_active <= '1';
-                  -- DData will be set in the setup_state machine below
+                  Expired_int <= Expired;
+                  NoData_int <= NoData;
+                  current_state <= S_INIT;
                 ELSE
                   DData <= (others => '0');
+                  current_state <= S_RD;
                 END IF;
               ELSE
                 DData <= std_logic_vector(NWremaining);
+                current_state <= S_RD;
               END IF;
             ELSIF (DataAddr = "10") THEN
               CASE current_tx IS
-              WHEN TX_IDLE =>
-                DData <= X"0000";
               WHEN TX_IPNUM =>
-                DData(5 downto 0) <= IPnum_int;
-                DData(14 downto 6) <= (others => '0');
-                DData(15) <= Expired;
-                NWremaining <= NWremaining - 1;
-                current_tx <= TX_NTLSB;
+                IF tx_active = '1' AND
+                    ( Expired_int = '1' OR NoData_int = '1' OR DRdy_int = '1') THEN
+                  DData(15) <= Expired_int;
+                  DData(14 downto 10) <= ScanStat_int;
+                  DData(9 downto 6) <= (others => '0');
+                  DData(5 downto 0) <= IPnum_int;
+                  NWremaining <= NWremaining - 1;
+                  current_tx <= TX_NTLSB;
+                ELSE
+                  DData <= X"0000";
+                  current_tx <= TX_IPNUM;
+                END IF;
               WHEN TX_NTLSB =>
                 DData <= NTrig_int(15 DOWNTO 0);
                 NWremaining <= NWremaining - 1;
@@ -137,9 +176,11 @@ BEGIN
               WHEN TX_LASERV =>
                 DData <= LaserV_int;
                 NWremaining <= NWremaining - 1;
-                IF Expired_int = '1' THEN
+                IF Expired_int = '1' OR NoData_int = '1' THEN
                   tx_active <= '0';
-                  current_tx <= TX_IDLE;
+                  NoData_int <= '0';
+                  Expired_int <= '0';
+                  current_tx <= TX_IPNUM;
                 ELSE
                   current_tx <= TX_DATA;
                 END IF;
@@ -165,7 +206,7 @@ BEGIN
                         tx_err_ovf <= '1';
                       END IF;
                       tx_active <= '0';
-                      current_tx <= TX_IDLE;
+                      current_tx <= TX_IPNUM;
                     ELSE
                       bin_cnt <= bin_cnt-1;
                       chan_cnt <= N_CHANNELS-1;
@@ -181,13 +222,14 @@ BEGIN
                 END IF;
               WHEN OTHERS =>
                 DData <= (others => '0');
-                current_tx <= TX_IDLE;
+                current_tx <= TX_IPNUM;
               END CASE;
+              current_state <= S_RD;
             ELSE -- Invalid address
               DData <= (others => '0');
+              current_state <= S_RD;
             END IF;
-            current_state <= S_RD;
-          ELSE
+          ELSE -- RdEn /= '1'
             current_state <= S_INIT;
           END IF;
         WHEN S_RD =>
@@ -208,37 +250,14 @@ BEGIN
         CASE setup_state IS
         WHEN SU_IDLE =>
           IF tx_active = '1' THEN
-            IF Expired = '1' THEN
-              NW := to_unsigned(4,NW'length);
-              NWremaining <= NW;
-              DData <= std_logic_vector(NW);
-              Expired_int <= '1';
-              current_tx <= TX_IPNUM;
-              setup_state <= SU_LATCH;
-            ELSIF (DRdy = '1') THEN
-              NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 4,16);
-              NWremaining <= NW;
-              DData <= std_logic_vector(NW);
-              bin_cnt <= NBtot;
-              chan_cnt <= N_CHANNELS-1;
-              word_cnt <= CTR_WORDS-1;
-              Expired_int <= '0';
-              current_tx <= TX_IPNUM;
-              IData <= RptData;
-              RptRE <= '1';
-              setup_state <= SU_LATCH;
-            ELSE -- should not actually get here
-              NWremaining <= to_unsigned(0,16);
-              DData <= X"0000";
-              tx_active <= '0';
-              setup_state <= SU_IDLE;
-            END IF;
+            setup_state <= SU_LATCH;
           ELSE
             setup_state <= SU_IDLE;
           END IF;
         WHEN SU_LATCH =>
           RptRE <= '0';
           IPnum_int <= IPnumOut;
+          ScanStat_int <= ScanStat;
           LaserV_int <= LaserVOut;
           NTrig_int <= NTriggered;
           setup_state <= SU_WAIT;

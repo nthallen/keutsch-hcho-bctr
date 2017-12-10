@@ -56,6 +56,7 @@ ENTITY BCtr2Ctrl IS
     FBFull     : IN     std_logic;
     FBWE       : OUT    std_logic;
     Expired    : OUT    std_logic;
+    NoData     : OUT    std_logic;
     txing      : IN     std_logic
   );
 
@@ -98,7 +99,9 @@ ARCHITECTURE fsm OF BCtr2Ctrl IS
    SIGNAL exp_LaserV : std_logic_vector(15 DOWNTO 0);
    SIGNAL exp_IPnum : std_logic_vector(5 DOWNTO 0);
    SIGNAL expired_2 : std_logic; -- expired while reading
+   SIGNAL expired_3 : std_logic; -- expired while expired: give up
    SIGNAL IPSseen : std_logic;
+   SIGNAL NoData_cld : std_logic;
 BEGIN
 
   -----------------------------------------------------------------
@@ -124,6 +127,7 @@ BEGIN
         Ntrig_cnt <= (others => '0');
         NArd <= '0';
         expired_2 <= '0';
+        expired_3 <= '0';
         Expired <= '0';
         rstA <= '1';
         rstB <= '1';
@@ -135,6 +139,8 @@ BEGIN
         exp_Ntrig <= (others => '0');
         exp_LaserV <= (others => '0');
         exp_IPnum <= (others => '0');
+        NoData_cld <= '0';
+        nxtEnA := '0';
       ELSE
         current_state <= next_state;
 
@@ -177,22 +183,32 @@ BEGIN
             TrigOE_cld <= '1';
             TrigArm_cld <= '0';
             NArd <= '0';
-            IF RptEmpty = '1' AND txing = '0' THEN
+            IF (RptEmpty = '1' OR Expired = '1' OR expired_3 = '1') AND txing = '0' AND expired_2 = '0' THEN
               nxtEnA := not(EnA);
               LaserVOut <= cur_LaserV;
               IPnumOut <= cur_IPnum;
               NTriggered <= std_logic_vector(
                 resize(Ntrig_cnt,NTriggered'length));
-              Expired <= '0';
-              DRdy_cld <= not(FBEmpty); -- Only declare DRdy if there is data
-            ELSIF txing = '0' THEN
+              IF Expired = '1' THEN
+                expired_3 <= '1';
+                Expired <= '0';
+              END IF;
+              -- DRdy_cld <= not(FBEmpty); -- Only declare DRdy if there is data
+              -- Alternate strategy: Always report DRdy but provide
+              -- another bit to indicate no counter data (NoData). That allows
+              -- the data block to still report the other relevant data.
+              DRdy_cld <= '1';
+              NoData_cld <= FBEmpty;
+            ELSIF txing = '0' AND DRdy_cld = '1' THEN
+              -- DRdy_cld = '1' implies RptEmpty = '0' OR Expired = '1' OR NoData = '1'
               nxtEnA := not(EnA);
               Expired <= '1';
               exp_LaserV <= cur_LaserV;
               exp_IPnum <= cur_IPnum;
-              NTriggered <= std_logic_vector(
-                resize(Ntrig_cnt,NTriggered'length));
-            ELSE
+              exp_Ntrig <= Ntrig_cnt;
+            ELSIF txing = '1' THEN
+              -- transmitting, so can't touch the rpt buffer
+              -- (unless Expired = '1' or NoData = '1')
               nxtEnA := EnA;
               expired_2 <= '1';
               exp_LaserV <= cur_LaserV;
@@ -268,19 +284,27 @@ BEGIN
         
         IF txing = '1' THEN
           DRdy_cld <= '0';
-        ELSIF DRdy_cld = '0' AND RptEmpty = '1' THEN
-          IF expired_2 = '1' OR Expired = '1' THEN
+          NoData_cld <= '0';
+          Expired <= '0';
+        ELSIF DRdy_cld = '0' THEN
+          IF RptEmpty = '0' OR expired_2 = '1' THEN
             DRdy_cld <= '1';
-            Expired <= expired_2;
-            expired_2 <= '0';
             IPnumOut <= exp_IPnum;
             LaserVOut <= exp_LaserV;
             NTriggered <= std_logic_vector(
                   resize(exp_Ntrig,NTriggered'length));
+            IF expired_2 = '1' THEN
+              Expired <= '1';
+              expired_2 <= '0';
+            ELSE
+              Expired <= '0';
+            END IF;
+          ELSE
+            expired_3 <= '0';
           END IF;
         END IF;
-      END IF;
-    END IF;
+      END IF; -- not(rst)
+    END IF; -- clk'event and clk = '1'
   END PROCESS clocked_proc;
 
   -----------------------------------------------------------------
@@ -339,9 +363,8 @@ BEGIN
   END PROCESS nextstate_proc;
   
   DRdy <= DRdy_cld;
+  NoData <= NoData_cld;
  
-  -- Concurrent Statements
-  -- Clocked output assignments
   first_row <= first_row_cld;
   first_col <= first_col_cld;
   CntEn <= CntEn_cld;

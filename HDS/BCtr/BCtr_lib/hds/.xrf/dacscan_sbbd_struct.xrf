@@ -42,162 +42,168 @@ VIEW symbol.sb
 GRAPHIC 166,0 31 0 
 DESIGN dacscan_sbbd
 VIEW symbol.sb
-GRAPHIC 711,0 32 0 
+GRAPHIC 833,0 32 0 
 DESIGN dacscan_sbbd
 VIEW symbol.sb
-GRAPHIC 204,0 33 0 
+GRAPHIC 711,0 33 0 
 DESIGN dacscan_sbbd
 VIEW symbol.sb
-GRAPHIC 209,0 34 0 
+GRAPHIC 204,0 34 0 
 DESIGN dacscan_sbbd
 VIEW symbol.sb
-GRAPHIC 1,0 37 0 
+GRAPHIC 209,0 35 0 
 DESIGN dacscan_sbbd
 VIEW symbol.sb
 GRAPHIC 1,0 38 0 
 DESIGN dacscan_sbbd
-VIEW struct.bd
-NO_GRAPHIC 41
+VIEW symbol.sb
+GRAPHIC 1,0 39 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 41,0 57 0 
+NO_GRAPHIC 42
 DESIGN dacscan_sbbd
 VIEW struct.bd
-NO_GRAPHIC 60
+GRAPHIC 41,0 58 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 0,0 63 2 
+NO_GRAPHIC 61
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 317,0 68 0 
+GRAPHIC 0,0 64 2 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 315,0 69 0 
+GRAPHIC 317,0 69 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 307,0 70 0 
+GRAPHIC 315,0 70 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 305,0 71 0 
+GRAPHIC 307,0 71 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-NO_GRAPHIC 72
+GRAPHIC 305,0 72 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
 NO_GRAPHIC 73
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 74
 LIBRARY BCtr_lib
 DESIGN dacscan
 VIEW beh
-GRAPHIC 199,0 75 0 
+GRAPHIC 199,0 76 0 
 DESIGN dacscan
 VIEW interface
-GRAPHIC 14,0 76 1 
+GRAPHIC 14,0 77 1 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 219,0 82 0 
+GRAPHIC 219,0 83 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 237,0 83 0 
+GRAPHIC 237,0 84 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 243,0 84 0 
+GRAPHIC 243,0 85 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 249,0 85 0 
+GRAPHIC 249,0 86 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 225,0 86 0 
+GRAPHIC 225,0 87 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 255,0 87 0 
+GRAPHIC 255,0 88 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 273,0 88 0 
+GRAPHIC 273,0 89 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 444,0 89 0 
+GRAPHIC 444,0 90 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 261,0 90 0 
+GRAPHIC 261,0 91 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 267,0 91 0 
+GRAPHIC 267,0 92 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 231,0 92 0 
+GRAPHIC 231,0 93 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 416,0 93 0 
+GRAPHIC 416,0 94 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 430,0 94 0 
+GRAPHIC 430,0 95 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 462,0 95 0 
+GRAPHIC 462,0 96 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 1234,0 96 0 
+GRAPHIC 1234,0 97 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 133,0 99 0 
+GRAPHIC 1303,0 98 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 140,0 100 1 
+GRAPHIC 1528,0 101 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-NO_GRAPHIC 112
-LIBRARY BCtr_lib
+GRAPHIC 1535,0 102 1 
 DESIGN dacscan_sbbd
 VIEW struct.bd
 NO_GRAPHIC 114
+LIBRARY BCtr_lib
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 199,0 117 0 
+NO_GRAPHIC 116
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 133,0 118 0 
+GRAPHIC 199,0 119 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-NO_GRAPHIC 121
+GRAPHIC 1528,0 120 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
 NO_GRAPHIC 123
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 199,0 125 0 
+NO_GRAPHIC 125
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 206,0 126 1 
+GRAPHIC 199,0 127 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 133,0 148 0 
+GRAPHIC 206,0 128 1 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 140,0 149 1 
+GRAPHIC 1528,0 151 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 281,0 153 0 
+GRAPHIC 1535,0 152 1 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 285,0 154 0 
+GRAPHIC 281,0 156 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 215,0 155 0 
+GRAPHIC 285,0 157 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 289,0 156 0 
+GRAPHIC 215,0 158 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 249,0 157 0 
+GRAPHIC 289,0 159 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 255,0 158 0 
+GRAPHIC 249,0 160 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 261,0 159 0 
+GRAPHIC 255,0 161 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-GRAPHIC 267,0 160 0 
+GRAPHIC 261,0 162 0 
 DESIGN dacscan_sbbd
 VIEW struct.bd
-NO_GRAPHIC 163
+GRAPHIC 267,0 163 0 
+DESIGN dacscan_sbbd
+VIEW struct.bd
+NO_GRAPHIC 166

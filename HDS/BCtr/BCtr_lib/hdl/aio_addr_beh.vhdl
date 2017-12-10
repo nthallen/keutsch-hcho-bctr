@@ -69,7 +69,7 @@ BEGIN
   END PROCESS;
   
   Writing : PROCESS (clk) IS
-    Variable Offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
+    Variable Offset : unsigned(1 DOWNTO 0);
   BEGIN
     IF clk'EVENT AND clk = '1' THEN
       IF rst = '1' THEN
@@ -80,8 +80,8 @@ BEGIN
         wData2 <= (others => '0');
       ELSE
         IF WrEn = '1' AND WrOK = '1' THEN
-          Offset := unsigned(ExpAddr) - unsigned(BASE_ADDR(ADDR_WIDTH-1 DOWNTO 0));
-          ChanAddr2 <= std_logic_vector(Offset(1 DOWNTO 0));
+          Offset := unsigned(ExpAddr(1 downto 0)) - unsigned(BASE_ADDR(1 DOWNTO 0));
+          ChanAddr2 <= std_logic_vector(Offset);
           wData2 <= wData;
           WrEn2_int <= '1';
         ELSIF idxWr = '1' THEN
@@ -99,7 +99,7 @@ BEGIN
         ELSE
           idxAck <= '0';
         END IF;
-    END IF;
+      END IF;
     END IF;
   END PROCESS;
   

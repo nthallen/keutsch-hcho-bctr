@@ -10,7 +10,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
-LIBRARY BCtr_lib;
 
 ENTITY BCtr_syscon IS
     GENERIC (
@@ -70,6 +69,7 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL idxWr         : std_logic;
   SIGNAL idxAck        : std_logic;
   SIGNAL LaserV        : std_logic_vector(15 DOWNTO 0);
+  SIGNAL ScanStat      : std_logic_vector (4 DOWNTO 0);
   
   COMPONENT syscon
     GENERIC (
@@ -155,7 +155,8 @@ ARCHITECTURE beh OF BCtr_syscon IS
       RData    : OUT    std_logic_vector (15 DOWNTO 0);
       IPS      : IN     std_logic;
       IPnum    : IN     std_logic_vector (5 DOWNTO 0);
-      LaserV   : IN     std_logic_vector (15 DOWNTO 0)
+      LaserV   : IN     std_logic_vector (15 DOWNTO 0);
+      ScanStat : IN     std_logic_vector (4 DOWNTO 0)
     );
   END COMPONENT BCtr2_sbbd ;
 
@@ -259,7 +260,7 @@ ARCHITECTURE beh OF BCtr_syscon IS
   COMPONENT dacscan_sbbd
     GENERIC (
       ADDR_WIDTH : integer range 16 downto 8      := 8;
-      BASE_ADDR  : std_logic_vector (15 downto 0) := x"0080"
+      BASE_ADDR  : unsigned (15 downto 0) := x"0080"
     );
     PORT (
       ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
@@ -274,6 +275,7 @@ ARCHITECTURE beh OF BCtr_syscon IS
       LDAC     : OUT    std_logic;
       RData    : OUT    std_logic_vector(15 DOWNTO 0);
       idxData  : OUT    std_logic_vector(15 DOWNTO 0);
+      ScanStat : OUT    std_logic_vector (4 DOWNTO 0);
       SetPoint : OUT    std_logic_vector(15 DOWNTO 0);
       idxWr    : OUT    std_logic
     );
@@ -340,7 +342,8 @@ BEGIN
       RData    => RData(15 DOWNTO 0),
       IPS      => IPS,
       IPnum    => IPnum,
-      LaserV   => LaserV
+      LaserV   => LaserV,
+      ScanStat => ScanStat
     );
 
   binctr : BCtr2_sbbd
@@ -365,7 +368,8 @@ BEGIN
       RData    => RData(31 DOWNTO 16),
       IPS      => IPS,
       IPnum    => IPnum,
-      LaserV   => LaserV
+      LaserV   => LaserV,
+      ScanStat => ScanStat
     );
 
   temps : temp_top
@@ -480,7 +484,8 @@ BEGIN
       RData    => RData(16*6+15 DOWNTO 16*6),
       idxData  => idxData,
       idxWr    => idxWr,
-      SetPoint => LaserV
+      SetPoint => LaserV,
+      ScanStat => ScanStat
     );
     
   BdIntr <= (others => '0');
