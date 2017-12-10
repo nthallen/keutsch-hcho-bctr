@@ -126,8 +126,12 @@ BEGIN
       NA_int <= (others => '0');
       NA_in <= (others => '0');
       NB_in <= (others => '0');
+      NB_in1 <= (others => '0');
       NBtotal <= (others => '0');
       NBtot <= (others => '0');
+      NBcnt <= (others => '0');
+      CData <= (others => '0');
+      En <= '0';
       En_int <= '0';
       N_NAB <= 0;
       NAB <= 0;

@@ -15,7 +15,7 @@ ENTITY dacscan IS
   GENERIC( 
     ADDR_WIDTH : integer range 16 downto 8 := 8;
     BASE_ADDR  : unsigned(15 DOWNTO 0)     := x"0080";
-    STEP_RES   : integer range 8 downto 0  := 3
+    STEP_RES   : integer range 8 downto 0  := 4
   );
   PORT( 
     ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
@@ -32,14 +32,16 @@ ENTITY dacscan IS
     idxData  : OUT    std_logic_vector (15 DOWNTO 0);
     idxWr    : OUT    std_logic;
     LDAC     : OUT    std_logic;
-    SetPoint : OUT    std_logic_vector (15 DOWNTO 0)
+    SetPoint : OUT    std_logic_vector (15 DOWNTO 0);
+    ScanStat : OUT    std_logic_vector (4 DOWNTO 0)
   );
 
 -- Declarations
 
 END ENTITY dacscan ;
 
---
+Library BCtr_lib;
+
 ARCHITECTURE beh OF dacscan IS
   SIGNAL StatusCmd_en : std_logic;
   SIGNAL SetPoint_en : std_logic;
@@ -47,34 +49,43 @@ ARCHITECTURE beh OF dacscan IS
   SIGNAL ScanStop_en : std_logic;
   SIGNAL ScanStep_en : std_logic;
   SIGNAL OnlinePos_en : std_logic;
-  SIGNAL OfflinePos_en : std_logic;
+  SIGNAL OfflineDelta_en : std_logic;
   SIGNAL Dither_en : std_logic;
   SIGNAL SetPoint_int : unsigned(15 downto 0);
-  SIGNAL nextSetPoint : unsigned(15 downto 0);
-  SIGNAL ScanStart : unsigned(15 downto 0);
-  SIGNAL ScanStop : unsigned(15 downto 0);
-  SIGNAL ScanStep : unsigned(15+STEP_RES downto 0);
-  SIGNAL CurStep  : unsigned(15+STEP_RES downto 0);
-  SIGNAL OnlinePos : unsigned(15 downto 0);
-  SIGNAL OfflinePos : unsigned(15 downto 0);
-  SIGNAL Dither : unsigned(15 downto 0);
+  SIGNAL nextSetPoint : signed(16 downto 0);
+  SIGNAL ScanStart : signed(16 downto 0);
+  SIGNAL ScanStop : signed(16 downto 0);
+  SIGNAL ScanStep : signed(16+STEP_RES downto 0);
+  SIGNAL CurStep  : signed(16+STEP_RES downto 0);
+  SIGNAL OnlinePos : signed(16 downto 0);
+  SIGNAL OfflineDelta : signed(16 downto 0);
+  SIGNAL Dither : signed(16 downto 0);
   SIGNAL Scanning : std_logic;
-  SIGNAL ScanningCmd : std_logic;
   SIGNAL next_Scanning : std_logic;
+  SIGNAL Chopping : std_logic;
+  SIGNAL next_Chopping : std_logic;
   SIGNAL Online : std_logic;
   SIGNAL next_Online : std_logic;
   SIGNAL Offline : std_logic;
   SIGNAL next_Offline : std_logic;
   TYPE state_t IS (st_idle, st_wrdac_0, st_wrdac_1, st_wrdac_2,
-      st_scan_0, st_scan_end);
+      st_scan_init, st_scan_step, st_scan_end,
+      st_chop_check, st_chop_wait, st_abort);
   SIGNAL current_state : state_t;
   SIGNAL start_write : std_logic;
   SIGNAL loop_count : unsigned(5 DOWNTO 0); -- 0 to 63
+  SIGNAL cmd_abort : std_logic;
   SIGNAL cmd_start_scan : std_logic;
   SIGNAL cmd_online : std_logic;
-  SIGNAL cmd_online_plus : std_logic;
-  SIGNAL cmd_online_minus : std_logic;
   SIGNAL cmd_offline : std_logic;
+  SIGNAL cmd_chop_init : std_logic;
+  SIGNAL cmd_chop_exit : std_logic;
+  SIGNAL NPtsOnline : unsigned(15 DOWNTO 0);
+  SIGNAL NPtsOnline_en : std_logic;
+  SIGNAL NPtsOffline : unsigned(15 DOWNTO 0);
+  SIGNAL NPtsOffline_en : std_logic;
+  SIGNAL NPtsChop : unsigned(15 DOWNTO 0);
+  SIGNAL PosOVF : std_logic;
 BEGIN
   addr : PROCESS (ExpAddr, current_state) IS
     VARIABLE offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
@@ -91,8 +102,10 @@ BEGIN
     ScanStop_en <= '0';
     ScanStep_en <= '0';
     OnlinePos_en <= '0';
-    OfflinePos_en <= '0';
+    OfflineDelta_en <= '0';
     Dither_en <= '0';
+    NPtsOnline_en <= '0';
+    NPtsOffline_en <= '0';
     offset := unsigned(ExpAddr) - resize(BASE_ADDR,ADDR_WIDTH);
     CASE to_integer(offset) IS
       WHEN 0 => StatusCmd_en <= '1'; BdWrEn <= '1';
@@ -101,8 +114,10 @@ BEGIN
       WHEN 3 => ScanStop_en <= '1';
       WHEN 4 => ScanStep_en <= '1';
       WHEN 5 => OnlinePos_en <= '1';
-      WHEN 6 => OfflinePos_en <= '1';
+      WHEN 6 => OfflineDelta_en <= '1';
       WHEN 7 => Dither_en <= '1';
+      WHEN 8 => NPtsOnline_en <= '1';
+      WHEN 9 => NPtsOffline_en <= '1';
       WHEN others => BdEn <= '0';
     END CASE;
   END PROCESS;
@@ -118,13 +133,18 @@ BEGIN
         ScanStep   <= (others => '0');
         CurStep    <= (others => '0');
         OnlinePos  <= (others => '0');
-        OfflinePos <= (others => '0');
         Dither     <= (others => '0');
+        OfflineDelta <= (others => '0');
+        NPtsOnline <= (others => '0');
+        NPtsOffline <= (others => '0');
+        NPtsChop <= (others => '0');
         Scanning   <= '0';
-        ScanningCmd <= '0';
+        Chopping   <= '0';
         Online     <= '0';
         Offline    <= '0';
+        PosOVF     <= '0';
         next_Scanning   <= '0';
+        next_Chopping   <= '0';
         next_Online     <= '0';
         next_Offline    <= '0';
         RData      <= (others => '0');
@@ -134,11 +154,12 @@ BEGIN
         idxWr <= '0';
         LDAC <= '1';
         loop_count <= (others => '0');
+        cmd_abort <= '0';
         cmd_start_scan <= '0';
         cmd_online <= '0';
-        cmd_online_plus <= '0';
-        cmd_online_minus <= '0';
         cmd_offline <= '0';
+        cmd_chop_init <= '0';
+        cmd_chop_exit <= '0';
       ELSE
         IF RdEn = '1' THEN
           IF StatusCmd_en = '1' THEN
@@ -146,57 +167,75 @@ BEGIN
               0 => Scanning,
               1 => Online,
               2 => Offline,
+              3 => Chopping,
+              4 => PosOVF,
               others => '0');
           ELSIF SetPoint_en = '1' THEN
             RData <= std_logic_vector(SetPoint_int);
           ELSIF ScanStart_en = '1' THEN
-            RData <= std_logic_vector(ScanStart);
+            RData <= std_logic_vector(ScanStart(15 DOWNTO 0));
           ELSIF ScanStop_en = '1' THEN
-            RData <= std_logic_vector(ScanStop);
+            RData <= std_logic_vector(ScanStop(15 DOWNTO 0));
           ELSIF ScanStep_en = '1' THEN
             RData <= std_logic_vector(ScanStep(15 DOWNTO 0));
           ELSIF OnlinePos_en = '1' THEN
-            RData <= std_logic_vector(OnlinePos);
-          ELSIF OfflinePos_en = '1' THEN
-            RData <= std_logic_vector(OfflinePos);
+            RData <= std_logic_vector(OnlinePos(15 DOWNTO 0));
+          ELSIF OfflineDelta_en = '1' THEN
+            RData <= std_logic_vector(OfflineDelta(15 DOWNTO 0));
           ELSIF Dither_en = '1' THEN
-            RData <= std_logic_vector(Dither);
+            RData <= std_logic_vector(Dither(15 DOWNTO 0));
+          ELSIF NPtsOnline_en = '1' THEN
+            RData <= std_logic_vector(NPtsOnline);
+          ELSIF NPtsOffline_en = '1' THEN
+            RData <= std_logic_vector(NPtsOffline);
           END IF;
         ELSIF WrEn = '1' THEN
           IF StatusCmd_en = '1' THEN
             CASE to_integer(unsigned(WData)) IS
-            WHEN 0 => -- stop scan
-              ScanningCmd <= '0';
+            WHEN 0 => -- abort scan or chopping
+              cmd_abort <= '1';
             WHEN 1 => -- start scan
               cmd_start_scan <= '1';
             WHEN 2 => -- drive online
               cmd_online <= '1';
-            WHEN 3 => -- drive online+dither
-              cmd_online_plus <= '1';
-            WHEN 4 => -- drive online-dither
-              cmd_online_minus <= '1';
+            WHEN 3 => -- move online+dither
+              OnlinePos <= OnlinePos + Dither;
+            WHEN 4 => -- move online-dither
+              OnlinePos <= OnlinePos - Dither;
             WHEN 5 => -- drive offline
               cmd_offline <= '1';
+            WHEN 6 => -- Enter Chop Mode (online)
+              cmd_chop_init <= '1';
+            WHEN 7 => -- Exit Chop Mode after offline
+              cmd_chop_exit <= '1';
             WHEN others =>
               NULL;
             END CASE;
           ELSIF current_state = st_idle THEN
             IF SetPoint_en = '1' THEN
-              nextSetPoint <= unsigned(WData);
+              nextSetPoint <=
+                signed(resize(unsigned(WData),nextSetPoint'length));
               start_write <= '1';
             ELSIF ScanStart_en = '1' THEN
-              ScanStart <= unsigned(WData);
+              ScanStart <=
+                signed(resize(unsigned(WData),ScanStart'length));
             ELSIF ScanStop_en = '1' THEN
-              ScanStop <= unsigned(WData);
+              ScanStop <=
+                signed(resize(unsigned(WData),ScanStart'length));
             ELSIF ScanStep_en = '1' THEN
-              ScanStep(15 DOWNTO 0) <= unsigned(WData);
-              ScanStep(15+STEP_RES DOWNTO 16) <= (others => '0');
+              ScanStep(15 DOWNTO 0) <= signed(WData);
+              ScanStep(16+STEP_RES DOWNTO 16) <= (others => '0');
             ELSIF OnlinePos_en = '1' THEN
-              OnlinePos <= unsigned(WData);
-            ELSIF OfflinePos_en = '1' THEN
-              OfflinePos <= unsigned(WData);
+              OnlinePos <=
+                signed(resize(unsigned(WData),OnlinePos'length));
+            ELSIF OfflineDelta_en = '1' THEN
+              OfflineDelta <= resize(signed(WData),OfflineDelta'length);
             ELSIF Dither_en = '1' THEN
-              Dither <= unsigned(WData);
+              Dither <= signed(resize(unsigned(WData),Dither'length));
+            ELSIF NPtsOnline_en = '1' THEN
+              NPtsOnline <= unsigned(WData);
+            ELSIF NPtsOffline_en = '1' THEN
+              NPtsOffline <= unsigned(WData);
             END IF;
           END IF;
         END IF;
@@ -204,63 +243,68 @@ BEGIN
         CASE current_state IS
         WHEN st_idle =>
           IF cmd_start_scan = '1' THEN
-            CurStep(15+STEP_RES DOWNTO STEP_RES) <= ScanStart;
-            CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
-            nextSetPoint <= ScanStart;
-            ScanningCmd <= '1';
-            next_Scanning <= '1';
-            -- start_write <= '1';
-            cmd_start_scan <= '0';
-            current_state <= st_wrdac_0;
+            current_state <= st_scan_init;
           ELSIF cmd_online = '1' THEN
-            nextSetPoint <= OnlinePos;
-            next_Online <= '1';
-            -- start_write <= '1';
             cmd_online <= '0';
-            current_state <= st_wrdac_0;
-          ELSIF cmd_online_plus = '1' THEN
-            nextSetPoint <= OnlinePos + Dither;
+            nextSetPoint <= OnlinePos;
+            next_Scanning <= '0';
             next_Online <= '1';
-            -- start_write <= '1';
-            cmd_online_plus <= '0';
-            current_state <= st_wrdac_0;
-          ELSIF cmd_online_minus = '1' THEN
-            nextSetPoint <= OnlinePos - Dither;
-            next_Online <= '1';
-            -- start_write <= '1';
-            cmd_online_minus <= '0';
+            next_Offline <= '0';
             current_state <= st_wrdac_0;
           ELSIF cmd_offline = '1' THEN
-            nextSetPoint <= OfflinePos;
+            nextSetPoint <= OnlinePos+OfflineDelta;
+            next_Scanning <= '0';
+            next_Online <= '0';
             next_Offline <= '1';
-            -- start_write <= '1';
             cmd_offline <= '0';
             current_state <= st_wrdac_0;
+          ELSIF cmd_chop_init = '1' THEN
+            next_Scanning <= '0';
+            next_Online <= '1';
+            next_Offline <= '0';
+            next_Chopping <= '1';
+            nextSetPoint <= OnlinePos;
+            current_state <= st_wrdac_0;
+          ELSIF cmd_chop_exit = '1' THEN
+            cmd_chop_exit <= '0';
+            current_state <= st_idle;
           ELSIF start_write = '1' THEN
             start_write <= '0';
             current_state <= st_wrdac_0;
+          ELSIF cmd_abort = '1' THEN
+            current_state <= st_abort;
           ELSE
             current_state <= st_idle;
           END IF;
         WHEN st_wrdac_0 =>
-          idxData <= std_logic_vector(nextSetPoint);
-          idxWr <= '1';
-          IF idxAck = '1' THEN
-            current_state <= st_wrdac_1;
+          IF nextSetPoint(16) = '0' THEN
+            idxData <= std_logic_vector(nextSetPoint(15 DOWNTO 0));
+            idxWr <= '1';
+            PosOVF <= '0';
+            IF idxAck = '1' THEN
+              current_state <= st_wrdac_1;
+            ELSE
+              current_state <= st_wrdac_0;
+            END IF;
           ELSE
-            current_state <= st_wrdac_0;
+            PosOVF <= '1';
+            current_state <= st_abort;
           END IF;
         WHEN st_wrdac_1 =>
           idxWr <= '0';
-          IF IPS = '1' THEN
+          IF cmd_abort = '1' THEN
+            current_state <= st_abort;
+          ELSIF IPS = '1' THEN
             LDAC <= '0'; -- negative logic
-            SetPoint_int <= nextSetPoint;
+            SetPoint_int <= unsigned(nextSetPoint(15 DOWNTO 0));
             Scanning <= next_Scanning;
+            Chopping <= next_Chopping;
             Online <= next_Online;
             Offline <= next_Offline;
             next_Online <= '0';
             next_Offline <= '0';
             next_Scanning <= '0';
+            next_Chopping <= '0';
             loop_count <= to_unsigned(50,loop_count'length);
             current_state <= st_wrdac_2;
           ELSE
@@ -271,7 +315,14 @@ BEGIN
             LDAC <= '1';
             IF Scanning = '1' THEN
               CurStep <= CurStep + ScanStep;
-              current_state <= st_scan_0;
+              current_state <= st_scan_step;
+            ELSIF Chopping = '1' THEN
+              IF Online = '1' THEN
+                NPtsChop <= NPtsOnline;
+              ELSE
+                NPtsChop <= NPtsOffline;
+              END IF;
+              current_state <= st_chop_check;
             ELSE
               current_state <= st_idle;
             END IF;
@@ -279,23 +330,81 @@ BEGIN
             loop_count <= loop_count - 1;
             current_state <= st_wrdac_2;
           END IF;
-        WHEN st_scan_0 =>
-          IF ScanningCmd = '0' OR
-              CurStep(15+STEP_RES DOWNTO STEP_RES) >= ScanStop THEN
+        WHEN st_scan_init =>
+          CurStep(16+STEP_RES DOWNTO STEP_RES) <= ScanStart;
+          CurStep(STEP_RES-1 DOWNTO 0) <= (others => '0');
+          nextSetPoint <= ScanStart;
+          next_Scanning <= '1';
+          next_Chopping <= '0';
+          next_Online <= '0';
+          next_Offline <= '0';
+          cmd_start_scan <= '0';
+          current_state <= st_wrdac_0;
+        WHEN st_scan_step =>
+          IF cmd_abort = '1' THEN
+            current_state <= st_abort;
+          ELSIF CurStep(16+STEP_RES DOWNTO STEP_RES) >= ScanStop THEN
             current_state <= st_scan_end;
           ELSE
             next_Scanning <= '1';
-            nextSetPoint <= CurStep(15+STEP_RES DOWNTO STEP_RES);
+            nextSetPoint <= CurStep(16+STEP_RES DOWNTO STEP_RES);
             current_state <= st_wrdac_0;
           END IF;
         WHEN st_scan_end =>
-          IF IPS = '1' THEN
+          IF cmd_abort = '1' THEN
+            current_state <= st_abort;
+          ELSIF IPS = '1' THEN
             Scanning <= '0';
             next_Scanning <= '0';
             current_state <= st_idle;
           ELSE
             current_state <= st_scan_end;
           END IF;
+        WHEN st_chop_check =>
+          IF NPtsChop < 2 THEN
+            IF Online = '1' THEN
+              nextSetPoint <= OnlinePos + OfflineDelta;
+              next_Scanning <= '0';
+              next_Chopping <= '1';
+              next_Online <= '0';
+              next_Offline <= '1';
+              current_state <= st_wrdac_0;
+            ELSIF cmd_chop_exit = '1' THEN
+              next_Chopping <= '0';
+              cmd_chop_exit <= '0';
+              current_state <= st_chop_wait;
+            ELSE
+              nextSetPoint <= OnlinePos;
+              next_Scanning <= '0';
+              next_Chopping <= '1';
+              next_Online <= '1';
+              next_Offline <= '0';
+              current_state <= st_wrdac_0;
+            END IF;
+          ELSE
+            NPtsChop <= NPtsChop - 1;
+            current_state <= st_chop_wait;
+          END IF;
+        WHEN st_chop_wait =>
+          IF IPS = '1' THEN
+            IF next_Chopping = '0' THEN
+              Chopping <= '0';
+              current_state <= st_idle;
+            ELSE
+              current_state <= st_chop_check;
+            END IF;
+          END IF;
+        WHEN st_abort =>
+          Scanning <= '0';
+          next_Scanning <= '0';
+          Chopping <= '0';
+          next_Chopping <= '0';
+          Online <= '0';
+          next_Online <= '0';
+          Offline <= '0';
+          next_Offline <= '0';
+          current_state <= st_idle;
+          cmd_abort <= '0';
         WHEN others =>
           current_state <= st_idle;
         END CASE;
@@ -304,5 +413,11 @@ BEGIN
   END PROCESS;
   
   SetPoint <= std_logic_vector(SetPoint_int);
+  ScanStat <= (
+    0 => Scanning,
+    1 => Online,
+    2 => Offline,
+    3 => Chopping,
+    4 => PosOVF);
 END ARCHITECTURE beh;
 

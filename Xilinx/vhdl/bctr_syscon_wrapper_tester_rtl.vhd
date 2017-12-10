@@ -20,6 +20,7 @@ ENTITY BCtr_syscon_wrapper_tester IS
     N_CHANNELS : integer range 4 downto 1       := 2;
     CTR_WIDTH  : integer range 32 downto 1      := 16;
     BIN_OPT    : integer range 10 downto 0      := 0; -- 0 to disable, 1,2,3 currently supported
+    CTR_OPT    : integer := 1; -- 0 to skip basic counter test
     TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
     AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
     DACSCAN_OPT : std_logic := '1'; -- Set true to run DACSCAN tests
@@ -52,7 +53,6 @@ LIBRARY BCtr_lib;
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL clk_int : std_logic;
-  SIGNAL NWords : unsigned(15 DOWNTO 0);
   SIGNAL SimDone : std_logic;
   SIGNAL ReadResult : std_logic_vector(15 DOWNTO 0);
   SIGNAL ctr_base : unsigned(7 DOWNTO 0);
@@ -145,7 +145,7 @@ BEGIN
       variable my_line : line;
     begin
       if ReadResult /= expected then
-        write(my_line, now);
+        write(my_line, now,right,12);
         write(my_line, string'(": sbrd("));
         hwrite(my_line, std_logic_vector(addr_in));
         write(my_line, string'(") Expected: "));
@@ -161,7 +161,7 @@ BEGIN
     begin
       sbrd(aio_base, '1');
       sbwr(aio_base, cmds, '1');
-        write(my_line, now);
+        write(my_line, now,right,12);
         write(my_line, string'(": htr cmd "));
         hwrite(my_line, cmds, RIGHT, 4);
         write(my_line, string'(" status "));
@@ -170,13 +170,201 @@ BEGIN
       while ReadResult(5) /= cmds(5) OR ReadResult(9) /= cmds(9) loop
         sbrd(aio_base, '1');
       end loop;
-        write(my_line, now);
+        write(my_line, now,right,12);
         write(my_line, string'(": status "));
         hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
         writeline(output, my_line);
     end procedure check_cmds;
+    
+    procedure read_bctr_report(prompt : IN integer := 0; expected : IN integer := 0) IS
+      -- prompt values:
+      --   0: read report as soon as it's ready
+      --   1: start reading report, then delay 
+      --   2: Delay before starting transmission
+      --   3: Delay a long time before doing anything (expired_3)
+      -- expected values:
+      --   0: Nothing expected
+      --   1: Expected success with NWords > 4
+      --   2: Expected NWords == 4
+      variable line1 : line;
+      variable line2 : line;
+      variable IPnum : unsigned(5 downto 0);
+      variable NTrig : unsigned(31 downto 0);
+      variable row_cts : integer;
+      variable NWords : unsigned(15 downto 0);
+    begin
+      sbrd(ctr_base,'1');
+      while ReadResult(1) = '0' AND ReadResult(10) = '0' loop
+        sbrd(ctr_base,'1');
+      end loop;
+      assert ReadResult(1) = '1'
+        report "Expected DRdy with Expired" severity error;
+      if prompt = 2 THEN
+        wait for 101 ms;
+      elsif prompt = 3 THEN
+        wait for 201 ms;
+      end if;
+      sbrd(ctr_base+1,'1'); -- NWords
+      NWords := unsigned(ReadResult);
+      IF prompt = 1 THEN
+        wait for 101 ms;
+      END IF;
+      IF expected = 1 THEN
+        assert NWords > 4
+        report "Expected NWords > 4" severity error;
+      ELSIF expected = 2 THEN
+        assert NWords = 4
+        report "Expected NWords = 4" severity error;
+      END IF;
+      write(line1, now, right, 9);
+      write(line1, string'(": NW:"));
+      write(line1, to_integer(NWords));
+      write(line1, string'(": "));
+      -- assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
+      IF NWords > 0 THEN
+        assert NWords >= 4
+          report "Expected NWords to be 0 or >= 4"
+          severity error;
+        NWords := NWords - 1;
+        sbrd(ctr_base+2,'1');
+        IPnum := unsigned(ReadResult(5 DOWNTO 0));
+        write(line1, string'("IP:"));
+        write(line1, to_integer(IPnum));
+        IF ReadResult(15) = '1' THEN
+          write(line1, string'(" Expired"));
+        END IF;
+        IF ReadResult(14) = '1' THEN
+          write(line1, string'(" Offline"));
+        END IF;
+        IF ReadResult(13) = '1' THEN
+          write(line1, string'(" Online"));
+        END IF;
+        IF ReadResult(12) = '1' THEN
+          write(line1, string'(" Scanning"));
+        END IF;
+        IF ReadResult(11) = '1' THEN
+          write(line1, string'(" Chopping"));
+        END IF;
+      END IF;
+      IF NWords > 0 THEN
+        NWords := NWords - 1;
+        sbrd(ctr_base+2,'1');
+        NTrig(15 DOWNTO 0) := unsigned(ReadResult);
+        IF NWords > 0 THEN
+          NWords := NWords - 1;
+        END IF;
+        sbrd(ctr_base+2,'1');
+        NTrig(31 DOWNTO 16) := unsigned(ReadResult);
+        write(line1, string'(" NT:"));
+        write(line1, to_integer(NTrig));
+      END IF;
+      IF NWords > 0 THEN
+        NWords := NWords - 1;
+        sbrd(ctr_base+2,'1');
+        write(line1, string'(" LV:"));
+        write(line1, to_integer(unsigned(ReadResult)));
+      END IF;
+      writeline(output, line1);
+      IF NWords > 0 THEN
+        row_cts := 0;
+        while NWords > 0 loop
+          IF row_cts = 0 THEN
+            write(line1, string'("  Ch1:"));
+            write(line2, string'("  Ch2:"));
+          END IF;
+          sbrd(ctr_base+2,'1');
+          write(line1, string'(" "));
+          write(line1, to_integer(unsigned(ReadResult)),right,3);
+          IF NWords >= 2 THEN
+            NWords := NWords - 2;
+            sbrd(ctr_base+2,'1');
+            write(line2, string'(" "));
+            write(line2, to_integer(unsigned(ReadResult)),right,3);
+          ELSE
+            NWords := NWords - 1;
+            report "Expected even number of words" severity error;
+          END IF;
+          IF row_cts >= 29 THEN
+            writeline(output, line1);
+            writeline(output, line2);
+            row_cts := 0;
+          ELSE
+            row_cts := row_cts + 1;
+          END IF;
+        end loop;
+        IF row_cts > 0 THEN
+          writeline(output, line1);
+          writeline(output, line2);
+        END IF;
+      END IF;
+    end procedure read_bctr_report;
+    
+    procedure init_counters IS
+      variable my_line : line;
+    BEGIN
+      CASE BIN_OPT IS
+      WHEN 1 =>
+        -- Configure for 1 bins of 10
+        write(my_line, now,right,12);
+        write(my_line, string'(": Using BIN_OPT 1 (1 bin of 10)"));
+        writeline(output, my_line);
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(10,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
+        -- Now add a second bin of 350ns
+        sbwr(ctr_base+5, std_logic_vector(to_unsigned(35,16)), '1');
+        sbwr(ctr_base+6, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
+        -- And a third bin of 2500ns
+        sbwr(ctr_base+7, std_logic_vector(to_unsigned(250,16)), '1');
+        sbwr(ctr_base+8, std_logic_vector(to_unsigned(1,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"00C0" report "Expecte N_NAB=3 status still" severity error;
+      WHEN 2 => -- 75x4, needs to be the bin ctr
+        write(my_line, now,right,12);
+        write(my_line, string'(": Using BIN_OPT 2 (75 bins of 4)"));
+        writeline(output, my_line);
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(4,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
+        -- Check the status again: should be 'Ready' but not enabled
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0060" report "Expected N_NAB=1/Ready status" severity error;
+      WHEN OTHERS =>
+        -- Configure for 45 bins of 1
+        write(my_line, now,right,12);
+        write(my_line, string'(": Using BIN_OPT 3 (45 bins of 1 and 40 bins of 5)"));
+        writeline(output, my_line);
+        sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
+        sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
+        -- Check the status again: should be 'Ready' but not enabled
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"0060" report "Expected N_NAB=1 status" severity error;
+        -- 40 bins of 5
+        sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
+        sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
+        sbrd(ctr_base, '1');
+        assert ReadResult = X"00A0" report "Expected N_NAB=2 status" severity error;
+      END CASE;
+
+      sbrd(ctr_base, '1');
+      assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
+  
+      -- Enable and check status
+      sbwr(ctr_base, X"0001", '1');
+      sbrd(ctr_base, '1');
+      assert ReadResult(5 DOWNTO 0) = "100001"
+        report "Expected Ready|En status" severity error;
+      sbrd(ctr_base+1,'1');
+      assert ReadResult = x"0000"
+        report "Expected zero FIFO length" severity error;
+    END PROCEDURE init_counters;
    
     variable my_line : line;
+    variable old_dac_setpoint : unsigned(15 downto 0);
+    variable cur_dac_setpoint : unsigned(15 downto 0);
+    variable new_dac_setpoint : unsigned(15 downto 0);
   Begin
     SimDone <= '0';
     Addr <= (others => '0');
@@ -201,6 +389,7 @@ BEGIN
     -- pragma synthesis_off
     wait until clk_int'Event and clk_int = '1';
     wait until clk_int'Event and clk_int = '1';
+    wait until clk_int'Event and clk_int = '1';
     rst <= '0';
     wait until clk_int'Event and clk_int = '1';
     wait until clk_int'Event and clk_int = '1';
@@ -208,135 +397,36 @@ BEGIN
     sbrd(ctr_base, '1');
     assert ReadResult = X"0000" report "Invalid startup status" severity error;
 
-    IF BIN_OPT > 0 THEN
-      write(my_line, now);
-      write(my_line, string'(": Starting BCtr2 tests"));
+    IF BIN_OPT > 0 AND CTR_OPT = 1 THEN
+      write(my_line, now,right,12);
+      write(my_line, string'(": Starting BCtr2 tests "));
       writeline(output, my_line);
-      
-      CASE BIN_OPT IS
-      WHEN 1 =>
-        -- Configure for 1 bins of 10
-        sbwr(ctr_base+3, std_logic_vector(to_unsigned(10,16)), '1');
-        sbwr(ctr_base+4, std_logic_vector(to_unsigned(1,16)), '1');
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"0040" report "Expected N_NAB=1 status" severity error;
-        -- Now add a second bin of 350ns
-        sbwr(ctr_base+5, std_logic_vector(to_unsigned(35,16)), '1');
-        sbwr(ctr_base+6, std_logic_vector(to_unsigned(1,16)), '1');
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"0080" report "Expected N_NAB=2 status" severity error;
-        -- And a third bin of 2500ns
-        sbwr(ctr_base+7, std_logic_vector(to_unsigned(250,16)), '1');
-        sbwr(ctr_base+8, std_logic_vector(to_unsigned(1,16)), '1');
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"00C0" report "Expecte N_NAB=3 status still" severity error;
-      WHEN 2 => -- 75x4, needs to be the bin ctr
-        sbwr(ctr_base+3, std_logic_vector(to_unsigned(4,16)), '1');
-        sbwr(ctr_base+4, std_logic_vector(to_unsigned(75,16)), '1');
-        -- Check the status again: should be 'Ready' but not enabled
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"0060" report "Expected N_NAB=1/Ready status" severity error;
-      WHEN OTHERS =>
-        -- Configure for 45 bins of 1
-        sbwr(ctr_base+3, std_logic_vector(to_unsigned(1,16)), '1');
-        sbwr(ctr_base+4, std_logic_vector(to_unsigned(45,16)), '1');
-        -- Check the status again: should be 'Ready' but not enabled
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"0060" report "Expected N_NAB=1 status" severity error;
-        -- 40 bins of 5
-        sbwr(ctr_base+5, std_logic_vector(to_unsigned(5,16)), '1');
-        sbwr(ctr_base+6, std_logic_vector(to_unsigned(40,16)), '1');
-        sbrd(ctr_base, '1');
-        assert ReadResult = X"00A0" report "Expected N_NAB=2 status" severity error;
-      END CASE;
-      -- sbwr(ctr_base+11, std_logic_vector(NCU(15 DOWNTO 0)),'1');
-      -- sbwr(ctr_base+12, X"00" & std_logic_vector(NCU(23 DOWNTO 16)),'1');
-      sbrd(ctr_base, '1');
-      assert ReadResult(5 DOWNTO 0) = "100000" report "Expected Ready status" severity error;
-  
-      -- Enable and check status
-      sbwr(ctr_base, X"0001", '1');
-      sbrd(ctr_base, '1');
-      assert ReadResult(5 DOWNTO 0) = "100001"
-        report "Expected Ready|En status" severity error;
-      sbrd(ctr_base+1,'1');
-      assert ReadResult = x"0000"
-        report "Expected zero FIFO length" severity error;
+      init_counters;
       
       for i in 1 to SIM_LOOPS loop
-        sbrd(ctr_base,'1');
-        while ReadResult(1) = '0' loop
-          sbrd(ctr_base,'1');
-        end loop;
-        write(my_line, now);
-        sbrd(ctr_base+1,'1'); -- NWords
-        NWords <= unsigned(ReadResult);
-        wait for 10 ns;
-        write(my_line, string'(": "));
-        write(my_line, to_integer(NWords));
-        write(my_line, string'(":"));
-        while NWords > 0 loop
-          sbrd(ctr_base+2,'1');
-          write(my_line, string'(" "));
-          write(my_line, to_integer(unsigned(ReadResult)));
-          NWords <= NWords - 1;
-          wait for 10 ns;
-        end loop;
+        write(my_line, now,right,12);
+        write(my_line, string'(": Starting iteration "));
+        write(my_line, i);
+        write(my_line, string'(" of "));
+        write(my_line, SIM_LOOPS);
         writeline(output, my_line);
+        read_bctr_report;
       end loop;
 
       -- wait for expired status
-      write(my_line, now);
-      write(my_line, string'(": Testing expired: waiting for two IPS"));
-      writeline(output, my_line);
-      sbrd(ctr_base,'1');
-      while ReadResult(10) = '0' loop
-        sbrd(ctr_base,'1');
-      end loop;
-      write(my_line, now);
-      write(my_line, string'(": Testing expired: NW:"));
-      sbrd(ctr_base+1,'1'); -- NWords
-      NWords <= unsigned(ReadResult);
-      wait for 10 ns;
-      write(my_line, to_integer(NWords));
-      assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
-      while NWords > 0 loop
-        sbrd(ctr_base+2,'1');
-        write(my_line, string'(" "));
-        write(my_line, to_integer(unsigned(ReadResult)));
-        NWords <= NWords - 1;
-        wait for 10 ns;
-      end loop;
+      write(my_line, now,right,12);
+      write(my_line, string'(": Waiting for Expired status"));
       writeline(output, my_line);
       
-      -- now ready the data afterwards
-      sbrd(ctr_base,'1');
-      assert ReadResult(2) = '1' AND ReadResult(10) = '0'
-        report "Expected DRdy and not Expired" severity error;
-      sbrd(ctr_base+1,'1'); -- NWords
-      NWords <= unsigned(ReadResult);
-      wait for 10 ns;
-      write(my_line, to_integer(NWords));
-      -- assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
-      while NWords > 0 loop
-        sbrd(ctr_base+2,'1');
-        write(my_line, string'(" "));
-        write(my_line, to_integer(unsigned(ReadResult)));
-        NWords <= NWords - 1;
-        wait for 10 ns;
-      end loop;
-      writeline(output, my_line);
-    
-      sbrd(ctr_base,'1');
-      while ReadResult(1) = '0' loop
-        sbrd(ctr_base,'1');
-      end loop;
-      sbrd(ctr_base+1,'1'); -- NWords
-      NWords <= unsigned(ReadResult);
-      wait for 10 ns;
-      sbrd(ctr_base,'1'); -- Check status inbetween
-      sbrd(ctr_base+2,'1'); -- Read NSkipped
-      sbrd(ctr_base,'1'); -- Check status inbetween
+      read_bctr_report(1,1); -- reports 2
+      read_bctr_report(0,2); -- reports 3 that expired
+      read_bctr_report(2,2); -- reports 4 that expired
+      read_bctr_report(0,1); -- reports 5 
+      read_bctr_report(2,2); -- reports 6 as expired
+      read_bctr_report(2,2); -- reports 7 as expired
+      read_bctr_report(0,1); -- reports 8
+      read_bctr_report(3,1); -- reports 11?
+      read_bctr_report(0,1);
   
       sbwr(ctr_base, X"0000", '1'); -- Try to disable the counter
       sbrd(ctr_base, '1');
@@ -345,7 +435,7 @@ BEGIN
       sbwr(ctr_base, X"8000", '1'); -- Try reset
       sbrd(ctr_base, '1');
       assert ReadResult = X"0000" report "Counter not reset after reset" severity error;
-    END IF;
+    END IF; -- BIN_OPT > 0 AND CTR_OPT = 1
     
     -- Temp sensor test
     if TEMP_OPT = '1' then
@@ -382,13 +472,13 @@ BEGIN
       
       sbrd(aio_base+1,'1');
       check_read(aio_base+1, X"0000"); -- Verify DAC1 Setpoint init
-        write(my_line, now);
+        write(my_line, now,right,12);
         write(my_line, string'(": sbwr(DAC1)"));
         writeline(output, my_line);
       sbwr(aio_base+1,X"1234",'1');
       sbrd(aio_base+1,'1');
       if ReadResult = X"0000" then
-        write(my_line, now);
+        write(my_line, now,right,12);
         write(my_line, string'(": readback is still zero"));
         writeline(output, my_line);
         while sp_updated = '0' loop
@@ -399,7 +489,7 @@ BEGIN
           end if;
         end loop;
       end if;
-      write(my_line, now);
+      write(my_line, now,right,12);
       write(my_line, string'(": readback now "));
       hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       writeline(output, my_line);
@@ -407,7 +497,7 @@ BEGIN
       wait for 100 ms;
       for i in 1 to 10 loop
         sbrd(aio_base,'1'); -- Status
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": Status: "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
         sbrd(aio_base+1,'1');
@@ -433,35 +523,48 @@ BEGIN
     
     IF DACSCAN_OPT = '1' THEN
       --dacscan tests
-      write(my_line, now);
+      write(my_line, now,right,12);
       write(my_line, string'(": starting dacscan tests"));
       writeline(output, my_line);
       sbwr(x"82", x"0100", '1'); -- scan start
       sbwr(x"83", x"0200", '1'); -- scan stop
-      sbwr(x"84", x"0155", '1'); -- scan step * 8
+      sbwr(x"84", x"0333", '1'); -- scan step * 16 (should be 5 steps)
       sbwr(x"85", X"0173", '1'); -- online pos
-      sbwr(x"86", x"0155", '1'); -- offline pos
+      sbwr(x"86", x"FFE0", '1'); -- offline delta -32
       sbwr(x"87", x"0005", '1'); -- dither
       sbrd(x"81",'1');
       check_read(x"81", x"0000");
-      
+      init_counters;
+     
       -- Let's try writing a synchronized output
       sp_updated <= '0';
       sbwr(x"81", x"00FF", '1');
       sbrd(x"81",'1');
       check_read(x"81", x"0000"); -- should still be zero
-      sbwr(x"81", x"00FE", '0'); --  Should get no ack now
+      old_dac_setpoint := to_unsigned(0,old_dac_setpoint'length);
+      new_dac_setpoint := to_unsigned(254,new_dac_setpoint'length);
+      sbwr(x"81", std_logic_vector(new_dac_setpoint), '0'); --  Should get no ack now
       while sp_updated = '0' loop
         sbrd(x"81", '1');
-        if ReadResult /= x"0000" then
+        cur_dac_setpoint := unsigned(ReadResult);
+        sbrd(ctr_base,'1');
+        IF ReadResult(1) = '0' THEN
+          assert cur_dac_setpoint = old_dac_setpoint
+          report "Setpoint changed early" severity error;
+        ELSE
           sp_updated <= '1';
-          write(my_line, now);
+          sbrd(x"81",'1');
+          cur_dac_setpoint := unsigned(ReadResult);
+          assert cur_dac_setpoint = new_dac_setpoint
+          report "Setpoint unchanged after DRdy" severity error;
+          write(my_line, now,right,12);
           write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
-          wait until clk'event and clk = '1';
-        end if;
+        END IF;
       end loop;
+      read_bctr_report;
+      
       wait for 500 ns;
       sbrd(x"50",'1');
       sbrd(x"80",'1');
@@ -469,10 +572,11 @@ BEGIN
       sp_updated <= '0';
       sbwr(x"80",x"0001",'1'); -- start scan
       while sp_updated = '0' loop
+        read_bctr_report;
         sbrd(x"80", '1');
         if ReadResult /= x"0000" then
           sp_updated <= '1';
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": scan started"));
           writeline(output, my_line);
           wait until clk'event and clk = '1';
@@ -488,7 +592,7 @@ BEGIN
         if ReadResult = x"0001" then
           sbrd(x"81", '1');
           if ReadResult /= Prev_Step then
-            write(my_line, now);
+            write(my_line, now,right,12);
             write(my_line, string'(": cur step "));
             hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
             writeline(output, my_line);
@@ -503,7 +607,7 @@ BEGIN
           wait until clk'event and clk = '1';
         end if;
       end loop;
-      write(my_line, now);
+      write(my_line, now,right,12);
       write(my_line, string'(": Scan Stopped"));
       writeline(output, my_line);
   
@@ -513,7 +617,7 @@ BEGIN
         sbrd(x"81", '1');
         if ReadResult /= Prev_Step then
           sp_updated <= '1';
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
@@ -527,7 +631,7 @@ BEGIN
         sbrd(x"81", '1');
         if ReadResult /= Prev_Step then
           sp_updated <= '1';
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
@@ -541,7 +645,7 @@ BEGIN
         sbrd(x"81", '1');
         if ReadResult /= Prev_Step then
           sp_updated <= '1';
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
@@ -555,7 +659,7 @@ BEGIN
         sbrd(x"81", '1');
         if ReadResult /= Prev_Step then
           sp_updated <= '1';
-          write(my_line, now);
+          write(my_line, now,right,12);
           write(my_line, string'(": readback now "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);

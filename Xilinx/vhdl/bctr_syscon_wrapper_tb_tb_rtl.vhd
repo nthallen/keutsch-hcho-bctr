@@ -88,10 +88,11 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       N_CHANNELS : integer range 4 downto 1       := 2;
       CTR_WIDTH  : integer range 32 downto 1      := 16;
       BIN_OPT    : integer range 10 downto 0      := 0; -- 0 to disable, 1,2,3 currently supported
+      CTR_OPT    : integer := 1; -- 0 to disable basic counter tests
+      SIM_LOOPS  : integer range 50 downto 0      := 10;
       TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
       AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
       DACSCAN_OPT : std_logic := '0'; -- Set true to run DACSCAN tests
-      SIM_LOOPS  : integer range 50 downto 0      := 10;
       NC         : integer range 2**24-1 downto 0 := 30000
     );
     PORT (
@@ -190,8 +191,9 @@ BEGIN
     tester : BCtr_syscon_wrapper_tester
       GENERIC MAP (
         BIN_OPT => 3,
-        DACSCAN_OPT => '0',
-        SIM_LOOPS => 2
+        CTR_OPT => 0,
+        SIM_LOOPS => 2,
+        DACSCAN_OPT => '1'
       )
       PORT MAP (
         Addr    => Addr,
