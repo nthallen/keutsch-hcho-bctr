@@ -19,8 +19,8 @@ END ENTITY BCtr_syscon_wrapper_tb;
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
-LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
+-- LIBRARY BCtr_lib;
+-- USE BCtr_lib.ALL;
 
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
@@ -40,9 +40,11 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL SimTrig : std_logic;
   SIGNAL Status  : std_logic_vector(3 DOWNTO 0);
   SIGNAL temp_scl : std_logic;
-  SIGNAL temp_sda : std_logic;
+  SIGNAL temp_sda_o : std_logic_vector(1 DOWNTO 0);
+  SIGNAL temp_sda_i : std_logic;
   SIGNAL aio_scl  : std_logic;
-  SIGNAL aio_sda  : std_logic;
+  SIGNAL aio_sda_o  : std_logic_vector(3 DOWNTO 0);
+  SIGNAL aio_sda_i : std_logic;
   SIGNAL RE        : std_logic;
   SIGNAL WE        : std_logic;
   SIGNAL start     : std_logic;
@@ -58,28 +60,32 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
 
   -- Component declarations
   COMPONENT BCtr_syscon_wrapper
-    PORT (
+    GENERIC(
+      BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"000A";    -- Relative to HCHO
+      Nbps_default   : integer range 63 downto 1     := 10
+   );
+   PORT (
       Addr    : IN     std_logic_vector(7 DOWNTO 0);
       Ctrl    : IN     std_logic_vector(6 DOWNTO 0);
       Data_o  : IN     std_logic_vector(15 DOWNTO 0);
       PMTs    : IN     std_logic_vector(1 DOWNTO 0);
       Trigger : IN     std_logic;
       clk     : IN     std_logic;
-      temp_scl : INOUT  std_logic;
-      temp_sda : INOUT  std_logic;
-      aio_scl  : INOUT  std_logic;
-      aio_sda  : INOUT  std_logic;
-      aio_scl_mon  : OUT std_logic;
-      aio_sda_mon  : OUT std_logic;
-      htr1_cmd : OUT std_logic;
-      htr2_cmd : OUT std_logic;
+      temp_scl : OUT   std_logic;
+      temp_sda_o : OUT std_logic;
+      temp_sda_i : IN  std_logic;
+      aio_scl  : OUT   std_logic;
+      aio_sdaoe : OUT  std_logic;
+      aio_sda_i : IN   std_logic;
+      htr1_cmd : OUT   std_logic;
+      htr2_cmd : OUT   std_logic;
       Data_i  : OUT    std_logic_vector(15 DOWNTO 0);
       Fail    : OUT    std_logic;
       SimPMT  : OUT    std_logic;
       SimTrig : OUT    std_logic;
       Status  : OUT    std_logic_vector(3 DOWNTO 0);
-      dac_reset : OUT   std_logic;
-      dac_ldac  : OUT    std_logic
+      dac_reset : OUT  std_logic;
+      dac_ldac  : OUT  std_logic
     );
   END COMPONENT BCtr_syscon_wrapper;
 
@@ -129,7 +135,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
     stop  : OUT    std_logic;
     wdata : OUT    std_logic_vector (7 DOWNTO 0);
     RE    : INOUT  std_logic;
-    sda   : INOUT  std_logic
+    sda_o : OUT    std_logic;
+    sda_i : IN     std_logic
   );
   END COMPONENT i2c_slave;
 
@@ -137,7 +144,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
     PORT (
       clk : IN     std_logic;
       rst : IN     std_logic;
-      sda : INOUT  std_logic;
+      sda_o : OUT  std_logic;
+      sda_i : IN   std_logic;
       scl : IN     std_logic
     );
   END COMPONENT ads1115;
@@ -149,23 +157,28 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
     PORT (
       clk : IN     std_logic;
       rst : IN     std_logic;
-      sda : INOUT  std_logic;
+      sda_o : OUT  std_logic;
+      sda_i : IN   std_logic;
       scl : IN     std_logic
     );
   END COMPONENT ad5693;
 
   -- embedded configurations
   -- pragma synthesis_off
-  FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
-  FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
-  FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
-  FOR ALL : ads1115 USE ENTITY BCtr_lib.ads1115;
-  FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
+  -- FOR dut : BCtr_syscon_wrapper USE ENTITY BCtr_lib.BCtr_syscon_wrapper;
+  -- FOR tester : BCtr_syscon_wrapper_tester USE ENTITY BCtr_lib.BCtr_syscon_wrapper_tester;
+  -- FOR slave : i2c_slave USE ENTITY BCtr_lib.i2c_slave;
+  -- FOR ALL : ads1115 USE ENTITY BCtr_lib.ads1115;
+  -- FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
   -- pragma synthesis_on
 
 BEGIN
 
     dut : BCtr_syscon_wrapper
+      GENERIC MAP (
+        BUILD_NUMBER => X"000A",
+        Nbps_default => 50
+      )
       PORT MAP (
         Addr    => Addr,
         Ctrl    => Ctrl,
@@ -174,9 +187,11 @@ BEGIN
         Trigger => Trigger,
         clk     => clk,
         temp_scl => temp_scl,
-        temp_sda => temp_sda,
+        temp_sda_o => temp_sda_o(0),
+        temp_sda_i => temp_sda_i,
         aio_scl => aio_scl,
-        aio_sda => aio_sda,
+        aio_sdaoe => aio_sda_o(0),
+        aio_sda_i => aio_sda_i,
         htr1_cmd => htr1_cmd,
         htr2_cmd => htr2_cmd,
         Data_i  => Data_i,
@@ -228,14 +243,16 @@ BEGIN
         wdata => wdata,
         rdreq => rdreq,
         RE    => RE,
-        sda   => temp_sda
+        sda_o => temp_sda_o(1),
+        sda_i => temp_sda_i
       );
 
   adc : ads1115
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
-      sda => aio_sda,
+      sda_o => aio_sda_o(1),
+      sda_i => aio_sda_i,
       scl => aio_scl
     );
 
@@ -246,7 +263,8 @@ BEGIN
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
-      sda => aio_sda,
+      sda_o => aio_sda_o(2),
+      sda_i => aio_sda_i,
       scl => aio_scl
     );
 
@@ -257,15 +275,36 @@ BEGIN
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
-      sda => aio_sda,
+      sda_o => aio_sda_o(3),
+      sda_i => aio_sda_i,
       scl => aio_scl
     );
 
   Trigger <= SimTrig;
   PMTs(0) <= SimPMT;
   PMTS(1) <= '0';
-  temp_scl <= 'H';
-  temp_sda <= 'H';
-  aio_scl <= 'H';
-  aio_sda <= 'H';
+  
+  temp_sda_proc : PROCESS (temp_sda_o) IS
+    variable sda_ii : std_logic;
+  BEGIN
+    sda_ii := '1';
+    for i in 0 to temp_sda_o'length-1 loop
+      if temp_sda_o(i) = '0' then
+        sda_ii := '0';
+      end if;
+    end loop;
+    temp_sda_i <= sda_ii;
+  END PROCESS;
+  
+  aio_sda_proc : PROCESS (aio_sda_o) IS
+    variable sda_ii : std_logic;
+  BEGIN
+    sda_ii := '1';
+    for i in 0 to aio_sda_o'length-1 loop
+      if aio_sda_o(i) = '0' then
+        sda_ii := '0';
+      end if;
+    end loop;
+    aio_sda_i <= sda_ii;
+  END PROCESS;
 END ARCHITECTURE rtl;

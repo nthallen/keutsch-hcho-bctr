@@ -32,10 +32,9 @@ ENTITY i2c_aio IS
     htr2_cmd : OUT    std_logic;
     idxAck   : OUT    std_logic;
     rData    : OUT    std_logic_vector (15 DOWNTO 0);
-    scl_mon  : OUT    std_logic;
-    sda_mon  : OUT    std_logic;
-    scl      : INOUT  std_logic;
-    sda      : INOUT  std_logic
+    scl      : OUT    std_logic;
+    sdaoe    : OUT    std_logic;
+    sda_i    : IN     std_logic
   );
 
 -- Declarations
@@ -95,7 +94,7 @@ ARCHITECTURE struct OF i2c_aio IS
   SIGNAL scl_pad_o    : std_logic;
   SIGNAL scl_padoen_o : std_logic;
   SIGNAL sda_pad_o    : std_logic;
-  SIGNAL sda_padoen_o : std_logic;
+  -- SIGNAL sda_padoen_o : std_logic;
   SIGNAL wData1       : std_logic_vector(15 DOWNTO 0);
   SIGNAL wData2       : std_logic_vector(15 DOWNTO 0);
   SIGNAL wb_ack_o     : std_logic;
@@ -108,7 +107,6 @@ ARCHITECTURE struct OF i2c_aio IS
   SIGNAL wb_we_i      : std_logic;
 
   -- Implicit buffer signal declarations
-  SIGNAL scl_mon_internal : std_logic;
   SIGNAL sda_mon_internal : std_logic;
 
 
@@ -197,7 +195,7 @@ ARCHITECTURE struct OF i2c_aio IS
     wb_stb_i     : IN     std_logic ;
     wb_we_i      : IN     std_logic ;
     scl_pad_i    : IN     std_logic ;
-    scl_pad_o    : OUT    std_logic ;
+    scl_pad_o    : OUT    std_logic ; -- Constant '0'
     scl_padoen_o : OUT    std_logic ;
     sda_pad_i    : IN     std_logic ;
     sda_pad_o    : OUT    std_logic ;
@@ -249,18 +247,6 @@ ARCHITECTURE struct OF i2c_aio IS
     WrEn   : OUT    std_logic
   );
   END COMPONENT subbus_io;
-  COMPONENT temp_i2c
-  PORT (
-    scl_pad_o    : IN     std_logic;
-    scl_padoen_o : IN     std_logic;
-    sda_pad_o    : IN     std_logic;
-    sda_padoen_o : IN     std_logic;
-    scl_pad_i    : OUT    std_logic;
-    sda_pad_i    : OUT    std_logic;
-    scl          : INOUT  std_logic;
-    sda          : INOUT  std_logic
-  );
-  END COMPONENT temp_i2c;
 
   -- Optional embedded configurations
   -- pragma synthesis_off
@@ -357,12 +343,12 @@ BEGIN
       wb_dat_i     => wb_dat_i,
       wb_stb_i     => wb_stb_i,
       wb_we_i      => wb_we_i,
-      scl_pad_i    => scl_mon_internal,
+      scl_pad_i    => scl_padoen_o,
       scl_pad_o    => scl_pad_o,
       scl_padoen_o => scl_padoen_o,
-      sda_pad_i    => sda_mon_internal,
+      sda_pad_i    => sda_i,
       sda_pad_o    => sda_pad_o,
-      sda_padoen_o => sda_padoen_o,
+      sda_padoen_o => sdaoe,
       wb_ack_o     => wb_ack_o,
       wb_dat_o     => wb_dat_o,
       wb_inta_o    => wb_inta_o,
@@ -407,20 +393,8 @@ BEGIN
       BdEn   => BdEn,
       BdWrEn => BdWrEn
     );
-  i2c_iface : temp_i2c
-    PORT MAP (
-      scl_pad_o    => scl_pad_o,
-      scl_padoen_o => scl_padoen_o,
-      sda_pad_o    => sda_pad_o,
-      sda_padoen_o => sda_padoen_o,
-      scl_pad_i    => scl_mon_internal,
-      sda_pad_i    => sda_mon_internal,
-      scl          => scl,
-      sda          => sda
-    );
 
   -- Implicit buffered output assignments
-  scl_mon <= scl_mon_internal;
-  sda_mon <= sda_mon_internal;
+  scl <= scl_padoen_o;
 
 END ARCHITECTURE struct;

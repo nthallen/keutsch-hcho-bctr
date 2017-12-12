@@ -63,7 +63,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF BCtr2_sbbd IS
 
@@ -218,12 +218,12 @@ ARCHITECTURE struct OF BCtr2_sbbd IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : BCtr2 USE ENTITY BCtr_lib.BCtr2;
-  FOR ALL : BCtr2_Addr USE ENTITY BCtr_lib.BCtr2_Addr;
-  FOR ALL : BCtr2_cfg USE ENTITY BCtr_lib.BCtr2_cfg;
-  FOR ALL : BCtr2_data USE ENTITY BCtr_lib.BCtr2_data;
-  FOR ALL : BCtr_Dmux USE ENTITY BCtr_lib.BCtr_Dmux;
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+  -- FOR ALL : BCtr2 USE ENTITY BCtr_lib.BCtr2;
+  -- FOR ALL : BCtr2_Addr USE ENTITY BCtr_lib.BCtr2_Addr;
+  -- FOR ALL : BCtr2_cfg USE ENTITY BCtr_lib.BCtr2_cfg;
+  -- FOR ALL : BCtr2_data USE ENTITY BCtr_lib.BCtr2_data;
+  -- FOR ALL : BCtr_Dmux USE ENTITY BCtr_lib.BCtr_Dmux;
+  -- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
   -- pragma synthesis_on
 
 

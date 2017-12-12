@@ -38,7 +38,8 @@ ENTITY i2c_slave IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
-      sda   : INOUT  std_logic
+      sda_o : OUT    std_logic;
+      sda_i : IN     std_logic
    );
 
 -- Declarations
@@ -90,7 +91,8 @@ ARCHITECTURE struct OF i2c_slave IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
-      sda   : INOUT  std_logic 
+      sda_o : OUT    std_logic;
+      sda_i : IN     std_logic
    );
    END COMPONENT;
    COMPONENT i2c_slave_sup
@@ -127,14 +129,15 @@ BEGIN
          wdata => wdata,
          rdreq => rdreq,
          RE    => RE,
-         sda   => sda
+         sda_o => sda_o,
+         sda_i => sda_i
       );
    U_1 : i2c_slave_sup
       PORT MAP (
          clk    => clk,
          rst    => rst,
          scl_in => scl,
-         sda_in => sda,
+         sda_in => sda_i,
          err    => err,
          start  => start_internal,
          stop   => stop_internal

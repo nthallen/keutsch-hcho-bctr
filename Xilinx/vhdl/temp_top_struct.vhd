@@ -26,8 +26,9 @@ ENTITY temp_top IS
     rst    : IN     std_logic;
     ExpAck : OUT    std_logic;
     RData  : OUT    std_logic_vector (15 DOWNTO 0);
-    scl    : INOUT  std_logic;
-    sda    : INOUT  std_logic
+    scl    : OUT    std_logic;
+    sda_o  : OUT    std_logic;
+    sda_i  : IN     std_logic
   );
 
 -- Declarations
@@ -95,8 +96,9 @@ ARCHITECTURE struct OF temp_top IS
     brd_num   : OUT    std_logic_vector (2 DOWNTO 0);
     rd_data_o : OUT    std_logic_vector (31 DOWNTO 0);
     rdy       : OUT    std_logic ;
-    scl       : INOUT  std_logic ;
-    sda       : INOUT  std_logic 
+    scl       : OUT    std_logic ;
+    sda_o     : OUT    std_logic;
+    sda_i     : IN     std_logic 
   );
   END COMPONENT temp_acquire;
   COMPONENT temp_addr
@@ -164,7 +166,8 @@ BEGIN
       rd_data_o => rd_data_o,
       rdy       => rdy,
       scl       => scl,
-      sda       => sda
+      sda_o     => sda_o,
+      sda_i     => sda_i
     );
   tmp_addr : temp_addr
     GENERIC MAP (

@@ -16,7 +16,9 @@ USE ieee.numeric_std.all;
 ENTITY ips_sbbd IS
   GENERIC( 
     ADDR_WIDTH : integer range 16 downto 8 := 8;
-    BASE_ADDR  : unsigned(15 DOWNTO 0)     := x"0070"
+    BASE_ADDR  : unsigned(15 DOWNTO 0)     := x"0070";
+    Nbps_default : integer range 63 downto 1 := 10;
+    NC0_default  : integer                   := 10**7
   );
   PORT( 
     ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
@@ -56,7 +58,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF ips_sbbd IS
 
@@ -75,7 +77,7 @@ ARCHITECTURE struct OF ips_sbbd IS
     ADDR_WIDTH   : integer range 16 downto 8 := 8;
     BASE_ADDR    : unsigned(15 DOWNTO 0)     := x"0070";
     Nbps_default : integer range 63 downto 1 := 10;
-    NC0_default  : integer                   := 10**6
+    NC0_default  : integer                   := 10**7
   );
   PORT (
     ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
@@ -110,8 +112,8 @@ ARCHITECTURE struct OF ips_sbbd IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : ipsgen USE ENTITY BCtr_lib.ipsgen;
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+-- FOR ALL : ipsgen USE ENTITY BCtr_lib.ipsgen;
+-- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
   -- pragma synthesis_on
 
 
@@ -122,8 +124,8 @@ BEGIN
     GENERIC MAP (
       ADDR_WIDTH   => ADDR_WIDTH,
       BASE_ADDR    => BASE_ADDR,
-      Nbps_default => 10,
-      NC0_default  => 10**7
+      Nbps_default => Nbps_default,
+      NC0_default  => NC0_default
     )
     PORT MAP (
       ExpAddr  => ExpAddr,

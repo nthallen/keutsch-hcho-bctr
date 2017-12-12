@@ -21,8 +21,9 @@ ENTITY temp_acquire IS
     brd_num   : OUT    std_logic_vector (2 DOWNTO 0);
     rd_data_o : OUT    std_logic_vector (31 DOWNTO 0);
     rdy       : OUT    std_logic;
-    scl       : INOUT  std_logic;
-    sda       : INOUT  std_logic
+    scl       : OUT    std_logic;
+    sda_o     : OUT    std_logic;
+    sda_i     : IN     std_logic
   );
 
 -- Declarations
@@ -63,10 +64,9 @@ ARCHITECTURE struct OF temp_acquire IS
   SIGNAL err          : std_logic;
   SIGNAL rd_cmd       : std_logic;
   SIGNAL rd_data      : std_logic_vector(31 DOWNTO 0);
-  SIGNAL scl_pad_i    : std_logic;
+  SIGNAL scl_int      : std_logic;
   SIGNAL scl_pad_o    : std_logic;
   SIGNAL scl_padoen_o : std_logic;
-  SIGNAL sda_pad_i    : std_logic;
   SIGNAL sda_pad_o    : std_logic;
   SIGNAL sda_padoen_o : std_logic;
   SIGNAL wb_ack_o     : std_logic;
@@ -108,18 +108,7 @@ ARCHITECTURE struct OF temp_acquire IS
     sda_padoen_o : OUT    std_logic                      -- i2c data line output enable, active low
   );
   END COMPONENT i2c_master_top;
-  COMPONENT temp_i2c
-  PORT (
-    scl_pad_o    : IN     std_logic;
-    scl_padoen_o : IN     std_logic;
-    sda_pad_o    : IN     std_logic;
-    sda_padoen_o : IN     std_logic;
-    scl_pad_i    : OUT    std_logic;
-    sda_pad_i    : OUT    std_logic;
-    scl          : INOUT  std_logic;
-    sda          : INOUT  std_logic
-  );
-  END COMPONENT temp_i2c;
+
   COMPONENT temp_i2c_mid
   GENERIC (
     I2C_CLK_PRESCALE : std_logic_vector(15 DOWNTO 0) := X"00BC"
@@ -191,24 +180,14 @@ BEGIN
       wb_cyc_i     => wb_cyc_i,
       wb_ack_o     => wb_ack_o,
       wb_inta_o    => wb_inta_o,
-      scl_pad_i    => scl_pad_i,
+      scl_pad_i    => scl_int,
       scl_pad_o    => scl_pad_o,
-      scl_padoen_o => scl_padoen_o,
-      sda_pad_i    => sda_pad_i,
+      scl_padoen_o => scl_int,
+      sda_pad_i    => sda_i,
       sda_pad_o    => sda_pad_o,
-      sda_padoen_o => sda_padoen_o
+      sda_padoen_o => sda_o
     );
-  i2c_iface : temp_i2c
-    PORT MAP (
-      scl_pad_o    => scl_pad_o,
-      scl_padoen_o => scl_padoen_o,
-      sda_pad_o    => sda_pad_o,
-      sda_padoen_o => sda_padoen_o,
-      scl_pad_i    => scl_pad_i,
-      sda_pad_i    => sda_pad_i,
-      scl          => scl,
-      sda          => sda
-    );
+
   temp_midlvl : temp_i2c_mid
     GENERIC MAP (
       I2C_CLK_PRESCALE => X"00BC"
@@ -250,4 +229,5 @@ BEGIN
       wr_data   => wr_data
     );
 
+  scl <= scl_int;
 END ARCHITECTURE struct;

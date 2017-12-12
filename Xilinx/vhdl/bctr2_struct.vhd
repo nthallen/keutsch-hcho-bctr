@@ -67,8 +67,8 @@ END ENTITY BCtr2 ;
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
-LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
+-- LIBRARY BCtr_lib;
+-- USE BCtr_lib.ALL;
 
 
 ARCHITECTURE struct OF BCtr2 IS
@@ -189,10 +189,10 @@ ARCHITECTURE struct OF BCtr2 IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : BCtr2Ctrl USE ENTITY BCtr_lib.BCtr2Ctrl;
-  FOR ALL : BCtrSums USE ENTITY BCtr_lib.BCtrSums;
-  FOR ALL : BitClk USE ENTITY BCtr_lib.BitClk;
-  FOR ALL : DualFIFO USE ENTITY BCtr_lib.DualFIFO;
+  -- FOR ALL : BCtr2Ctrl USE ENTITY BCtr_lib.BCtr2Ctrl;
+  -- FOR ALL : BCtrSums USE ENTITY BCtr_lib.BCtrSums;
+  -- FOR ALL : BitClk USE ENTITY BCtr_lib.BitClk;
+  -- FOR ALL : DualFIFO USE ENTITY BCtr_lib.DualFIFO;
   -- pragma synthesis_on
 
 

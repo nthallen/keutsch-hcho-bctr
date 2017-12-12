@@ -60,7 +60,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF dacscan_sbbd IS
 
@@ -117,8 +117,8 @@ ARCHITECTURE struct OF dacscan_sbbd IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : dacscan USE ENTITY BCtr_lib.dacscan;
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+-- FOR ALL : dacscan USE ENTITY BCtr_lib.dacscan;
+-- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
   -- pragma synthesis_on
 
 
