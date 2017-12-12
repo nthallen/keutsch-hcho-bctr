@@ -52,7 +52,7 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF temp_acquire IS
 
@@ -149,9 +149,9 @@ ARCHITECTURE struct OF temp_acquire IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : i2c_master_top USE ENTITY BCtr_lib.i2c_master_top;
-  FOR ALL : temp_i2c_mid USE ENTITY BCtr_lib.temp_i2c_mid;
-  FOR ALL : temp_i2c_top USE ENTITY BCtr_lib.temp_i2c_top;
+-- FOR ALL : i2c_master_top USE ENTITY BCtr_lib.i2c_master_top;
+-- FOR ALL : temp_i2c_mid USE ENTITY BCtr_lib.temp_i2c_mid;
+-- FOR ALL : temp_i2c_top USE ENTITY BCtr_lib.temp_i2c_top;
   -- pragma synthesis_on
 
 

@@ -62,7 +62,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF i2c_aio IS
 
@@ -244,12 +244,12 @@ ARCHITECTURE struct OF i2c_aio IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : aio_acq USE ENTITY BCtr_lib.aio_acq;
-  FOR ALL : aio_addr USE ENTITY BCtr_lib.aio_addr;
-  FOR ALL : aio_dpram USE ENTITY BCtr_lib.aio_dpram;
-  FOR ALL : aio_i2c USE ENTITY BCtr_lib.aio_i2c;
-  FOR ALL : aio_txn USE ENTITY BCtr_lib.aio_txn;
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+-- FOR ALL : aio_acq USE ENTITY BCtr_lib.aio_acq;
+-- FOR ALL : aio_addr USE ENTITY BCtr_lib.aio_addr;
+-- FOR ALL : aio_dpram USE ENTITY BCtr_lib.aio_dpram;
+-- FOR ALL : aio_i2c USE ENTITY BCtr_lib.aio_i2c;
+-- FOR ALL : aio_txn USE ENTITY BCtr_lib.aio_txn;
+-- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
   -- pragma synthesis_on
 
 

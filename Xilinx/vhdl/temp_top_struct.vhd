@@ -56,7 +56,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF temp_top IS
 
@@ -135,10 +135,10 @@ ARCHITECTURE struct OF temp_top IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
-  FOR ALL : temp_acquire USE ENTITY BCtr_lib.temp_acquire;
-  FOR ALL : temp_addr USE ENTITY BCtr_lib.temp_addr;
-  FOR ALL : temp_avg USE ENTITY BCtr_lib.temp_avg;
+-- FOR ALL : subbus_io USE ENTITY BCtr_lib.subbus_io;
+-- FOR ALL : temp_acquire USE ENTITY BCtr_lib.temp_acquire;
+-- FOR ALL : temp_addr USE ENTITY BCtr_lib.temp_addr;
+-- FOR ALL : temp_avg USE ENTITY BCtr_lib.temp_avg;
   -- pragma synthesis_on
 
 
