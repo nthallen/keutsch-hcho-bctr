@@ -203,14 +203,14 @@ BEGIN
       assert ReadResult(1) = '1'
         report "Expected DRdy with Expired" severity error;
       if prompt = 2 THEN
-        wait for 101 ms;
+        wait for 21 ms;
       elsif prompt = 3 THEN
-        wait for 201 ms;
+        wait for 41 ms;
       end if;
       sbrd(ctr_base+1,'1'); -- NWords
       NWords := unsigned(ReadResult);
       IF prompt = 1 THEN
-        wait for 101 ms;
+        wait for 21 ms; -- Must be updated if testing IPS period changes
       END IF;
       IF expected = 1 THEN
         assert NWords > 4
@@ -490,23 +490,29 @@ BEGIN
     
     -- Temp sensor test
     if TEMP_OPT = '1' then
+      write(my_line, now,right,12);
+      write(my_line, string'(": Starting Temp Sensor Tests"));
+      writeline(output, my_line);
       for i in 1 to 2 loop
         if i > 1 then
-          wait for 1000 ms;
+          wait for 200 ms;
         end if;
         for sensor in 0 to 5 loop
           sbrd(temp_base + sensor*3,'1');
           check_read(temp_base+sensor*3, X"0000");
           sbrd(temp_base + sensor*3+1,'1');
-          check_read(temp_base+sensor*3, X"0000");
+          check_read(temp_base+sensor*3+1, X"0000");
           sbrd(temp_base + sensor*3+2,'1');
-          check_read(temp_base+sensor*3, X"0000");
+          check_read(temp_base+sensor*3+2, X"0000");
         end loop;
       end loop;
     end if;
     
     if AIO_OPT = '1' THEN
       -- Heater Controller Test
+      write(my_line, now,right,12);
+      write(my_line, string'(": Starting Heater Controller Tests"));
+      writeline(output, my_line);
       sp_updated <= '0';
       sbwr(aio_base+2, X"0000", '0'); -- Should get NACK on write
       -- Check digital commands
@@ -523,9 +529,9 @@ BEGIN
       
       sbrd(aio_base+1,'1');
       check_read(aio_base+1, X"0000"); -- Verify DAC1 Setpoint init
-        write(my_line, now,right,12);
-        write(my_line, string'(": sbwr(DAC1)"));
-        writeline(output, my_line);
+      write(my_line, now,right,12);
+      write(my_line, string'(": sbwr(DAC1)"));
+      writeline(output, my_line);
       sbwr(aio_base+1,X"1234",'1');
       sbrd(aio_base+1,'1');
       if ReadResult = X"0000" then
@@ -545,7 +551,7 @@ BEGIN
       hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
       writeline(output, my_line);
       
-      wait for 100 ms;
+      wait for 20 ms;
       for i in 1 to 10 loop
         sbrd(aio_base,'1'); -- Status
           write(my_line, now,right,12);
@@ -568,7 +574,7 @@ BEGIN
           write(my_line, string'(" VTemp2: "));
           hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
           writeline(output, my_line);
-        wait for 100 ms;
+        wait for 20 ms;
       end loop;
     end if;
     
