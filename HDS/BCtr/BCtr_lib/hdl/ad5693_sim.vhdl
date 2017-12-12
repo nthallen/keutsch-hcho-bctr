@@ -18,8 +18,10 @@ ENTITY ad5693 IS
   PORT (
     clk : IN std_logic;
     rst : IN std_logic;
-    sda : INOUT std_logic;
-    scl : IN std_logic
+    scl_o : OUT std_logic;
+    scl_i : IN std_logic;
+    sda_i : IN std_logic;
+    sda_o : OUT std_logic
   );
 END ENTITY ad5693;
 
@@ -34,7 +36,6 @@ ARCHITECTURE sim OF ad5693 IS
         clk   : IN     std_logic;
         rdata : IN     std_logic_vector(7 DOWNTO 0);
         rst   : IN     std_logic;
-        scl   : IN     std_logic;
         en    : IN     std_logic;
         WE    : OUT    std_logic;
         start : OUT    std_logic;
@@ -42,7 +43,10 @@ ARCHITECTURE sim OF ad5693 IS
         wdata : OUT    std_logic_vector(7 DOWNTO 0);
         rdreq : OUT    std_logic;
         RE    : INOUT  std_logic;
-        sda   : INOUT  std_logic
+        scl_i : IN     std_logic;
+        scl_o : OUT    std_logic;
+        sda_i : IN     std_logic;
+        sda_o : OUT    std_logic
      );
   END COMPONENT i2c_slave;
   SIGNAL WE : std_logic;
@@ -62,7 +66,6 @@ BEGIN
         clk   => clk,
         rdata => X"00",
         rst   => rst,
-        scl   => scl,
         en    => '1',
         WE    => WE,
         start => start,
@@ -70,7 +73,10 @@ BEGIN
         wdata => wdata,
         rdreq => rdreq,
         RE    => RE,
-        sda   => sda
+        scl_i => scl_i,
+        scl_o => scl_o,
+        sda_i => sda_i,
+        sda_o => sda_o
      );
 END ARCHITECTURE sim;
 

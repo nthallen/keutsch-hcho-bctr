@@ -39,10 +39,12 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   SIGNAL SimPMT  : std_logic;
   SIGNAL SimTrig : std_logic;
   SIGNAL Status  : std_logic_vector(3 DOWNTO 0);
-  SIGNAL temp_scl : std_logic;
+  SIGNAL temp_scl_o : std_logic_vector(1 DOWNTO 0);
+  SIGNAL temp_scl_i : std_logic;
   SIGNAL temp_sda_o : std_logic_vector(1 DOWNTO 0);
   SIGNAL temp_sda_i : std_logic;
-  SIGNAL aio_scl  : std_logic;
+  SIGNAL aio_scl_o  : std_logic_vector(3 DOWNTO 0);
+  SIGNAL aio_scl_i  : std_logic;
   SIGNAL aio_sda_o  : std_logic_vector(3 DOWNTO 0);
   SIGNAL aio_sda_i : std_logic;
   SIGNAL RE        : std_logic;
@@ -71,12 +73,14 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       PMTs    : IN     std_logic_vector(1 DOWNTO 0);
       Trigger : IN     std_logic;
       clk     : IN     std_logic;
-      temp_scl : OUT   std_logic;
+      temp_scl_o : OUT    std_logic;
+      temp_scl_i : IN    std_logic;
       temp_sda_o : OUT std_logic;
       temp_sda_i : IN  std_logic;
-      aio_scl  : OUT   std_logic;
-      aio_sdaoe : OUT  std_logic;
-      aio_sda_i : IN   std_logic;
+      aio_scl_o  : OUT    std_logic;
+      aio_scl_i  : IN     std_logic;
+      aio_sda_o  : OUT  std_logic;
+      aio_sda_i  : IN   std_logic;
       htr1_cmd : OUT   std_logic;
       htr2_cmd : OUT   std_logic;
       Data_i  : OUT    std_logic_vector(15 DOWNTO 0);
@@ -98,7 +102,7 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       SIM_LOOPS  : integer range 50 downto 0      := 10;
       TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
       AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
-      DACSCAN_OPT : std_logic := '0'; -- Set true to run DACSCAN tests
+      DACSCAN_OPT : integer := 1; -- 0 disable, 1 run all, 2 skip early tests
       NC         : integer range 2**24-1 downto 0 := 30000
     );
     PORT (
@@ -126,7 +130,6 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   PORT (
     clk   : IN     std_logic;
     rst   : IN     std_logic;
-    scl   : IN     std_logic;
     en    : IN     std_logic;
     rdata : IN     std_logic_vector (7 DOWNTO 0);
     WE    : OUT    std_logic;
@@ -135,6 +138,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
     stop  : OUT    std_logic;
     wdata : OUT    std_logic_vector (7 DOWNTO 0);
     RE    : INOUT  std_logic;
+    scl_o : OUT    std_logic;
+    scl_i : IN     std_logic;
     sda_o : OUT    std_logic;
     sda_i : IN     std_logic
   );
@@ -146,7 +151,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       rst : IN     std_logic;
       sda_o : OUT  std_logic;
       sda_i : IN   std_logic;
-      scl : IN     std_logic
+      scl_o : OUT  std_logic;
+      scl_i : IN     std_logic
     );
   END COMPONENT ads1115;
 
@@ -159,7 +165,8 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
       rst : IN     std_logic;
       sda_o : OUT  std_logic;
       sda_i : IN   std_logic;
-      scl : IN     std_logic
+      scl_o : OUT  std_logic;
+      scl_i : IN     std_logic
     );
   END COMPONENT ad5693;
 
@@ -172,6 +179,14 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tb IS
   -- FOR ALL : ad5693 USE ENTITY BCtr_lib.ad5693;
   -- pragma synthesis_on
 
+  function and_reduct(inv : IN std_logic_vector) return std_logic is
+    variable res_v : std_logic := '1';
+  begin
+    for i in inv'range loop
+      res_v := res_v and inv(i);
+    end loop;
+    return res_v;
+  end function;
 BEGIN
 
     dut : BCtr_syscon_wrapper
@@ -186,11 +201,13 @@ BEGIN
         PMTs    => PMTs,
         Trigger => Trigger,
         clk     => clk,
-        temp_scl => temp_scl,
+        temp_scl_o => temp_scl_o(0),
+        temp_scl_i => temp_scl_i,
         temp_sda_o => temp_sda_o(0),
         temp_sda_i => temp_sda_i,
-        aio_scl => aio_scl,
-        aio_sdaoe => aio_sda_o(0),
+        aio_scl_o => aio_scl_o(0),
+        aio_scl_i => aio_scl_i,
+        aio_sda_o => aio_sda_o(0),
         aio_sda_i => aio_sda_i,
         htr1_cmd => htr1_cmd,
         htr2_cmd => htr2_cmd,
@@ -208,7 +225,7 @@ BEGIN
         BIN_OPT => 3,
         CTR_OPT => 0,
         SIM_LOOPS => 2,
-        DACSCAN_OPT => '1'
+        DACSCAN_OPT => 3
       )
       PORT MAP (
         Addr    => Addr,
@@ -235,7 +252,6 @@ BEGIN
         clk   => clk,
         rdata => rdata,
         rst   => Ctrl(4),
-        scl   => temp_scl,
         en    => en,
         WE    => WE,
         start => start,
@@ -243,6 +259,8 @@ BEGIN
         wdata => wdata,
         rdreq => rdreq,
         RE    => RE,
+        scl_o   => temp_scl_o(1),
+        scl_i   => temp_scl_i,
         sda_o => temp_sda_o(1),
         sda_i => temp_sda_i
       );
@@ -251,9 +269,10 @@ BEGIN
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
+      scl_o => aio_scl_o(1),
+      scl_i => aio_scl_i,
       sda_o => aio_sda_o(1),
-      sda_i => aio_sda_i,
-      scl => aio_scl
+      sda_i => aio_sda_i
     );
 
   dac1 : ad5693
@@ -263,9 +282,10 @@ BEGIN
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
+      scl_o => aio_scl_o(2),
+      scl_i => aio_scl_i,
       sda_o => aio_sda_o(2),
-      sda_i => aio_sda_i,
-      scl => aio_scl
+      sda_i => aio_sda_i
     );
 
   dac2 : ad5693
@@ -275,9 +295,10 @@ BEGIN
     PORT MAP (
       clk => clk,
       rst => Ctrl(4),
+      scl_o => aio_scl_o(3),
+      scl_i => aio_scl_i,
       sda_o => aio_sda_o(3),
-      sda_i => aio_sda_i,
-      scl => aio_scl
+      sda_i => aio_sda_i
     );
 
   Trigger <= SimTrig;
@@ -296,6 +317,9 @@ BEGIN
     temp_sda_i <= sda_ii;
   END PROCESS;
   
+  temp_scl_i <= and_reduct(temp_scl_o);
+  
+  
   aio_sda_proc : PROCESS (aio_sda_o) IS
     variable sda_ii : std_logic;
   BEGIN
@@ -307,4 +331,6 @@ BEGIN
     end loop;
     aio_sda_i <= sda_ii;
   END PROCESS;
+  
+  aio_scl_i <= and_reduct(aio_scl_o);
 END ARCHITECTURE rtl;

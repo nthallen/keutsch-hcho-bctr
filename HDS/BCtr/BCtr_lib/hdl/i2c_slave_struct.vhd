@@ -30,7 +30,6 @@ ENTITY i2c_slave IS
       clk   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
       rst   : IN     std_logic;
-      scl   : IN     std_logic;
       en    : IN     std_logic;
       WE    : OUT    std_logic;
       start : OUT    std_logic;
@@ -38,7 +37,10 @@ ENTITY i2c_slave IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
-      sda   : INOUT  std_logic
+      scl_o : OUT    std_logic;
+      scl_i : IN     std_logic;
+      sda_o : OUT    std_logic;
+      sda_i : IN     std_logic
    );
 
 -- Declarations
@@ -82,7 +84,6 @@ ARCHITECTURE struct OF i2c_slave IS
       err   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
       rst   : IN     std_logic;
-      scl   : IN     std_logic;
       start : IN     std_logic;
       stop  : IN     std_logic;
       en    : IN     std_logic;
@@ -90,7 +91,10 @@ ARCHITECTURE struct OF i2c_slave IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
-      sda   : INOUT  std_logic 
+      scl_o : OUT    std_logic;
+      scl_i : IN     std_logic;
+      sda_o : OUT    std_logic;
+      sda_i : IN     std_logic
    );
    END COMPONENT;
    COMPONENT i2c_slave_sup
@@ -119,7 +123,6 @@ BEGIN
          err   => err,
          rdata => rdata,
          rst   => rst,
-         scl   => scl,
          en    => en,
          start => start_internal,
          stop  => stop_internal,
@@ -127,14 +130,17 @@ BEGIN
          wdata => wdata,
          rdreq => rdreq,
          RE    => RE,
-         sda   => sda
+         scl_o => scl_o,
+         scl_i => scl_i,
+         sda_o => sda_o,
+         sda_i => sda_i
       );
    U_1 : i2c_slave_sup
       PORT MAP (
          clk    => clk,
          rst    => rst,
-         scl_in => scl,
-         sda_in => sda,
+         scl_in => scl_i,
+         sda_in => sda_i,
          err    => err,
          start  => start_internal,
          stop   => stop_internal

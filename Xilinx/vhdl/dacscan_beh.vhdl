@@ -40,8 +40,6 @@ ENTITY dacscan IS
 
 END ENTITY dacscan ;
 
-Library BCtr_lib;
-
 ARCHITECTURE beh OF dacscan IS
   SIGNAL StatusCmd_en : std_logic;
   SIGNAL SetPoint_en : std_logic;
@@ -160,7 +158,7 @@ BEGIN
         cmd_offline <= '0';
         cmd_chop_init <= '0';
         cmd_chop_exit <= '0';
-      ELSE
+      ELSE -- not rst
         IF RdEn = '1' THEN
           IF StatusCmd_en = '1' THEN
             RData <= (
@@ -252,13 +250,14 @@ BEGIN
             next_Offline <= '0';
             current_state <= st_wrdac_0;
           ELSIF cmd_offline = '1' THEN
+            cmd_offline <= '0';
             nextSetPoint <= OnlinePos+OfflineDelta;
             next_Scanning <= '0';
             next_Online <= '0';
             next_Offline <= '1';
-            cmd_offline <= '0';
             current_state <= st_wrdac_0;
           ELSIF cmd_chop_init = '1' THEN
+            cmd_chop_init <= '0';
             next_Scanning <= '0';
             next_Online <= '1';
             next_Offline <= '0';
@@ -304,7 +303,7 @@ BEGIN
             next_Online <= '0';
             next_Offline <= '0';
             next_Scanning <= '0';
-            next_Chopping <= '0';
+            -- next_Chopping <= '0';
             loop_count <= to_unsigned(50,loop_count'length);
             current_state <= st_wrdac_2;
           ELSE
@@ -369,6 +368,9 @@ BEGIN
               next_Online <= '0';
               next_Offline <= '1';
               current_state <= st_wrdac_0;
+            ELSIF cmd_start_scan = '1' THEN
+              cmd_start_scan <= '0';
+              current_state <= st_scan_init;
             ELSIF cmd_chop_exit = '1' THEN
               next_Chopping <= '0';
               cmd_chop_exit <= '0';
@@ -408,16 +410,17 @@ BEGIN
         WHEN others =>
           current_state <= st_idle;
         END CASE;
-      END IF;
-    END IF;
+        
+        SetPoint <= std_logic_vector(SetPoint_int);
+        ScanStat <= (
+          0 => Scanning,
+          1 => Online,
+          2 => Offline,
+          3 => Chopping,
+          4 => PosOVF);
+      END IF; -- not rst
+    END IF; -- clk'event and clk = '1'
   END PROCESS;
   
-  SetPoint <= std_logic_vector(SetPoint_int);
-  ScanStat <= (
-    0 => Scanning,
-    1 => Online,
-    2 => Offline,
-    3 => Chopping,
-    4 => PosOVF);
 END ARCHITECTURE beh;
 

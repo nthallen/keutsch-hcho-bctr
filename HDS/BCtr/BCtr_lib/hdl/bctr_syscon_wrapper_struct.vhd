@@ -26,30 +26,33 @@ USE ieee.numeric_std.all;
 
 ENTITY BCtr_syscon_wrapper IS
   GENERIC(
-    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"000A"    -- Relative to HCHO
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"000A";    -- Relative to HCHO
+    Nbps_default   : integer range 63 downto 1     := 10
   );
   PORT( 
-    Addr     : IN     std_logic_vector (7 DOWNTO 0);
-    Ctrl     : IN     std_logic_vector (6 DOWNTO 0);
-    Data_o   : IN     std_logic_vector (15 DOWNTO 0);
-    PMTs     : IN     std_logic_vector (1 DOWNTO 0);
-    Trigger  : IN     std_logic;
-    clk      : IN     std_logic;
-    Data_i   : OUT    std_logic_vector (15 DOWNTO 0);
-    Fail     : OUT    std_logic;
-    temp_scl : INOUT  std_logic;
-    temp_sda : INOUT  std_logic;
-    aio_scl  : INOUT  std_logic;
-    aio_sda  : INOUT  std_logic;
-    aio_scl_mon : OUT std_logic;
-    aio_sda_mon : OUT std_logic;
-    htr1_cmd : OUT    std_logic;
-    htr2_cmd : OUT    std_logic;
-    SimPMT   : OUT    std_logic;
-    SimTrig  : OUT    std_logic;
-    Status   : OUT    std_logic_vector (3 DOWNTO 0);
+    Addr      : IN     std_logic_vector (7 DOWNTO 0);
+    Ctrl      : IN     std_logic_vector (6 DOWNTO 0);
+    Data_o    : IN     std_logic_vector (15 DOWNTO 0);
+    PMTs      : IN     std_logic_vector (1 DOWNTO 0);
+    Trigger   : IN     std_logic;
+    clk       : IN     std_logic;
+    Data_i    : OUT    std_logic_vector (15 DOWNTO 0);
+    Fail      : OUT    std_logic;
+    temp_scl_o : OUT    std_logic;
+    temp_scl_i : IN    std_logic;
+    temp_sda_o : OUT   std_logic;
+    temp_sda_i : IN    std_logic;
+    aio_scl_o : OUT    std_logic;
+    aio_scl_i : IN     std_logic;
+    aio_sda_o : OUT    std_logic;
+    aio_sda_i : IN     std_logic;
+    htr1_cmd  : OUT    std_logic;
+    htr2_cmd  : OUT    std_logic;
+    SimPMT    : OUT    std_logic;
+    SimTrig   : OUT    std_logic;
+    Status    : OUT    std_logic_vector (3 DOWNTO 0);
     dac_reset : OUT   std_logic;
-    dac_ldac : OUT    std_logic
+    dac_ldac  : OUT    std_logic
   );
 
 -- Declarations
@@ -76,7 +79,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-LIBRARY BCtr_lib;
+-- LIBRARY BCtr_lib;
 
 ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
@@ -96,21 +99,24 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     ADDR_WIDTH     : integer range 16 downto 8     := 8;
     FAIL_WIDTH     : integer range 16 downto 1     := 1;
     SW_WIDTH       : integer range 16 DOWNTO 0     := 1;
-    N_CTR_CHANNELS : integer range 4 DOWNTO 0      := 2
+    N_CTR_CHANNELS : integer range 4 DOWNTO 0      := 2;
+    Nbps_default   : integer range 63 downto 1     := 10
   );
   PORT (
-    Addr     : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
-    Ctrl     : IN     std_logic_vector (6 DOWNTO 0);
-    Data_o   : IN     std_logic_vector (15 DOWNTO 0);
-    PMTs     : IN     std_logic_vector (N_CTR_CHANNELS-1 DOWNTO 0);
-    Trigger  : IN     std_logic;
-    clk      : IN     std_logic;
-    temp_scl : INOUT  std_logic;
-    temp_sda : INOUT  std_logic;
-    aio_scl  : INOUT  std_logic;
-    aio_sda  : INOUT  std_logic;
-    aio_scl_mon : OUT std_logic;
-    aio_sda_mon : OUT std_logic;
+    Addr      : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
+    Ctrl      : IN     std_logic_vector (6 DOWNTO 0);
+    Data_o    : IN     std_logic_vector (15 DOWNTO 0);
+    PMTs      : IN     std_logic_vector (N_CTR_CHANNELS-1 DOWNTO 0);
+    Trigger   : IN     std_logic;
+    clk       : IN     std_logic;
+    temp_scl_o : OUT    std_logic;
+    temp_scl_i : IN    std_logic;
+    temp_sda_o : OUT   std_logic;
+    temp_sda_i : IN    std_logic;
+    aio_scl_o  : OUT    std_logic;
+    aio_scl_i : IN     std_logic;
+    aio_sda_o : OUT    std_logic;
+    aio_sda_i : IN     std_logic;
     htr1_cmd : OUT    std_logic;
     htr2_cmd : OUT    std_logic;
     Data_i   : OUT    std_logic_vector (15 DOWNTO 0);
@@ -124,7 +130,7 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
 
   -- Optional embedded configurations
   -- pragma synthesis_off
-  FOR ALL : BCtr_syscon USE ENTITY BCtr_lib.BCtr_syscon;
+  -- FOR ALL : BCtr_syscon USE ENTITY BCtr_lib.BCtr_syscon;
   -- pragma synthesis_on
 
 
@@ -138,7 +144,8 @@ BEGIN
       N_INTERRUPTS   => 0,
       FAIL_WIDTH     => 1,
       SW_WIDTH       => 0,
-      N_CTR_CHANNELS => 2
+      N_CTR_CHANNELS => 2,
+      Nbps_default   => Nbps_default
     )
     PORT MAP (
       clk      => clk,
@@ -147,12 +154,14 @@ BEGIN
       Fail     => Fail_int,
       Ctrl     => Ctrl,
       Addr     => Addr,
-      temp_scl => temp_scl,
-      temp_sda => temp_sda,
-      aio_scl  => aio_scl,
-      aio_sda  => aio_sda,
-      aio_scl_mon => aio_scl_mon,
-      aio_sda_mon => aio_sda_mon,
+      temp_scl_o => temp_scl_o,
+      temp_scl_i => temp_scl_i,
+      temp_sda_o => temp_sda_o,
+      temp_sda_i => temp_sda_i,
+      aio_scl_o => aio_scl_o,
+      aio_scl_i => aio_scl_i,
+      aio_sda_o => aio_sda_o,
+      aio_sda_i => aio_sda_i,
       htr1_cmd => htr1_cmd,
       htr2_cmd => htr2_cmd,
       Data_i   => Data_i,

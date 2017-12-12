@@ -23,7 +23,7 @@ ENTITY BCtr_syscon_wrapper_tester IS
     CTR_OPT    : integer := 1; -- 0 to skip basic counter test
     TEMP_OPT   : std_logic := '0'; -- Set true to run temp sensor tests
     AIO_OPT   : std_logic := '0'; -- Set true to run basic AIO tests
-    DACSCAN_OPT : std_logic := '1'; -- Set true to run DACSCAN tests
+    DACSCAN_OPT : integer := 1; -- 0 to disable, 1 do all, 2 skip scan, online, offline
     SIM_LOOPS  : integer range 50 downto 0      := 10;
     NC         : integer range 2**24-1 downto 0 := 30000
   );
@@ -49,7 +49,6 @@ END ENTITY BCtr_syscon_wrapper_tester;
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
-LIBRARY BCtr_lib;
 
 ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL clk_int : std_logic;
@@ -59,9 +58,10 @@ ARCHITECTURE rtl OF BCtr_syscon_wrapper_tester IS
   SIGNAL ctr_base : unsigned(7 DOWNTO 0);
   SIGNAL sp_updated : std_logic;
   SIGNAL prev_step : std_logic_vector(15 DOWNTO 0);
+  SIGNAL BCtrReportCts : std_logic;
   CONSTANT temp_base : unsigned(7 DOWNTO 0) := to_unsigned(16#30#,8);
   CONSTANT aio_base : unsigned(7 DOWNTO 0) := to_unsigned(16#50#,8);
-  CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
+  -- CONSTANT NCU : unsigned(23 DOWNTO 0) := to_unsigned(NC,24);
   alias RdEn is Ctrl(0);
   alias WrEn is Ctrl(1);
   alias CS is Ctrl(2);
@@ -155,6 +155,7 @@ BEGIN
         hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
         writeline(output, my_line);
       end if;
+      return;
     end procedure check_read;
     
     procedure check_cmds(cmds : std_logic_vector(15 DOWNTO 0)) IS
@@ -171,10 +172,11 @@ BEGIN
       while ReadResult(5) /= cmds(5) OR ReadResult(9) /= cmds(9) loop
         sbrd(aio_base, '1');
       end loop;
-        write(my_line, now,right,12);
-        write(my_line, string'(": status "));
-        hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
-        writeline(output, my_line);
+      write(my_line, now,right,12);
+      write(my_line, string'(": status "));
+      hwrite(my_line, std_logic_vector(ReadResult), RIGHT, 4);
+      writeline(output, my_line);
+      return;
     end procedure check_cmds;
     
     procedure read_bctr_report(prompt : IN integer := 0; expected : IN integer := 0) IS
@@ -217,7 +219,7 @@ BEGIN
         assert NWords = 4
         report "Expected NWords = 4" severity error;
       END IF;
-      write(line1, now, right, 9);
+      write(line1, now, right, 12);
       write(line1, string'(": NW:"));
       write(line1, to_integer(NWords));
       write(line1, string'(": "));
@@ -273,35 +275,42 @@ BEGIN
       IF NWords > 0 THEN
         row_cts := 0;
         while NWords > 0 loop
-          IF row_cts = 0 THEN
+          IF row_cts = 0 AND BCtrReportCts = '1' THEN
             write(line1, string'("  Ch1:"));
             write(line2, string'("  Ch2:"));
           END IF;
           sbrd(ctr_base+2,'1');
-          write(line1, string'(" "));
-          write(line1, to_integer(unsigned(ReadResult)),right,3);
+          IF BCtrReportCts = '1' THEN
+            write(line1, string'(" "));
+            write(line1, to_integer(unsigned(ReadResult)),right,3);
+          END IF;
           IF NWords >= 2 THEN
             NWords := NWords - 2;
             sbrd(ctr_base+2,'1');
-            write(line2, string'(" "));
-            write(line2, to_integer(unsigned(ReadResult)),right,3);
+            IF BCtrReportCts = '1' THEN
+              write(line2, string'(" "));
+              write(line2, to_integer(unsigned(ReadResult)),right,3);
+            END IF;
           ELSE
             NWords := NWords - 1;
             report "Expected even number of words" severity error;
           END IF;
-          IF row_cts >= 29 THEN
-            writeline(output, line1);
-            writeline(output, line2);
-            row_cts := 0;
-          ELSE
-            row_cts := row_cts + 1;
+          IF BCtrReportCts = '1' THEN
+            IF row_cts >= 29 THEN
+              writeline(output, line1);
+              writeline(output, line2);
+              row_cts := 0;
+            ELSE
+              row_cts := row_cts + 1;
+            END IF;
           END IF;
         end loop;
-        IF row_cts > 0 THEN
+        IF row_cts > 0 AND BCtrReportCts = '1' THEN
           writeline(output, line1);
           writeline(output, line2);
         END IF;
       END IF;
+      return;
     end procedure read_bctr_report;
     
     procedure init_counters IS
@@ -364,6 +373,7 @@ BEGIN
       sbrd(ctr_base+1,'1');
       assert ReadResult = x"0000"
         report "Expected zero FIFO length" severity error;
+      return;
     END PROCEDURE init_counters;
 
     procedure check_chop(online : IN std_logic; offline : IN std_logic; chopping : IN std_logic := '0';
@@ -397,6 +407,7 @@ BEGIN
           assert(BCtrStatus(10) = '0')
             report "Scanning bit set erroneously" severity error;
         END IF;
+        return;
     END PROCEDURE check_chop;
    
     variable my_line : line;
@@ -413,6 +424,7 @@ BEGIN
     en <= '1';
     RE <= '0';
     rdata <= (others => '0');
+    BCtrReportCts <= '1';
     
     CASE BIN_OPT IS
     WHEN 1 =>
@@ -560,7 +572,7 @@ BEGIN
       end loop;
     end if;
     
-    IF DACSCAN_OPT = '1' THEN
+    IF DACSCAN_OPT > 0 THEN
       --dacscan tests
       write(my_line, now,right,12);
       write(my_line, string'(": starting dacscan tests"));
@@ -576,7 +588,9 @@ BEGIN
       sbrd(x"81",'1');
       check_read(x"81", x"0000");
       init_counters;
+      BCtrReportCts <= '0';
      
+      IF DACSCAN_OPT = 1 THEN
       -- Let's try writing a synchronized output
       sp_updated <= '0';
       write(my_line, now,right,12);
@@ -656,14 +670,20 @@ BEGIN
       check_chop('1','0');
       read_bctr_report; -- Now we should be reporting offline
       check_chop('0','1');
+      END IF; -- DACSCAN_OPT = 1
 
+      IF DACSCAN_OPT < 3 THEN
       -- Test chop mode start and stop
       write(my_line, now,right,12);
       write(my_line, string'(": Issuing chop mode start"));
       writeline(output, my_line);
       sbwr(x"80", x"0006",'1'); -- Enter Chop Mode (online)
       read_bctr_report;
-      check_chop('0','1'); -- Not chopping yet
+      IF DACSCAN_OPT > 1 THEN
+        check_chop('0','0');
+      ELSE
+        check_chop('0','1'); -- Not chopping yet
+      END IF;
       read_bctr_report;
       check_chop('1','0','1'); -- Online (and chopping)
       read_bctr_report;
@@ -681,14 +701,21 @@ BEGIN
       read_bctr_report;
       check_chop('0','1','1'); -- Offline (and chopping)
       read_bctr_report;
-      check_chop('0','1','0'); -- Offline (and presumably not chopping)
+      check_chop('0','1','0'); -- Offline (and not chopping)
+      read_bctr_report;
+      check_chop('0','1','0'); -- Offline (and not chopping)
+      END IF; -- DACSCAN_OPT < 3
 
       write(my_line, now,right,12);
       write(my_line, string'(": Issuing chop mode start"));
       writeline(output, my_line);
       sbwr(x"80", x"0006",'1'); -- Enter Chop Mode (online)
       read_bctr_report;
-      check_chop('0','1'); -- Not chopping yet
+      IF DACSCAN_OPT < 3 THEN
+        check_chop('0','1');
+      ELSE
+        check_chop('0','0'); -- Not chopping yet
+      END IF;
       read_bctr_report;
       check_chop('1','0','1'); -- Online (and chopping)
       write(my_line, now,right,12);
@@ -706,10 +733,12 @@ BEGIN
       wait until clk'event and clk = '1';
       while sp_updated = '0' loop
         read_bctr_report;
-        check_chop('0','0','0');
         IF BCtrStatus(10) = '0' THEN
+          check_chop('0','0');
           sp_updated <= '1';
           wait until clk'event and clk = '1';
+        ELSE
+          check_chop('0','0','0','1');
         END IF;
       end loop;
       write(my_line, now,right,12);

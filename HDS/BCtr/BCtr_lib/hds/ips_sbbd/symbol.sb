@@ -436,6 +436,22 @@ value "x\"0070\""
 )
 uid 464,0
 )
+*63 (LogGeneric
+generic (GiElement
+name "Nbps_default"
+type "integer range 63 downto 1"
+value "10"
+)
+uid 489,0
+)
+*64 (LogGeneric
+generic (GiElement
+name "NC0_default"
+type "integer"
+value "10**7"
+)
+uid 491,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -443,7 +459,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 94,0
 optionalChildren [
-*63 (Sheet
+*65 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -460,43 +476,55 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *64 (MRCItem
+emptyMRCItem *66 (MRCItem
 litem &49
 pos 3
 dimension 20
 )
 uid 96,0
 optionalChildren [
-*65 (MRCItem
+*67 (MRCItem
 litem &50
 pos 0
 dimension 20
 uid 97,0
 )
-*66 (MRCItem
+*68 (MRCItem
 litem &51
 pos 1
 dimension 23
 uid 98,0
 )
-*67 (MRCItem
+*69 (MRCItem
 litem &52
 pos 2
 hidden 1
 dimension 20
 uid 99,0
 )
-*68 (MRCItem
+*70 (MRCItem
 litem &61
 pos 0
 dimension 20
 uid 164,0
 )
-*69 (MRCItem
+*71 (MRCItem
 litem &62
 pos 1
 dimension 20
 uid 463,0
+)
+*72 (MRCItem
+litem &63
+pos 2
+dimension 20
+uid 488,0
+)
+*73 (MRCItem
+litem &64
+pos 3
+dimension 20
+uid 490,0
 )
 ]
 )
@@ -509,43 +537,43 @@ textAngle 90
 )
 uid 100,0
 optionalChildren [
-*70 (MRCItem
+*74 (MRCItem
 litem &53
 pos 0
 dimension 20
 uid 101,0
 )
-*71 (MRCItem
+*75 (MRCItem
 litem &55
 pos 1
 dimension 50
 uid 102,0
 )
-*72 (MRCItem
+*76 (MRCItem
 litem &56
 pos 2
 dimension 100
 uid 103,0
 )
-*73 (MRCItem
+*77 (MRCItem
 litem &57
 pos 3
 dimension 100
 uid 104,0
 )
-*74 (MRCItem
+*78 (MRCItem
 litem &58
 pos 4
 dimension 50
 uid 105,0
 )
-*75 (MRCItem
+*79 (MRCItem
 litem &59
 pos 5
 dimension 50
 uid 106,0
 )
-*76 (MRCItem
+*80 (MRCItem
 litem &60
 pos 6
 dimension 80
@@ -609,19 +637,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/11/2017"
+value "12/12/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "12"
 )
 (vvPair
 variable "entity_name"
@@ -649,7 +677,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/11/2017"
+value "12/12/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -661,7 +689,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:46:36"
+value "10:08:45"
 )
 (vvPair
 variable "group"
@@ -689,7 +717,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "11"
+value "12"
 )
 (vvPair
 variable "module_name"
@@ -697,11 +725,11 @@ value "ips_sbbd"
 )
 (vvPair
 variable "month"
-value "Nov"
+value "Dec"
 )
 (vvPair
 variable "month_long"
-value "November"
+value "December"
 )
 (vvPair
 variable "p"
@@ -765,7 +793,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "13:46:36"
+value "10:08:45"
 )
 (vvPair
 variable "unit"
@@ -796,10 +824,10 @@ value "17"
 LanguageMgr "Vhdl2008LangMgr"
 uid 51,0
 optionalChildren [
-*77 (SymbolBody
+*81 (SymbolBody
 uid 8,0
 optionalChildren [
-*78 (CptPort
+*82 (CptPort
 uid 124,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -842,7 +870,7 @@ suid 1,0
 )
 )
 )
-*79 (CptPort
+*83 (CptPort
 uid 129,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -885,7 +913,7 @@ suid 2,0
 )
 )
 )
-*80 (CptPort
+*84 (CptPort
 uid 134,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -928,7 +956,7 @@ suid 3,0
 )
 )
 )
-*81 (CptPort
+*85 (CptPort
 uid 139,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -973,7 +1001,7 @@ suid 4,0
 )
 )
 )
-*82 (CptPort
+*86 (CptPort
 uid 144,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1018,7 +1046,7 @@ suid 5,0
 )
 )
 )
-*83 (CptPort
+*87 (CptPort
 uid 149,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1063,7 +1091,7 @@ suid 6,0
 )
 )
 )
-*84 (CptPort
+*88 (CptPort
 uid 154,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1109,7 +1137,7 @@ suid 7,0
 )
 )
 )
-*85 (CptPort
+*89 (CptPort
 uid 159,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1156,7 +1184,7 @@ suid 8,0
 )
 )
 )
-*86 (CptPort
+*90 (CptPort
 uid 237,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1200,7 +1228,7 @@ suid 9,0
 )
 )
 )
-*87 (CptPort
+*91 (CptPort
 uid 336,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1244,7 +1272,7 @@ suid 10,0
 )
 )
 )
-*88 (CptPort
+*92 (CptPort
 uid 435,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1326,7 +1354,7 @@ st "ips_sbbd"
 blo "22200,16800"
 )
 )
-gi *89 (GenericInterface
+gi *93 (GenericInterface
 uid 13,0
 ps "CenterOffsetStrategy"
 matrix (Matrix
@@ -1336,11 +1364,13 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "0,12000,25000,15200"
+xt "0,12000,26000,16800"
 st "Generic Declarations
 
-ADDR_WIDTH integer range 16 downto 8 8        
-BASE_ADDR  unsigned(15 DOWNTO 0)     x\"0070\"  
+ADDR_WIDTH   integer range 16 downto 8 8        
+BASE_ADDR    unsigned(15 DOWNTO 0)     x\"0070\"  
+Nbps_default integer range 63 downto 1 10       
+NC0_default  integer                   10**7    
 "
 )
 header "Generic Declarations"
@@ -1357,6 +1387,16 @@ name "BASE_ADDR"
 type "unsigned(15 DOWNTO 0)"
 value "x\"0070\""
 )
+(GiElement
+name "Nbps_default"
+type "integer range 63 downto 1"
+value "10"
+)
+(GiElement
+name "NC0_default"
+type "integer"
+value "10**7"
+)
 ]
 )
 portInstanceVisAsIs 1
@@ -1367,10 +1407,10 @@ portVis (PortSigDisplay
 sIVOD 1
 )
 )
-*90 (Grouping
+*94 (Grouping
 uid 16,0
 optionalChildren [
-*91 (CommentText
+*95 (CommentText
 uid 18,0
 shape (Rectangle
 uid 19,0
@@ -1388,7 +1428,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "31200,50000,39900,51000"
+xt "31200,50000,40000,51000"
 st "
 by %user on %dd %month %year
 "
@@ -1401,7 +1441,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*92 (CommentText
+*96 (CommentText
 uid 21,0
 shape (Rectangle
 uid 22,0
@@ -1432,7 +1472,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*93 (CommentText
+*97 (CommentText
 uid 24,0
 shape (Rectangle
 uid 25,0
@@ -1463,7 +1503,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*94 (CommentText
+*98 (CommentText
 uid 27,0
 shape (Rectangle
 uid 28,0
@@ -1494,7 +1534,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*95 (CommentText
+*99 (CommentText
 uid 30,0
 shape (Rectangle
 uid 31,0
@@ -1524,7 +1564,7 @@ visibleWidth 20000
 ignorePrefs 1
 titleBlock 1
 )
-*96 (CommentText
+*100 (CommentText
 uid 33,0
 shape (Rectangle
 uid 34,0
@@ -1555,7 +1595,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*97 (CommentText
+*101 (CommentText
 uid 36,0
 shape (Rectangle
 uid 37,0
@@ -1586,7 +1626,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*98 (CommentText
+*102 (CommentText
 uid 39,0
 shape (Rectangle
 uid 40,0
@@ -1617,7 +1657,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*99 (CommentText
+*103 (CommentText
 uid 42,0
 shape (Rectangle
 uid 43,0
@@ -1648,7 +1688,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*100 (CommentText
+*104 (CommentText
 uid 45,0
 shape (Rectangle
 uid 46,0
@@ -1704,11 +1744,11 @@ xShown 1
 yShown 1
 color "26368,26368,26368"
 )
-packageList *101 (PackageList
+packageList *105 (PackageList
 uid 48,0
 stg "VerticalLayoutStrategy"
 textVec [
-*102 (Text
+*106 (Text
 uid 49,0
 va (VaSet
 font "arial,8,1"
@@ -1717,7 +1757,7 @@ xt "0,0,5400,1000"
 st "Package List"
 blo "0,800"
 )
-*103 (MLText
+*107 (MLText
 uid 50,0
 va (VaSet
 )
@@ -1843,7 +1883,7 @@ st "<cell>"
 blo "22200,16800"
 )
 )
-gi *104 (GenericInterface
+gi *108 (GenericInterface
 ps "CenterOffsetStrategy"
 matrix (Matrix
 text (MLText
@@ -1942,7 +1982,7 @@ o 0
 )
 )
 )
-DeclarativeBlock *105 (SymDeclBlock
+DeclarativeBlock *109 (SymDeclBlock
 uid 1,0
 stg "SymDeclLayoutStrategy"
 declLabel (Text
@@ -2000,6 +2040,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 464,0
+lastUid 491,0
 activeModelName "Symbol:CDM"
 )

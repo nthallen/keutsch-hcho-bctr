@@ -33,11 +33,13 @@ ENTITY BCtr_syscon IS
       Data_i    : OUT std_logic_vector(15 DOWNTO 0);
       Data_o    : IN std_logic_vector(15 DOWNTO 0);
       Status    : OUT std_logic_vector(3 DOWNTO 0);
-      temp_scl    : OUT std_logic;
+      temp_scl_o  : OUT std_logic;
+      temp_scl_i  : IN  std_logic;
       temp_sda_o  : OUT std_logic;
       temp_sda_i  : IN  std_logic;
-      aio_scl   : OUT   std_logic;
-      aio_sdaoe : OUT   std_logic;
+      aio_scl_o : OUT   std_logic;
+      aio_scl_i : IN    std_logic;
+      aio_sda_o : OUT   std_logic;
       aio_sda_i : IN    std_logic;
       htr1_cmd  : OUT std_logic;
       htr2_cmd  : OUT std_logic;
@@ -188,7 +190,8 @@ ARCHITECTURE beh OF BCtr_syscon IS
       rst    : IN     std_logic;
       ExpAck : OUT    std_logic;
       RData  : OUT    std_logic_vector(15 DOWNTO 0);
-      scl    : OUT    std_logic;
+      scl_o  : OUT    std_logic;
+      scl_i  : IN     std_logic;
       sda_o  : OUT    std_logic;
       sda_i  : IN     std_logic
     );
@@ -210,8 +213,9 @@ ARCHITECTURE beh OF BCtr_syscon IS
       wData   : IN     std_logic_vector(15 DOWNTO 0);
       ExpAck  : OUT    std_logic;
       rData   : OUT    std_logic_vector(15 DOWNTO 0);
-      scl     : OUT    std_logic;
-      sdaoe   : OUT    std_logic;
+      scl_o   : OUT    std_logic;
+      scl_i   : IN     std_logic;
+      sda_o   : OUT    std_logic;
       sda_i   : IN     std_logic;
       idxAck  : OUT    std_logic;
       htr1_cmd : OUT std_logic;
@@ -388,7 +392,8 @@ BEGIN
       rst    => ExpReset,
       ExpAck => ExpAck(2),
       RData  => RData(47 DOWNTO 32),
-      scl    => temp_scl,
+      scl_o  => temp_scl_o,
+      scl_i  => temp_scl_i,
       sda_o  => temp_sda_o,
       sda_i  => temp_sda_i
     );
@@ -410,8 +415,9 @@ BEGIN
       wData   => WData,
       ExpAck  => ExpAck(3),
       rData   => RData(16*3+15 DOWNTO 16*3),
-      scl     => aio_scl,
-      sdaoe   => aio_sdaoe,
+      scl_o   => aio_scl_o,
+      scl_i   => aio_scl_i,
+      sda_o   => aio_sda_o,
       sda_i   => aio_sda_i,
       htr1_cmd => htr1_cmd,
       htr2_cmd => htr2_cmd

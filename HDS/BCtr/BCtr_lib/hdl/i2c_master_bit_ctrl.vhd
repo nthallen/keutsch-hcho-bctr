@@ -172,7 +172,7 @@ entity i2c_master_bit_ctrl is
 end entity i2c_master_bit_ctrl;
 
 architecture structural of i2c_master_bit_ctrl is
-    constant I2C_CMD_NOP    : std_logic_vector(3 downto 0) := "0000";
+    -- constant I2C_CMD_NOP    : std_logic_vector(3 downto 0) := "0000";
     constant I2C_CMD_START  : std_logic_vector(3 downto 0) := "0001";
     constant I2C_CMD_STOP   : std_logic_vector(3 downto 0) := "0010";
     constant I2C_CMD_READ   : std_logic_vector(3 downto 0) := "0100";

@@ -45,12 +45,12 @@ value "BASE_ADDR"
 (GiElement
 name "Nbps_default"
 type "integer range 63 downto 1"
-value "10"
+value "Nbps_default"
 )
 (GiElement
 name "NC0_default"
 type "integer"
-value "10**7"
+value "NC0_default"
 )
 ]
 mwi 0
@@ -109,19 +109,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\HCHO\\BCtr\\HDS\\BCtr\\BCtr_lib\\hds
 )
 (vvPair
 variable "date"
-value "11/11/2017"
+value "12/12/2017"
 )
 (vvPair
 variable "day"
-value "Sat"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Saturday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "11"
+value "12"
 )
 (vvPair
 variable "entity_name"
@@ -149,7 +149,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/11/2017"
+value "12/12/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -161,7 +161,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:46:36"
+value "10:08:44"
 )
 (vvPair
 variable "group"
@@ -189,7 +189,7 @@ value "$HDS_PROJECT_DIR/BCtr_lib/work"
 )
 (vvPair
 variable "mm"
-value "11"
+value "12"
 )
 (vvPair
 variable "module_name"
@@ -197,11 +197,11 @@ value "ips_sbbd"
 )
 (vvPair
 variable "month"
-value "Nov"
+value "Dec"
 )
 (vvPair
 variable "month_long"
-value "November"
+value "December"
 )
 (vvPair
 variable "p"
@@ -265,7 +265,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "13:46:36"
+value "10:08:44"
 )
 (vvPair
 variable "unit"
@@ -1232,11 +1232,11 @@ uid 197,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "29000,34800,61000,38000"
-st "ADDR_WIDTH   = ADDR_WIDTH    ( integer range 16 downto 8 )  
-BASE_ADDR    = BASE_ADDR     ( unsigned(15 DOWNTO 0)     )  
-Nbps_default = 10            ( integer range 63 downto 1 )  
-NC0_default  = 10**7         ( integer                   )  
+xt "29000,34800,62000,38000"
+st "ADDR_WIDTH   = ADDR_WIDTH      ( integer range 16 downto 8 )  
+BASE_ADDR    = BASE_ADDR       ( unsigned(15 DOWNTO 0)     )  
+Nbps_default = Nbps_default    ( integer range 63 downto 1 )  
+NC0_default  = NC0_default     ( integer                   )  
 "
 )
 header ""
@@ -1255,12 +1255,12 @@ value "BASE_ADDR"
 (GiElement
 name "Nbps_default"
 type "integer range 63 downto 1"
-value "10"
+value "Nbps_default"
 )
 (GiElement
 name "NC0_default"
 type "integer"
-value "10**7"
+value "NC0_default"
 )
 ]
 )
@@ -2580,12 +2580,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "64,51,1083,741"
-viewArea "-1053,-1053,77795,52476"
+windowSize "64,51,1084,741"
+viewArea "-1100,-1100,78100,52600"
 cachedDiagramExtent "0,0,68000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 547,0
+lastUid 600,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4112,6 +4112,22 @@ value "x\"0070\""
 )
 uid 546,0
 )
+*171 (LogGeneric
+generic (GiElement
+name "Nbps_default"
+type "integer range 63 downto 1"
+value "10"
+)
+uid 597,0
+)
+*172 (LogGeneric
+generic (GiElement
+name "NC0_default"
+type "integer"
+value "10**7"
+)
+uid 599,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -4119,7 +4135,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 95,0
 optionalChildren [
-*171 (Sheet
+*173 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -4136,43 +4152,55 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *172 (MRCItem
+emptyMRCItem *174 (MRCItem
 litem &157
-pos 2
+pos 4
 dimension 20
 )
 uid 97,0
 optionalChildren [
-*173 (MRCItem
+*175 (MRCItem
 litem &158
 pos 0
 dimension 20
 uid 98,0
 )
-*174 (MRCItem
+*176 (MRCItem
 litem &159
 pos 1
 dimension 23
 uid 99,0
 )
-*175 (MRCItem
+*177 (MRCItem
 litem &160
 pos 2
 hidden 1
 dimension 20
 uid 100,0
 )
-*176 (MRCItem
+*178 (MRCItem
 litem &169
 pos 0
 dimension 20
 uid 296,0
 )
-*177 (MRCItem
+*179 (MRCItem
 litem &170
 pos 1
 dimension 20
 uid 547,0
+)
+*180 (MRCItem
+litem &171
+pos 2
+dimension 20
+uid 598,0
+)
+*181 (MRCItem
+litem &172
+pos 3
+dimension 20
+uid 600,0
 )
 ]
 )
@@ -4185,43 +4213,43 @@ textAngle 90
 )
 uid 101,0
 optionalChildren [
-*178 (MRCItem
+*182 (MRCItem
 litem &161
 pos 0
 dimension 20
 uid 102,0
 )
-*179 (MRCItem
+*183 (MRCItem
 litem &163
 pos 1
 dimension 50
 uid 103,0
 )
-*180 (MRCItem
+*184 (MRCItem
 litem &164
 pos 2
 dimension 100
 uid 104,0
 )
-*181 (MRCItem
+*185 (MRCItem
 litem &165
 pos 3
 dimension 100
 uid 105,0
 )
-*182 (MRCItem
+*186 (MRCItem
 litem &166
 pos 4
 dimension 50
 uid 106,0
 )
-*183 (MRCItem
+*187 (MRCItem
 litem &167
 pos 5
 dimension 50
 uid 107,0
 )
-*184 (MRCItem
+*188 (MRCItem
 litem &168
 pos 6
 dimension 80

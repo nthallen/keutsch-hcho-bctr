@@ -38,11 +38,13 @@ ENTITY BCtr_syscon_wrapper IS
     clk       : IN     std_logic;
     Data_i    : OUT    std_logic_vector (15 DOWNTO 0);
     Fail      : OUT    std_logic;
-    temp_scl  : OUT    std_logic;
+    temp_scl_o : OUT    std_logic;
+    temp_scl_i : IN    std_logic;
     temp_sda_o : OUT   std_logic;
     temp_sda_i : IN    std_logic;
-    aio_scl   : OUT    std_logic;
-    aio_sdaoe : OUT    std_logic;
+    aio_scl_o : OUT    std_logic;
+    aio_scl_i : IN     std_logic;
+    aio_sda_o : OUT    std_logic;
     aio_sda_i : IN     std_logic;
     htr1_cmd  : OUT    std_logic;
     htr2_cmd  : OUT    std_logic;
@@ -107,11 +109,13 @@ ARCHITECTURE struct OF BCtr_syscon_wrapper IS
     PMTs      : IN     std_logic_vector (N_CTR_CHANNELS-1 DOWNTO 0);
     Trigger   : IN     std_logic;
     clk       : IN     std_logic;
-    temp_scl  : OUT    std_logic;
+    temp_scl_o : OUT    std_logic;
+    temp_scl_i : IN    std_logic;
     temp_sda_o : OUT   std_logic;
     temp_sda_i : IN    std_logic;
-    aio_scl   : OUT    std_logic;
-    aio_sdaoe : OUT    std_logic;
+    aio_scl_o  : OUT    std_logic;
+    aio_scl_i : IN     std_logic;
+    aio_sda_o : OUT    std_logic;
     aio_sda_i : IN     std_logic;
     htr1_cmd : OUT    std_logic;
     htr2_cmd : OUT    std_logic;
@@ -150,11 +154,13 @@ BEGIN
       Fail     => Fail_int,
       Ctrl     => Ctrl,
       Addr     => Addr,
-      temp_scl => temp_scl,
+      temp_scl_o => temp_scl_o,
+      temp_scl_i => temp_scl_i,
       temp_sda_o => temp_sda_o,
       temp_sda_i => temp_sda_i,
-      aio_scl  => aio_scl,
-      aio_sdaoe => aio_sdaoe,
+      aio_scl_o => aio_scl_o,
+      aio_scl_i => aio_scl_i,
+      aio_sda_o => aio_sda_o,
       aio_sda_i => aio_sda_i,
       htr1_cmd => htr1_cmd,
       htr2_cmd => htr2_cmd,

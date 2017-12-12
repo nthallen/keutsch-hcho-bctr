@@ -19,7 +19,6 @@ ENTITY i2c_slave_bits IS
       err   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
       rst   : IN     std_logic;
-      scl   : IN     std_logic;
       start : IN     std_logic;
       stop  : IN     std_logic;
       en    : IN     std_logic;
@@ -27,7 +26,10 @@ ENTITY i2c_slave_bits IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
-      sda   : INOUT  std_logic
+      scl_o : OUT    std_logic;
+      scl_i : IN     std_logic;
+      sda_o : OUT    std_logic;
+      sda_i : IN     std_logic
    );
 
 -- Declarations
@@ -392,39 +394,41 @@ BEGIN
    -----------------------------------------------------------------
    output_proc : PROCESS ( 
       current_state,
-      scl,
-      sda,
+      scl_i,
+      sda_i,
       sr
    )
    -----------------------------------------------------------------
    BEGIN
       -- Default Assignment
       RE <= 'L';
-      sda <= 'Z';
+      -- sda <= 'Z';
       -- Default Assignment To Internals
-      sclq <= To_X01(scl);
-      sdaq <= To_X01(sda);
+      sclq <= To_X01(scl_i);
+      sdaq <= To_X01(sda_i);
 
       -- Combined Actions
       IF (en = '1') THEN
         CASE current_state IS
            WHEN i2cs_addr2 => 
-              sda <= '0';
+              sda_o <= '0';
            WHEN i2cs_addr3 => 
-              sda <= '0';
+              sda_o <= '0';
            WHEN i2cs_w2 => 
-              sda <= '0';
+              sda_o <= '0';
            WHEN i2cs_w3 => 
-              sda <= '0';
+              sda_o <= '0';
            WHEN i2cs_r1 => 
-              sda <= sr(7);
+              sda_o <= sr(7);
            WHEN i2cs_r2 => 
-              sda <= sr(7);
+              sda_o <= sr(7);
            WHEN i2cs_w6 => 
-              sda <= '0';
+              sda_o <= '0';
            WHEN OTHERS =>
-              NULL;
+              sda_o <= '1';
         END CASE;
+      ELSE
+        sda_o <= '1';
       END IF;
    END PROCESS output_proc;
  
@@ -433,4 +437,5 @@ BEGIN
    WE <= WE_cld;
    wdata <= wdata_cld;
    rdreq <= rdreq_cld;
+   scl_o <= '1';
 END fsm;

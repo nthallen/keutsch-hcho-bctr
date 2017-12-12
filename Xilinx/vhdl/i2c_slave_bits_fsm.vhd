@@ -19,7 +19,6 @@ ENTITY i2c_slave_bits IS
       err   : IN     std_logic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
       rst   : IN     std_logic;
-      scl   : IN     std_logic;
       start : IN     std_logic;
       stop  : IN     std_logic;
       en    : IN     std_logic;
@@ -27,6 +26,8 @@ ENTITY i2c_slave_bits IS
       wdata : OUT    std_logic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
+      scl_o : OUT    std_logic;
+      scl_i : IN     std_logic;
       sda_o : OUT    std_logic;
       sda_i : IN     std_logic
    );
@@ -393,7 +394,7 @@ BEGIN
    -----------------------------------------------------------------
    output_proc : PROCESS ( 
       current_state,
-      scl,
+      scl_i,
       sda_i,
       sr
    )
@@ -403,7 +404,7 @@ BEGIN
       RE <= 'L';
       -- sda <= 'Z';
       -- Default Assignment To Internals
-      sclq <= To_X01(scl);
+      sclq <= To_X01(scl_i);
       sdaq <= To_X01(sda_i);
 
       -- Combined Actions
@@ -436,4 +437,5 @@ BEGIN
    WE <= WE_cld;
    wdata <= wdata_cld;
    rdreq <= rdreq_cld;
+   scl_o <= '1';
 END fsm;

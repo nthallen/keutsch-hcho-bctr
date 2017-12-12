@@ -20,29 +20,32 @@ ENTITY BCtr_syscon IS
       ADDR_WIDTH    : integer range 16 downto 8     := 8;
       FAIL_WIDTH    : integer range 16 downto 1     := 1;
       SW_WIDTH      : integer range 16 DOWNTO 0     := 1;
-      N_CTR_CHANNELS : integer range 4 DOWNTO 0     := 2
+      N_CTR_CHANNELS : integer range 4 DOWNTO 0     := 2;
+      Nbps_default  : integer range 63 downto 1     := 10
     );
     PORT (
-      clk      : IN std_logic;
-      PMTs     : IN std_logic_vector(N_CTR_CHANNELS-1 DOWNTO 0);
-      Trigger  : IN std_logic;
-      Fail     : OUT std_logic;
-      Ctrl     : IN std_logic_vector(6 DOWNTO 0);
-      Addr     : IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
-      Data_i   : OUT std_logic_vector(15 DOWNTO 0);
-      Data_o   : IN std_logic_vector(15 DOWNTO 0);
-      Status   : OUT std_logic_vector(3 DOWNTO 0);
-      temp_scl : INOUT std_logic;
-      temp_sda : INOUT std_logic;
-      aio_scl  : INOUT std_logic;
-      aio_sda  : INOUT std_logic;
-      aio_scl_mon  : OUT std_logic;
-      aio_sda_mon  : OUT std_logic;
-      htr1_cmd : OUT std_logic;
-      htr2_cmd : OUT std_logic;
-      SimTrig  : OUT std_logic;
-      SimPMT   : OUT std_logic;
-      LDAC     : OUT std_logic
+      clk       : IN std_logic;
+      PMTs      : IN std_logic_vector(N_CTR_CHANNELS-1 DOWNTO 0);
+      Trigger   : IN std_logic;
+      Fail      : OUT std_logic;
+      Ctrl      : IN std_logic_vector(6 DOWNTO 0);
+      Addr      : IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      Data_i    : OUT std_logic_vector(15 DOWNTO 0);
+      Data_o    : IN std_logic_vector(15 DOWNTO 0);
+      Status    : OUT std_logic_vector(3 DOWNTO 0);
+      temp_scl_o  : OUT std_logic;
+      temp_scl_i  : IN  std_logic;
+      temp_sda_o  : OUT std_logic;
+      temp_sda_i  : IN  std_logic;
+      aio_scl_o : OUT   std_logic;
+      aio_scl_i : IN    std_logic;
+      aio_sda_o : OUT   std_logic;
+      aio_sda_i : IN    std_logic;
+      htr1_cmd  : OUT std_logic;
+      htr2_cmd  : OUT std_logic;
+      SimTrig   : OUT std_logic;
+      SimPMT    : OUT std_logic;
+      LDAC      : OUT std_logic
     );
 END ENTITY BCtr_syscon;
 
@@ -187,8 +190,10 @@ ARCHITECTURE beh OF BCtr_syscon IS
       rst    : IN     std_logic;
       ExpAck : OUT    std_logic;
       RData  : OUT    std_logic_vector(15 DOWNTO 0);
-      scl    : INOUT  std_logic;
-      sda    : INOUT  std_logic
+      scl_o  : OUT    std_logic;
+      scl_i  : IN     std_logic;
+      sda_o  : OUT    std_logic;
+      sda_i  : IN     std_logic
     );
   END COMPONENT temp_top;
   
@@ -208,11 +213,11 @@ ARCHITECTURE beh OF BCtr_syscon IS
       wData   : IN     std_logic_vector(15 DOWNTO 0);
       ExpAck  : OUT    std_logic;
       rData   : OUT    std_logic_vector(15 DOWNTO 0);
-      scl     : INOUT  std_logic;
-      sda     : INOUT  std_logic;
+      scl_o   : OUT    std_logic;
+      scl_i   : IN     std_logic;
+      sda_o   : OUT    std_logic;
+      sda_i   : IN     std_logic;
       idxAck  : OUT    std_logic;
-      scl_mon : OUT std_logic;
-      sda_mon : OUT std_logic;
       htr1_cmd : OUT std_logic;
       htr2_cmd : OUT std_logic
     );
@@ -241,7 +246,9 @@ ARCHITECTURE beh OF BCtr_syscon IS
   COMPONENT ips_sbbd
     GENERIC (
       ADDR_WIDTH : integer range 16 downto 8 := 8;
-      BASE_ADDR  : unsigned(15 downto 0)     := x"0070"
+      BASE_ADDR  : unsigned(15 downto 0)     := x"0070";
+      Nbps_default : integer range 63 downto 1 := 10;
+      NC0_default  : integer                   := 10**7
     );
     PORT (
       ExpAddr  : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
@@ -385,8 +392,10 @@ BEGIN
       rst    => ExpReset,
       ExpAck => ExpAck(2),
       RData  => RData(47 DOWNTO 32),
-      scl    => temp_scl,
-      sda    => temp_sda
+      scl_o  => temp_scl_o,
+      scl_i  => temp_scl_i,
+      sda_o  => temp_sda_o,
+      sda_i  => temp_sda_i
     );
 
   aio : i2c_aio
@@ -406,10 +415,10 @@ BEGIN
       wData   => WData,
       ExpAck  => ExpAck(3),
       rData   => RData(16*3+15 DOWNTO 16*3),
-      scl     => aio_scl,
-      sda     => aio_sda,
-      scl_mon => aio_scl_mon,
-      sda_mon => aio_sda_mon,
+      scl_o   => aio_scl_o,
+      scl_i   => aio_scl_i,
+      sda_o   => aio_sda_o,
+      sda_i   => aio_sda_i,
       htr1_cmd => htr1_cmd,
       htr2_cmd => htr2_cmd
     );
@@ -449,7 +458,9 @@ BEGIN
   ips_gen : ips_sbbd
     GENERIC MAP (
       ADDR_WIDTH => ADDR_WIDTH,
-      BASE_ADDR  => x"0070"
+      BASE_ADDR  => x"0070",
+      Nbps_default => Nbps_default,
+      NC0_default  => (10**8)/Nbps_default
     )
     PORT MAP (
       ExpAddr  => ExpAddr,

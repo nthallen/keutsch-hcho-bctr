@@ -15,9 +15,10 @@ ENTITY ads1115 IS
   PORT (
     clk : IN std_logic;
     rst : IN std_logic;
-    sda_o : OUT std_logic;
+    scl_o : OUT std_logic;
+    scl_i : IN std_logic;
     sda_i : IN std_logic;
-    scl : IN std_logic
+    sda_o : OUT std_logic
   );
 END ENTITY ads1115;
 
@@ -54,15 +55,16 @@ ARCHITECTURE sim OF ads1115 IS
          clk   : IN     std_logic;
          rdata : IN     std_logic_vector(7 DOWNTO 0);
          rst   : IN     std_logic;
-         scl   : IN     std_logic;
          en    : IN     std_logic;
          WE    : OUT    std_logic;
          start : OUT    std_logic;
          stop  : OUT    std_logic;
          wdata : OUT    std_logic_vector(7 DOWNTO 0);
          RE    : INOUT  std_logic;
-         sda_o : OUT    std_logic;
+         scl_i : IN     std_logic;
+         scl_o : OUT    std_logic;
          sda_i : IN     std_logic;
+         sda_o : OUT    std_logic;
          rdreq : OUT    std_logic
       );
    END COMPONENT i2c_slave;
@@ -76,13 +78,14 @@ BEGIN
       clk   => clk,
       rdata => rdata,
       rst   => rst,
-      scl   => scl,
       en    => '1',
       WE    => WE,
       start => start,
       stop  => stop,
       wdata => wdata,
       RE    => RE,
+      scl_i => scl_i,
+      scl_o => scl_o,
       sda_o => sda_o,
       sda_i => sda_i,
       rdreq => rdreq

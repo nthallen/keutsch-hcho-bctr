@@ -27,37 +27,39 @@ ENTITY BCtr2Ctrl IS
     FIFO_ADDR_WIDTH : integer range 10 downto 1 := 8
   );
   PORT( 
-    En         : IN     std_logic;
-    NA         : IN     unsigned (15 DOWNTO 0);
-    TrigSeen   : IN     std_logic;
-    clk        : IN     std_logic;
-    rst        : IN     std_logic;
-    CntEn      : OUT    std_logic;
-    DRdy       : OUT    std_logic;
-    TrigArm    : OUT    std_logic;
-    NArd       : OUT    std_logic;
-    TrigClr    : OUT    std_logic;
-    TrigOE     : OUT    std_logic;
-    first_col  : OUT    std_logic;
-    first_row  : OUT    std_logic;
-    FBRE       : OUT    std_logic;
-    EnA        : OUT    std_logic;
-    NTriggered : OUT    std_logic_vector (31 DOWNTO 0);
-    LaserVOut  : OUT    std_logic_vector (15 DOWNTO 0);
-    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-    IPnumOut   : OUT    std_logic_vector (5 DOWNTO 0);
-    LaserV     : IN     std_logic_vector (15 DOWNTO 0);
-    IPnum      : IN     std_logic_vector (5 DOWNTO 0);
-    IPS        : IN     std_logic;
-    FBEmpty    : IN     std_logic;
-    RptEmpty   : IN     std_logic;
-    rstA       : OUT    std_logic;
-    rstB       : OUT    std_logic;
-    FBFull     : IN     std_logic;
-    FBWE       : OUT    std_logic;
-    Expired    : OUT    std_logic;
-    NoData     : OUT    std_logic;
-    txing      : IN     std_logic
+    En          : IN     std_logic;
+    NA          : IN     unsigned (15 DOWNTO 0);
+    TrigSeen    : IN     std_logic;
+    clk         : IN     std_logic;
+    rst         : IN     std_logic;
+    CntEn       : OUT    std_logic;
+    DRdy        : OUT    std_logic;
+    TrigArm     : OUT    std_logic;
+    NArd        : OUT    std_logic;
+    TrigClr     : OUT    std_logic;
+    TrigOE      : OUT    std_logic;
+    first_col   : OUT    std_logic;
+    first_row   : OUT    std_logic;
+    FBRE        : OUT    std_logic;
+    EnA         : OUT    std_logic;
+    NTriggered  : OUT    std_logic_vector (31 DOWNTO 0);
+    LaserVOut   : OUT    std_logic_vector (15 DOWNTO 0);
+    NBtot       : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    IPnumOut    : OUT    std_logic_vector (5 DOWNTO 0);
+    LaserV      : IN     std_logic_vector (15 DOWNTO 0);
+    IPnum       : IN     std_logic_vector (5 DOWNTO 0);
+    IPS         : IN     std_logic;
+    FBEmpty     : IN     std_logic;
+    RptEmpty    : IN     std_logic;
+    rstA        : OUT    std_logic;
+    rstB        : OUT    std_logic;
+    FBFull      : IN     std_logic;
+    FBWE        : OUT    std_logic;
+    Expired     : OUT    std_logic;
+    NoData      : OUT    std_logic;
+    txing       : IN     std_logic;
+    ScanStat    : IN     std_logic_vector (4 DOWNTO 0);
+    ScanStatOut : OUT    std_logic_vector (4 DOWNTO 0)
   );
 
 -- Declarations
@@ -96,8 +98,10 @@ ARCHITECTURE fsm OF BCtr2Ctrl IS
    SIGNAL TrigArm_cld : std_logic;
    SIGNAL cur_LaserV : std_logic_vector(15 DOWNTO 0);
    SIGNAL cur_IPnum : std_logic_vector(5 DOWNTO 0);
+   SIGNAL cur_ScanStat : std_logic_vector(4 DOWNTO 0);
    SIGNAL exp_LaserV : std_logic_vector(15 DOWNTO 0);
    SIGNAL exp_IPnum : std_logic_vector(5 DOWNTO 0);
+   SIGNAL exp_ScanStat : std_logic_vector(4 DOWNTO 0);
    SIGNAL expired_2 : std_logic; -- expired while reading
    SIGNAL expired_3 : std_logic; -- expired while expired: give up
    SIGNAL IPSseen : std_logic;
@@ -136,9 +140,14 @@ BEGIN
         NTriggered <= (others => '0');
         LaserVOut <= (others => '0');
         IPnumOut <= (others => '0');
+        ScanStatOut <= (others => '0');
+        cur_LaserV <= (others => '0');
+        cur_IPnum <= (others => '0');
+        cur_ScanStat <= (others => '0');
         exp_Ntrig <= (others => '0');
         exp_LaserV <= (others => '0');
         exp_IPnum <= (others => '0');
+        exp_ScanStat <= (others => '0');
         NoData_cld <= '0';
         nxtEnA := '0';
       ELSE
@@ -162,6 +171,7 @@ BEGIN
               DRdy_cld <= '1';
               LaserVOut <= cur_LaserV;
               IPnumOut <= cur_IPnum;
+              ScanStatOut <= cur_ScanStat;
               NTriggered <= std_logic_vector(
                 resize(Ntrig_cnt,NTriggered'length));
               IF nxtEnA = '1' THEN
@@ -187,6 +197,7 @@ BEGIN
               nxtEnA := not(EnA);
               LaserVOut <= cur_LaserV;
               IPnumOut <= cur_IPnum;
+              ScanStatOut <= cur_ScanStat;
               NTriggered <= std_logic_vector(
                 resize(Ntrig_cnt,NTriggered'length));
               IF Expired = '1' THEN
@@ -205,6 +216,7 @@ BEGIN
               Expired <= '1';
               exp_LaserV <= cur_LaserV;
               exp_IPnum <= cur_IPnum;
+              exp_ScanStat <= cur_ScanStat;
               exp_Ntrig <= Ntrig_cnt;
             ELSIF txing = '1' THEN
               -- transmitting, so can't touch the rpt buffer
@@ -212,6 +224,7 @@ BEGIN
               nxtEnA := EnA;
               expired_2 <= '1';
               exp_LaserV <= cur_LaserV;
+              exp_ScanStat <= cur_ScanStat;
               exp_IPnum <= cur_IPnum;
               exp_Ntrig <= Ntrig_cnt;
             END IF;
@@ -280,6 +293,7 @@ BEGIN
           IPSseen <= '1';
           cur_LaserV <= LaserV;
           cur_IPnum <= IPnum;
+          cur_ScanStat <= ScanStat;
         END IF;
         
         IF txing = '1' THEN

@@ -19,24 +19,24 @@ ENTITY BCtr2_data IS
     FIFO_WIDTH      : integer range 128 downto 1 := 48
   );
   PORT( 
-    CfgStatus  : IN     std_logic_vector (5 DOWNTO 0);
-    DRdy       : IN     std_logic;
-    DataAddr   : IN     std_logic_vector (1 DOWNTO 0);
-    En         : IN     std_logic;
-    Expired    : IN     std_logic;
-    IPnumOut   : IN     std_logic_vector (5 DOWNTO 0);
-    LaserVOut  : IN     std_logic_vector (15 DOWNTO 0);
-    NBtot      : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
-    NTriggered : IN     std_logic_vector (31 DOWNTO 0);
-    NoData     : IN     std_logic;
-    RdEn       : IN     std_logic;
-    RptData    : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
-    ScanStat   : IN     std_logic_vector (4 DOWNTO 0);
-    clk        : IN     std_logic;
-    rst        : IN     std_logic;
-    DData      : OUT    std_logic_vector (15 DOWNTO 0);
-    RptRE      : OUT    std_logic;
-    txing      : OUT    std_logic
+    CfgStatus   : IN     std_logic_vector (5 DOWNTO 0);
+    DRdy        : IN     std_logic;
+    DataAddr    : IN     std_logic_vector (1 DOWNTO 0);
+    En          : IN     std_logic;
+    Expired     : IN     std_logic;
+    IPnumOut    : IN     std_logic_vector (5 DOWNTO 0);
+    LaserVOut   : IN     std_logic_vector (15 DOWNTO 0);
+    NBtot       : IN     unsigned (FIFO_ADDR_WIDTH-1 DOWNTO 0);
+    NTriggered  : IN     std_logic_vector (31 DOWNTO 0);
+    NoData      : IN     std_logic;
+    RdEn        : IN     std_logic;
+    RptData     : IN     std_logic_vector (FIFO_WIDTH-1 DOWNTO 0);
+    ScanStatOut : IN     std_logic_vector (4 DOWNTO 0);
+    clk         : IN     std_logic;
+    rst         : IN     std_logic;
+    DData       : OUT    std_logic_vector (15 DOWNTO 0);
+    RptRE       : OUT    std_logic;
+    txing       : OUT    std_logic
   );
 
 -- Declarations
@@ -257,7 +257,7 @@ BEGIN
         WHEN SU_LATCH =>
           RptRE <= '0';
           IPnum_int <= IPnumOut;
-          ScanStat_int <= ScanStat;
+          ScanStat_int <= ScanStatOut;
           LaserV_int <= LaserVOut;
           NTrig_int <= NTriggered;
           setup_state <= SU_WAIT;
