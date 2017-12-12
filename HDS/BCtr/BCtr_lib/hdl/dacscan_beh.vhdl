@@ -84,6 +84,7 @@ ARCHITECTURE beh OF dacscan IS
   SIGNAL NPtsOffline_en : std_logic;
   SIGNAL NPtsChop : unsigned(15 DOWNTO 0);
   SIGNAL PosOVF : std_logic;
+  SIGNAL BdWrEn_int : std_logic;
 BEGIN
   addr : PROCESS (ExpAddr, current_state) IS
     VARIABLE offset : unsigned(ADDR_WIDTH-1 DOWNTO 0);
@@ -116,7 +117,7 @@ BEGIN
       WHEN 7 => Dither_en <= '1';
       WHEN 8 => NPtsOnline_en <= '1';
       WHEN 9 => NPtsOffline_en <= '1';
-      WHEN others => BdEn <= '0';
+      WHEN others => BdEn <= '0'; BdWrEn <= '0';
     END CASE;
   END PROCESS;
   
