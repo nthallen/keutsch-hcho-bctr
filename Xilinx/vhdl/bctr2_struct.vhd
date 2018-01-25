@@ -70,7 +70,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 -- LIBRARY BCtr_lib;
-USE BCtr_lib.ALL;
+-- USE BCtr_lib.ALL;
 
 
 ARCHITECTURE struct OF BCtr2 IS
