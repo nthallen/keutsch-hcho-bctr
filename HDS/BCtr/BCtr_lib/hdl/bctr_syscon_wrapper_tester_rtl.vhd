@@ -195,6 +195,7 @@ BEGIN
       variable NTrig : unsigned(31 downto 0);
       variable row_cts : integer;
       variable NWords : unsigned(15 downto 0);
+      variable LasPwr : unsigned(31 downto 0);
     begin
       sbrd(ctr_base,'1');
       while ReadResult(1) = '0' AND ReadResult(10) = '0' loop
@@ -225,8 +226,8 @@ BEGIN
       write(line1, string'(": "));
       -- assert NWords = 4 report "Expected NWords=4 after Expired" severity error;
       IF NWords > 0 THEN
-        assert NWords >= 4
-          report "Expected NWords to be 0 or >= 4"
+        assert NWords >= 6 -- For late build 10 and up
+          report "Expected NWords to be 0 or >= 6"
           severity error;
         NWords := NWords - 1;
         sbrd(ctr_base+2,'1');
@@ -270,6 +271,19 @@ BEGIN
         sbrd(ctr_base+2,'1');
         write(line1, string'(" LV:"));
         write(line1, to_integer(unsigned(ReadResult)));
+      END IF;
+      IF NWords > 0 THEN
+        NWords := NWords - 2;
+        sbrd(ctr_base+2,'1');
+        LasPwr(15 downto 0) := unsigned(ReadResult);
+        sbrd(ctr_base+2,'1');
+        LasPwr(31 downto 16) := unsigned(ReadResult);
+        write(line1, string'(" LP:"));
+        hwrite(line1, LasPwr);
+        --write(line1, LasPwr);
+        IF BctrStatus(9) = '1' THEN
+          write(line1, string'("*"));
+        END IF;
       END IF;
       writeline(output, line1);
       IF NWords > 0 THEN
