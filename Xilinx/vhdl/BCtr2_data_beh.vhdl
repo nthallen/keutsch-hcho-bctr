@@ -34,6 +34,9 @@ ENTITY BCtr2_data IS
     ScanStatOut : IN     std_logic_vector (4 DOWNTO 0);
     clk         : IN     std_logic;
     rst         : IN     std_logic;
+    LasPwrIn    : IN     std_logic_vector (31 DOWNTO 0);
+    LasPwrRdy   : IN     std_logic;
+    LasPwrAck   : OUT    std_logic;
     DData       : OUT    std_logic_vector (15 DOWNTO 0);
     RptRE       : OUT    std_logic;
     txing       : OUT    std_logic
@@ -49,7 +52,7 @@ ARCHITECTURE beh OF BCtr2_data IS
   );
   SIGNAL current_state : State_t;
   TYPE TX_t IS (
-    TX_IPNUM, TX_NTLSB, TX_NTMSB, TX_LASERV, TX_DATA
+    TX_IPNUM, TX_NTLSB, TX_NTMSB, TX_LASERV, TX_LPLSW, TX_LPMSW, TX_DATA
   );
   SIGNAL current_tx : TX_t;
   TYPE setup_t IS (
@@ -61,6 +64,7 @@ ARCHITECTURE beh OF BCtr2_data IS
   SIGNAL IData : std_logic_vector (N_CHANNELS*CTR_WIDTH-1 DOWNTO 0);
   CONSTANT CTR_WORDS : integer := (CTR_WIDTH+15)/16;
   CONSTANT CTR_LAST_WIDTH : integer := CTR_WIDTH-((CTR_WORDS-1)*16);
+  CONSTANT FIFO_HDR_LEN : integer := 6;
   SIGNAL DRdy_int : std_logic;
   SIGNAL word_cnt : integer range CTR_WORDS-1 DOWNTO 0;
   SIGNAL chan_cnt : integer range N_CHANNELS-1 DOWNTO 0;
@@ -72,6 +76,8 @@ ARCHITECTURE beh OF BCtr2_data IS
   SIGNAL NTrig_int : std_logic_vector (31 DOWNTO 0);
   SIGNAL Expired_int : std_logic;
   SIGNAL NoData_int : std_logic;
+  SIGNAL LPfresh : std_logic;
+  SIGNAL LP_int : std_logic_vector (31 DOWNTO 0);
 BEGIN
   PROCESS (clk) IS
     VARIABLE NW : unsigned(15 DOWNTO 0);
@@ -90,12 +96,15 @@ BEGIN
         LaserV_int <= (others => '0');
         NTrig_int <= (others => '0');
         IData <= (others => '0');
+        LP_int <= (others => '0');
         DRdy_int <= '0';
         word_cnt <= 0;
         chan_cnt <= 0;
         bin_cnt <= (others => '0');
         Expired_int <= '0';
         NoData_int <= '0';
+        LPfresh <= '0';
+        LasPwrAck <= '0';
       ELSE
         IF DRdy = '1' OR NWremaining > 0 THEN
           DRdy_int <= '1';
@@ -114,13 +123,13 @@ BEGIN
               IF current_tx = TX_IPNUM THEN
                 IF tx_active = '1' THEN
                   IF Expired_int = '1' OR NoData_int = '1' THEN
-                    NW := to_unsigned(4,NW'length);
+                    NW := to_unsigned(FIFO_HDR_LEN,NW'length);
                     NWremaining <= NW;
                     DData <= std_logic_vector(NW);
                     -- Expired_int <= Expired;
                     -- setup_state <= SU_LATCH;
                   ELSIF DRdy = '1' THEN
-                    NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + 4,16);
+                    NW := resize(N_CHANNELS * CTR_WORDS * (NBtot+1) + FIFO_HDR_LEN,16);
                     NWremaining <= NW;
                     DData <= std_logic_vector(NW);
                     bin_cnt <= NBtot;
@@ -157,9 +166,11 @@ BEGIN
                     ( Expired_int = '1' OR NoData_int = '1' OR DRdy_int = '1') THEN
                   DData(15) <= Expired_int;
                   DData(14 downto 10) <= ScanStat_int;
-                  DData(9 downto 6) <= (others => '0');
+                  DData(9) <= LPfresh;
+                  DData(8 downto 6) <= (others => '0');
                   DData(5 downto 0) <= IPnum_int;
                   NWremaining <= NWremaining - 1;
+                  LPfresh <= '0';
                   current_tx <= TX_NTLSB;
                 ELSE
                   DData <= X"0000";
@@ -175,6 +186,14 @@ BEGIN
                 current_tx <= TX_LASERV;
               WHEN TX_LASERV =>
                 DData <= LaserV_int;
+                NWremaining <= NWremaining - 1;
+                current_tx <= TX_LPLSW;
+              WHEN TX_LPLSW =>
+                DData <= LP_int(15 DOWNTO 0);
+                NWremaining <= NWremaining - 1;
+                current_tx <= TX_LPMSW;
+              WHEN TX_LPMSW =>
+                DData <= LP_int(31 DOWNTO 16);
                 NWremaining <= NWremaining - 1;
                 IF Expired_int = '1' OR NoData_int = '1' THEN
                   tx_active <= '0';
@@ -260,8 +279,14 @@ BEGIN
           ScanStat_int <= ScanStatOut;
           LaserV_int <= LaserVOut;
           NTrig_int <= NTriggered;
+          if (LasPwrRdy = '1') then
+            LP_int <= LasPwrIn;
+            LPfresh <= '1';
+            LasPwrAck <= '1';
+          end if;
           setup_state <= SU_WAIT;
         WHEN SU_WAIT =>
+          LasPwrAck <= '0';
           IF tx_active = '0' THEN
             setup_state <= SU_IDLE;
           ELSE

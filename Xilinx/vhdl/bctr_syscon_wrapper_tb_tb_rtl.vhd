@@ -246,7 +246,7 @@ BEGIN
 
     slave : i2c_slave
       GENERIC MAP (
-        I2C_ADDR => "0010100"
+        I2C_ADDR => "0010101" -- Board "2" (LasPwr)
       )
       PORT MAP (
         clk   => clk,

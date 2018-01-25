@@ -73,6 +73,10 @@ ARCHITECTURE beh OF BCtr_syscon IS
   SIGNAL idxAck        : std_logic;
   SIGNAL LaserV        : std_logic_vector(15 DOWNTO 0);
   SIGNAL ScanStat      : std_logic_vector (4 DOWNTO 0);
+  SIGNAL tap_ack2      : std_logic;
+  SIGNAL tap_ack2_ign  : std_logic;
+  SIGNAL tap_rdy2      : std_logic;
+  SIGNAL tap_data2     : std_logic_vector(31 DOWNTO 0);
   
   COMPONENT syscon
     GENERIC (
@@ -146,20 +150,23 @@ ARCHITECTURE beh OF BCtr_syscon IS
       FIFO_WIDTH      : integer range 128 downto 1 := 16
     );
     PORT( 
-      ExpAddr  : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
-      ExpRd    : IN     std_logic;
-      ExpReset : IN     std_logic;
-      ExpWr    : IN     std_logic;
-      PMTs     : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
-      Trigger  : IN     std_logic;
-      WData    : IN     std_logic_vector (15 DOWNTO 0);
-      clk      : IN     std_logic;
-      ExpAck   : OUT    std_logic;
-      RData    : OUT    std_logic_vector (15 DOWNTO 0);
-      IPS      : IN     std_logic;
-      IPnum    : IN     std_logic_vector (5 DOWNTO 0);
-      LaserV   : IN     std_logic_vector (15 DOWNTO 0);
-      ScanStat : IN     std_logic_vector (4 DOWNTO 0)
+      ExpAddr   : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd     : IN     std_logic;
+      ExpReset  : IN     std_logic;
+      ExpWr     : IN     std_logic;
+      PMTs      : IN     std_logic_vector (N_CHANNELS-1 DOWNTO 0);
+      Trigger   : IN     std_logic;
+      WData     : IN     std_logic_vector (15 DOWNTO 0);
+      clk       : IN     std_logic;
+      ExpAck    : OUT    std_logic;
+      RData     : OUT    std_logic_vector (15 DOWNTO 0);
+      IPS       : IN     std_logic;
+      IPnum     : IN     std_logic_vector (5 DOWNTO 0);
+      LasPwrIn  : IN     std_logic_vector (31 DOWNTO 0);
+      LasPwrRdy : IN     std_logic;
+      LasPwrAck : OUT    std_logic;
+      LaserV    : IN     std_logic_vector (15 DOWNTO 0);
+      ScanStat  : IN     std_logic_vector (4 DOWNTO 0)
     );
   END COMPONENT BCtr2_sbbd ;
 
@@ -183,17 +190,20 @@ ARCHITECTURE beh OF BCtr_syscon IS
       ADDR_WIDTH : integer range 16 downto 8 := 8
     );
     PORT (
-      Addr   : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
-      ExpRd  : IN     std_logic;
-      ExpWr  : IN     std_logic;
-      clk    : IN     std_logic;
-      rst    : IN     std_logic;
-      ExpAck : OUT    std_logic;
-      RData  : OUT    std_logic_vector(15 DOWNTO 0);
-      scl_o  : OUT    std_logic;
-      scl_i  : IN     std_logic;
-      sda_o  : OUT    std_logic;
-      sda_i  : IN     std_logic
+      Addr      : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+      ExpRd     : IN     std_logic;
+      ExpWr     : IN     std_logic;
+      clk       : IN     std_logic;
+      rst       : IN     std_logic;
+      tap_ack2  : IN     std_logic;
+      ExpAck    : OUT    std_logic;
+      RData     : OUT    std_logic_vector(15 DOWNTO 0);
+      scl_o     : OUT    std_logic;
+      scl_i     : IN     std_logic;
+      sda_o     : OUT    std_logic;
+      sda_i     : IN     std_logic;
+      tap_data2 : OUT    std_logic_vector (31 DOWNTO 0);
+      tap_rdy2  : OUT    std_logic
     );
   END COMPONENT temp_top;
   
@@ -350,7 +360,10 @@ BEGIN
       IPS      => IPS,
       IPnum    => IPnum,
       LaserV   => LaserV,
-      ScanStat => ScanStat
+      ScanStat => ScanStat,
+      LasPwrAck => tap_ack2_ign,
+      LasPwrRdy => tap_rdy2,
+      LasPwrIn  => tap_data2
     );
 
   binctr : BCtr2_sbbd
@@ -376,7 +389,10 @@ BEGIN
       IPS      => IPS,
       IPnum    => IPnum,
       LaserV   => LaserV,
-      ScanStat => ScanStat
+      ScanStat => ScanStat,
+      LasPwrAck => tap_ack2,
+      LasPwrRdy => tap_rdy2,
+      LasPwrIn  => tap_data2
     );
 
   temps : temp_top
@@ -385,17 +401,20 @@ BEGIN
       ADDR_WIDTH => ADDR_WIDTH
     )
     PORT MAP (
-      Addr   => Addr,
-      ExpRd  => ExpRd,
-      ExpWr  => ExpWr,
-      clk    => clk,
-      rst    => ExpReset,
-      ExpAck => ExpAck(2),
-      RData  => RData(47 DOWNTO 32),
-      scl_o  => temp_scl_o,
-      scl_i  => temp_scl_i,
-      sda_o  => temp_sda_o,
-      sda_i  => temp_sda_i
+      Addr      => Addr,
+      ExpRd     => ExpRd,
+      ExpWr     => ExpWr,
+      clk       => clk,
+      rst       => ExpReset,
+      ExpAck    => ExpAck(2),
+      RData     => RData(47 DOWNTO 32),
+      scl_o     => temp_scl_o,
+      scl_i     => temp_scl_i,
+      sda_o     => temp_sda_o,
+      sda_i     => temp_sda_i,
+      tap_ack2  => tap_ack2,
+      tap_rdy2   => tap_rdy2,
+      tap_data2 => tap_data2
     );
 
   aio : i2c_aio
