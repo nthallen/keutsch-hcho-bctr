@@ -39,8 +39,11 @@ BEGIN
       if rst = '1' then
         tap_data <= (others => '0');
         tap_rdy <= '0';
-      elsif rdy = '1' and to_integer(unsigned(brd_num)) = BRD_SEL then
-        tap_data <= rd_data_o;
+      elsif rdy = '1' and to_integer(unsigned(brd_num)) = BRD_SEL 
+          and rd_data_o(31 downto 29) /= "001"
+          and rd_data_o(31 downto 29) /= "110" then
+        tap_data(31) <= rd_data_o(30);
+        tap_data(30 downto 0) <= rd_data_o(30 downto 0);
         tap_rdy <= '1';
       elsif tap_ack = '1' then
         tap_rdy <= '0';
