@@ -244,10 +244,8 @@ BEGIN
             TrigClr_cld <= '0';
             TrigArm_cld <= '1';
             NArd <= '0';
-            IF En = '1' AND TrigSeen = '1' AND IPS = '0' AND IPSseen = '0' THEN
-              Ntrig_cnt <= Ntrig_cnt + 1;
-            END IF;
           WHEN Triggered =>
+            Ntrig_cnt <= Ntrig_cnt + 1;
             CntEn_cld <= '1';
             IF first_row_cld = '0' THEN
               RE_cld <= '1';
