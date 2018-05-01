@@ -1,6 +1,6 @@
 {
    ExpandedHierarchyInLayout: "",
-   guistr: "# # String gsaved with Nlview 6.6.11  2017-06-12 bk=1.3860 VDI=40 GEI=35 GUI=JA:1.6
+   guistr: "# # String gsaved with Nlview 6.8.5  2018-01-30 bk=1.4354 VDI=40 GEI=35 GUI=JA:1.6 non-TLS
 #  -string -flagsOSRD
 preplace port aio_scl -pg 1 -y 80 -defaultsOSRD
 preplace port temp_sda -pg 1 -y 670 -defaultsOSRD
@@ -19,77 +19,77 @@ preplace port Fail -pg 1 -y 380 -defaultsOSRD
 preplace port uart_rx -pg 1 -y 1430 -defaultsOSRD
 preplace port reset -pg 1 -y 1200 -defaultsOSRD
 preplace portBus PMTs -pg 1 -y 450 -defaultsOSRD
-preplace inst BCtr_syscon_wrapper_0 -pg 1 -lvl 7 -y 480 -defaultsOSRD
 preplace inst subbus_data_o -pg 1 -lvl 6 -y 1070 -defaultsOSRD
-preplace inst temp_scl_buf -pg 1 -lvl 6 -y 360 -defaultsOSRD
-preplace inst subbus_status -pg 1 -lvl 6 -y 1200 -defaultsOSRD
-preplace inst aio_sda_buf -pg 1 -lvl 6 -y 210 -defaultsOSRD
+preplace inst BCtr_syscon_wrapper_0 -pg 1 -lvl 7 -y 480 -defaultsOSRD
+preplace inst subbus_status -pg 1 -lvl 6 -y 1210 -defaultsOSRD
+preplace inst temp_scl_buf -pg 1 -lvl 6 -y 330 -defaultsOSRD
+preplace inst aio_sda_buf -pg 1 -lvl 6 -y 180 -defaultsOSRD
 preplace inst microblaze_0_axi_periph -pg 1 -lvl 5 -y 870 -defaultsOSRD
-preplace inst microblaze_0_xlconcat -pg 1 -lvl 2 -y 1150 -defaultsOSRD
-preplace inst subbus_addr -pg 1 -lvl 6 -y 680 -defaultsOSRD
-preplace inst temp_sda_buf -pg 1 -lvl 6 -y 540 -defaultsOSRD
-preplace inst microblaze_0_axi_intc -pg 1 -lvl 3 -y 1140 -defaultsOSRD
+preplace inst subbus_addr -pg 1 -lvl 6 -y 650 -defaultsOSRD
+preplace inst microblaze_0_xlconcat -pg 1 -lvl 2 -y 1130 -defaultsOSRD
+preplace inst temp_sda_buf -pg 1 -lvl 6 -y 500 -defaultsOSRD
 preplace inst mdm_1 -pg 1 -lvl 3 -y 1360 -defaultsOSRD
-preplace inst subbus_data_i -pg 1 -lvl 6 -y 940 -defaultsOSRD
-preplace inst aio_scl_buf -pg 1 -lvl 6 -y 70 -defaultsOSRD
+preplace inst microblaze_0_axi_intc -pg 1 -lvl 3 -y 1140 -defaultsOSRD
+preplace inst subbus_data_i -pg 1 -lvl 6 -y 930 -defaultsOSRD
 preplace inst microblaze_0 -pg 1 -lvl 4 -y 1170 -defaultsOSRD
-preplace inst axi_uartlite_0 -pg 1 -lvl 6 -y 1350 -defaultsOSRD
+preplace inst axi_uartlite_0 -pg 1 -lvl 6 -y 1360 -defaultsOSRD
+preplace inst aio_scl_buf -pg 1 -lvl 6 -y 60 -defaultsOSRD
 preplace inst rst_clk_wiz_1_100M -pg 1 -lvl 2 -y 1290 -defaultsOSRD
 preplace inst clk_wiz_1 -pg 1 -lvl 1 -y 1210 -defaultsOSRD
-preplace inst subbus_ctrl -pg 1 -lvl 6 -y 810 -defaultsOSRD
+preplace inst subbus_ctrl -pg 1 -lvl 6 -y 790 -defaultsOSRD
 preplace inst microblaze_0_local_memory -pg 1 -lvl 5 -y 1180 -defaultsOSRD
-preplace netloc i2c_iobuf_2_pad_i 1 6 1 N
-preplace netloc rx_1 1 0 7 NJ 1430 220J 1440 NJ 1440 NJ 1440 NJ 1440 NJ 1440 2090
-preplace netloc microblaze_0_axi_periph_M04_AXI 1 5 1 1690
-preplace netloc BCtr_syscon_wrapper_0_temp_sda_o 1 5 3 1740 430 2040J 660 2460
-preplace netloc Trigger_1 1 0 7 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ
-preplace netloc subbus_data_o_gpio_io_o 1 6 1 2110
-preplace netloc BCtr_syscon_wrapper_0_temp_scl_o 1 5 3 1740 290 NJ 290 2440
+preplace netloc i2c_iobuf_2_pad_i 1 6 1 2120
+preplace netloc rx_1 1 0 7 NJ 1430 210J 1460 NJ 1460 NJ 1460 NJ 1460 NJ 1460 2140
+preplace netloc microblaze_0_axi_periph_M04_AXI 1 5 1 1790
+preplace netloc BCtr_syscon_wrapper_0_temp_sda_o 1 5 3 1800 420 2110J 670 2480
+preplace netloc Trigger_1 1 0 7 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 1730J 410 2120J
+preplace netloc subbus_data_o_gpio_io_o 1 6 1 2160
+preplace netloc BCtr_syscon_wrapper_0_temp_scl_o 1 5 3 1800 260 NJ 260 2480
 preplace netloc BCtr_syscon_wrapper_0_dac_ldac 1 7 1 NJ
-preplace netloc axi_uartlite_0_interrupt 1 1 6 230 1420 NJ 1420 NJ 1420 NJ 1420 1710J 1430 2030
-preplace netloc microblaze_0_intr 1 2 1 NJ
+preplace netloc axi_uartlite_0_interrupt 1 1 6 230 1450 NJ 1450 NJ 1450 NJ 1450 NJ 1450 2100
+preplace netloc microblaze_0_intr 1 2 1 600J
 preplace netloc BCtr_syscon_wrapper_0_Fail 1 7 1 NJ
-preplace netloc microblaze_0_Clk 1 1 6 220 1200 620 1240 900 1250 1390 630 1710 460 2060
+preplace netloc microblaze_0_Clk 1 1 6 220 1190 620 1260 900 1260 1400 630 1750 430 2140
 preplace netloc microblaze_0_axi_periph_M06_AXI 1 5 1 1740
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 5 1 1720
-preplace netloc microblaze_0_intc_axi 1 2 4 640 1270 NJ 1270 NJ 1270 1670
+preplace netloc microblaze_0_axi_periph_M03_AXI 1 5 1 1780
+preplace netloc microblaze_0_intc_axi 1 2 4 640 1280 NJ 1280 NJ 1280 1720
 preplace netloc microblaze_0_interrupt 1 3 1 N
 preplace netloc BCtr_syscon_wrapper_0_htr2_cmd 1 7 1 NJ
-preplace netloc subbus_ctrl_gpio_io_o 1 6 1 2070
+preplace netloc subbus_ctrl_gpio_io_o 1 6 1 2130
 preplace netloc microblaze_0_ilmb_1 1 4 1 N
-preplace netloc aio_scl_buf_pad_i 1 6 1 2120
-preplace netloc i2c_iobuf_1_pad_i1 1 6 1 2100
+preplace netloc aio_scl_buf_pad_i 1 6 1 2180
+preplace netloc i2c_iobuf_1_pad_i1 1 6 1 2170
 preplace netloc sys_clock_1 1 0 1 NJ
-preplace netloc microblaze_0_axi_periph_M05_AXI 1 5 1 1690
+preplace netloc microblaze_0_axi_periph_M05_AXI 1 5 1 1730
 preplace netloc microblaze_0_axi_dp 1 4 1 1380
-preplace netloc axi_uartlite_0_tx 1 6 2 NJ 1360 NJ
+preplace netloc axi_uartlite_0_tx 1 6 2 2180J 1360 NJ
 preplace netloc BCtr_syscon_wrapper_0_SimPMT 1 7 1 NJ
-preplace netloc rst_clk_wiz_1_100M_interconnect_aresetn 1 2 3 590J 730 NJ 730 N
-preplace netloc rst_clk_wiz_1_100M_bus_struct_reset 1 2 3 600J 1280 NJ 1280 1410
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 5 1 1700
-preplace netloc i2c_iobuf_1_pad_i 1 6 1 2080
-preplace netloc PMTs_1 1 0 7 10J 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 2090J
-preplace netloc subbus_addr_gpio_io_o 1 6 1 2050
-preplace netloc rst_clk_wiz_1_100M_peripheral_aresetn 1 2 4 610 1260 NJ 1260 1400 1260 1730
+preplace netloc rst_clk_wiz_1_100M_interconnect_aresetn 1 2 3 590J 1030 NJ 1030 1390
+preplace netloc rst_clk_wiz_1_100M_bus_struct_reset 1 2 3 NJ 1270 NJ 1270 1420
+preplace netloc microblaze_0_axi_periph_M01_AXI 1 5 1 1770
+preplace netloc i2c_iobuf_1_pad_i 1 6 1 2150
+preplace netloc PMTs_1 1 0 7 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 1720J 400 2190J
+preplace netloc subbus_addr_gpio_io_o 1 6 1 2090
+preplace netloc rst_clk_wiz_1_100M_peripheral_aresetn 1 2 4 610 1290 NJ 1290 1410 1260 1800
 preplace netloc rst_clk_wiz_1_100M_mb_reset 1 2 2 630 1250 890J
 preplace netloc clk_wiz_1_locked 1 1 1 200
-preplace netloc BCtr_syscon_wrapper_0_aio_scl_o 1 5 3 1730 610 2030J 650 2440
-preplace netloc BCtr_syscon_wrapper_0_Status 1 6 2 N 1210 2450
-preplace netloc BCtr_syscon_wrapper_0_Data_i 1 6 2 N 950 2480
-preplace netloc microblaze_0_axi_periph_M02_AXI 1 5 1 1680
+preplace netloc BCtr_syscon_wrapper_0_aio_scl_o 1 5 3 1800 250 NJ 250 2490
+preplace netloc BCtr_syscon_wrapper_0_Status 1 6 2 N 1220 2470
+preplace netloc BCtr_syscon_wrapper_0_Data_i 1 6 2 N 940 2500
+preplace netloc microblaze_0_axi_periph_M02_AXI 1 5 1 1760
 preplace netloc microblaze_0_dlmb_1 1 4 1 N
-preplace netloc Net1 1 6 2 2050J 300 NJ
-preplace netloc Net 1 6 2 2020J 670 NJ
+preplace netloc Net1 1 6 2 2090J 300 NJ
+preplace netloc Net 1 6 2 2080J 680 2510J
 preplace netloc BCtr_syscon_wrapper_0_dac_reset 1 7 1 NJ
 preplace netloc microblaze_0_debug 1 3 1 880
-preplace netloc BCtr_syscon_wrapper_0_aio_sdaoe 1 5 3 1740 280 NJ 280 2470
-preplace netloc Net2 1 6 2 NJ 220 NJ
+preplace netloc BCtr_syscon_wrapper_0_aio_sdaoe 1 5 3 1790 570 2100J 660 2460
+preplace netloc Net2 1 6 2 NJ 190 2500J
 preplace netloc BCtr_syscon_wrapper_0_SimTrig 1 7 1 NJ
-preplace netloc reset_1 1 0 2 10 1150 210J
+preplace netloc reset_1 1 0 2 10 1140 210J
 preplace netloc mdm_1_debug_sys_rst 1 1 3 240 1430 NJ 1430 890
-preplace netloc Net3 1 6 2 NJ 80 NJ
+preplace netloc Net3 1 6 2 NJ 70 2500J
 preplace netloc BCtr_syscon_wrapper_0_htr1_cmd 1 7 1 NJ
-levelinfo -pg 1 -10 110 420 760 1140 1540 1880 2290 2510 -top 0 -bot 1450
+levelinfo -pg 1 -10 110 420 760 1140 1570 1940 2330 2540 -top -10 -bot 1470
 ",
 }
 {
