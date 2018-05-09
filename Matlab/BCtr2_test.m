@@ -17,6 +17,11 @@ if Build < 8
   error('BCtr build is %d: must be >= 8 for BCtr2 operations', BdID);
 end
 fprintf(1, 'Attached to BCtr2 Build # %d\n', Build);
+if Build >= 10
+  ct_offset = 6;
+else
+  ct_offset = 4;
+end
 %%
 ctr = 32;
 %%
@@ -54,7 +59,7 @@ if bitand(status, 32) ~= 32 || N_NAB ~= length(bin_NB)
   error('Counter not ready after init');
 end
 NBtotal = sum(bin_NB);
-exp_ct = NBtotal*NChannels+4;
+exp_ct = NBtotal*NChannels+ct_offset;
 % rm_obj = read_multi_prep([exp_ct ctr+2]);
 rm_obj2 = read_multi_prep(ctr, [ctr+1,exp_ct,ctr+2,0]);
 Nsave = 1000;
@@ -83,7 +88,7 @@ write_subbus(s, ctr, 1); % Enable
 write_subbus(s, ds_base, 1); % start scan
 
 Nsampled = 0;
-Nsamples = 650;
+Nsamples = 35;
 while Nsampled < Nsamples
   [values,ack] = read_multi(s,rm_obj2);
   if ack == 1
@@ -95,21 +100,33 @@ while Nsampled < Nsamples
     if length(values) ~= NB_rpt+2
       error('NB_rpt:%d returned %d Values', NB_rpt, length(values));
     else
-      if bitand(status,2) == 2 && NB_rpt ~= exp_ct
-        warning('NB_rpt = %d, exp_ct = %d', NB_rpt, exp_ct);
-      elseif bitand(status,2) == 0 && NB_rpt ~= 0
+%       if bitand(status,2) == 2 && NB_rpt ~= exp_ct
+%         warning('NB_rpt = %d, exp_ct = %d', NB_rpt, exp_ct);
+%       end
+      if bitand(status,2) == 0 && NB_rpt ~= 0
         warning('!DRdy + NB_rpt = %d', NB_rpt);
       end
-      if NB_rpt == exp_ct
-        Nsampled = Nsampled+1;
-        Statuses(Nsampled) = status;
-        IPnum(Nsampled) = values(3);
-        NTrig(Nsampled) = values(4)+values(5)*65536;
-        LaserV(Nsampled) = values(6);
-        Cts(Nsampled,:) = values(7:end)';
-        fprintf(1,'Nsample:%d: IPnum:%d', Nsampled, IPnum(Nsampled));
-        fprintf(1,' %d',Cts(Nsampled,1:2:end));
-        fprintf(1,'\n');
+      if bitand(status,2) == 2
+        if NB_rpt >= 6
+          Nsampled = Nsampled+1;
+          Statuses(Nsampled) = status;
+          IPnum(Nsampled) = bitand(values(3),63);
+          NTrig(Nsampled) = values(4)+values(5)*65536;
+          LaserV(Nsampled) = values(6);
+          % should log LaserinP here.
+          if NB_rpt > ct_offset
+            if NB_rpt > exp_ct
+              NB_rpt = exp_ct;
+            end
+            Cts(Nsampled,1:(NB_rpt-ct_offset)) = ...
+              values((2+ct_offset+1):(2+NB_rpt))';
+            fprintf(1,'Nsample:%d: IPnum:%d', Nsampled, IPnum(Nsampled));
+            fprintf(1,' %d',Cts(Nsampled,1:2:end));
+            fprintf(1,'\n');
+          else
+            Cts(Nsampled,:) = 0;
+          end
+        end
       end
     end
   else
