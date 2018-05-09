@@ -28,7 +28,7 @@ USE ieee.numeric_std.all;
 
 ENTITY BCtr_syscon_wrapper IS
   GENERIC(
-    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"000A";    -- Relative to HCHO
+    BUILD_NUMBER   : std_logic_vector(15 DOWNTO 0) := X"000B";    -- Relative to HCHO
     Nbps_default   : integer range 63 downto 1     := 10
   );
   PORT( 

@@ -76,7 +76,7 @@ ds_end = round(0.600*65536/5); % 1 V
 ds_steps = 600;
 ds_step = round((ds_end-ds_start)*8/ds_steps);
 ds_base = hex2dec('80');
-report_ds_status(read_subbus(s, ds_base));
+report_ds_status(s, ds_base);
 write_subbus(s, ds_base+2, ds_start);
 write_subbus(s, ds_base+3, ds_end);
 write_subbus(s, ds_base+4, ds_step);
@@ -251,13 +251,14 @@ ds_end = round(65536/5); % 1 V
 ds_steps = 600;
 ds_step = round((ds_end-ds_start)*8/ds_steps);
 ds_base = hex2dec('80');
-report_ds_status(read_subbus(s, ds_base));
+report_ds_status(s, ds_base);
 write_subbus(s, ds_base+2, ds_start);
 write_subbus(s, ds_base+3, ds_end);
 write_subbus(s, ds_base+4, ds_step);
-report_ds_status(read_subbus(s, ds_base));
+report_ds_status(s, ds_base);
 write_subbus(s, ds_base, 1); % start scan
-report_ds_status(read_subbus(s, ds_base));
+%%
+report_ds_status(s, ds_base);
 %% BCtr2: test expiration...
 report_status(read_subbus(s,ctr));
 %%
